@@ -1,46 +1,68 @@
 <?php
-use yii\helpers\Html;
+/**
+ * 登录页面
+ * Created by GuLang on 2015-04-16.
+ */
+use app\assets\AppAsset;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
+use yii\captcha\Captcha;
 
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model app\models\LoginForm */
+/* @var $this \yii\web\View */
+/* @var $content string */
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+AppAsset::register($this);
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>系统登录</title>
+    <link href="/yii-basic-app-2.0.3/web/assets/61ba6892/css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo CSS_PATH; ?>login.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="wrap">
+    <div id="content">
+        <div id="login">
+            <h3><span style="font-size: 25px;margin-left: 5px;">登录</span>&nbsp;&nbsp;LOGIN</h3>
+            <hr style="width:305px; margin-left: -5px;"/>
+            <?php $form = ActiveForm::begin([
+                'fieldConfig' => [
+                    'template' => "<div class=\"login_row\"><div class=\"login_title\">{label}</div>{input}<div class=\"login_error\">{error}</div></div>",
+                ]
+            ]); ?>
+            <?php echo $form->field($loginForm, 'username')->textInput(['class' => 'login_input_normal']); ?>
+            <?php echo $form->field($loginForm, 'password')->passwordInput(['class' => 'login_input_normal']); ?>
+            <!--            --><?php //echo $form->field($loginForm, 'verifyCode')->textInput(['class' => 'login_input_verify']); ?>
+            <?php echo $form->field($loginForm, 'verifyCode')->widget(Captcha::className(), [
+                'template' => "{input}{image} ",
+                'imageOptions' => ['alt' => '验证码图片', 'class' => 'verifyCodeImage'],
+                'captchaAction' => 'site/captcha',
+                'options' => ['class' => 'verifyCodeInput', 'maxlength' => 4],
+            ]) ?>
+            <div style="margin-left: 70px;margin-top:-10px;">
+                <?php echo $form->field($loginForm, 'rememberMe')->checkbox(); ?>
+            </div>
+            <div style="margin-top: 25px;margin-left: 95px;">
+                <!--                <input type="submit" id="login_button" value="登录">&nbsp;&nbsp;&nbsp;-->
+                <?= Html::submitButton('登录', ['class' => 'btn btn-primary']) ?>
+                &nbsp;&nbsp;&nbsp;
+                <a href="#" style="font-size: 14px;color: #0000ff">找回密码？</a>
+            </div>
+            <?php $form = ActiveForm::end(); ?>
+        </div>
 
-    <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
-        'options' => ['class' => 'form-horizontal'],
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
-        ],
-    ]); ?>
-
-    <?= $form->field($model, 'username') ?>
-
-    <?= $form->field($model, 'password')->passwordInput() ?>
-
-    <?= $form->field($model, 'rememberMe', [
-        'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-    ])->checkbox() ?>
-
-    <div class="form-group">
-        <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+        <div id="left_content">
+            <img src="<?php echo IMG_PATH; ?>ic_title.png" alt="标题图片">
         </div>
     </div>
+    <div id="foot">
+        <p style="font-size: 15px;">版权所有&nbsp;&nbsp;2014-2015&nbsp;&nbsp;孤狼软件&nbsp;&nbsp;版权所有&nbsp;&nbsp;盗版必究</p>
 
-    <?php ActiveForm::end(); ?>
-
-    <div class="col-lg-offset-1" style="color:#999;">
-        You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-        To modify the username/password, please check out the code <code>app\models\User::$users</code>.
+        <p style="font-size: 13px;margin-top: -10px;">Copyright&nbsp;©&nbsp;GuLangSoftware,All rights reserved.</p>
     </div>
 </div>
+</body>
+</html>

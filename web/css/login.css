@@ -57,7 +57,7 @@ form {
     width: 85px;
     height: 20px;
     font-size: 20px;
-    font-style: normal;
+    font-weight: normal;
     text-align: right;
     display: inline;
     float: left;
@@ -75,6 +75,7 @@ form {
     outline: none;
     margin-bottom: -10px;
     clear: right;
+    font-weight: normal;
 }
 
 .verifyCodeInput {
@@ -99,19 +100,15 @@ form {
     margin-left: 15px;
 }
 
-.login_input_normal:focus {
-    border: 1px solid #0000FF;
-}
-
-.verifyCodeInput:focus {
+.login_input_normal:focus, .verifyCodeInput:focus {
     border: 1px solid #0000FF;
 }
 
 .login_error {
     clear: left;
-    width: 85px;
+    width: 180px;
     height: 15px;
-    margin-left: 100px;
+    margin-left: 90px;
     margin-right: 50px;
     margin-top: -2px;
     font-size: 13px;

@@ -1,70 +1,68 @@
 <?php
-use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
+/**
+ * 主页面模板
+ * Created by GuLang on 2015-04-18.
+ */
 use app\assets\AppAsset;
+use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
 
 AppAsset::register($this);
 ?>
-<?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html>
 <head>
-    <meta charset="<?= Yii::$app->charset ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?= Html::csrfMetaTags() ?>
+    <meta charset="utf-8">
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
     <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
+    <link href="/yii-basic-app-2.0.3/web/assets/61ba6892/css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo CSS_PATH; ?>main.css" rel="stylesheet" type="text/css">
+    <?php $this->head(); ?>
 </head>
 <body>
+<div id="header">
+    <div id="titleLogo"></div>
+    <ul id="navigation">
+        <li class="navigationItem">欢迎你，<span style="color: #FF0000;font-weight:bold;">admin</span></li>
+        <li class="navigationItem"><span class="navigationDivider">|</span><a href="#">个人信息管理</a></li>
+        <li class="navigationItem"><span class="navigationDivider">|</span><a href="#">后台管理</a></li>
+        <li class="navigationItem"><span class="navigationDivider">|</span><a href="#">退出系统</a></li>
+    </ul>
+</div>
+<div id="content">
+    <div id="leftContent">
+        <div id="productList">
+            <?php echo Html::dropDownList("productSelector", null, ['孤狼软件', '毕设'], ["id" => 'productSelector']); ?>
+            <div id="productContent">
+                <p>神农放松是神农放松是神农放松是神农放松是</p>
 
-<?php $this->beginBody() ?>
-    <div class="wrap">
-        <?php
-            NavBar::begin([
-                'brandLabel' => 'My Company',
-                'brandUrl' => Yii::$app->homeUrl,
-                'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
-                ],
-            ]);
-            echo Nav::widget([
-                'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => [
-                    ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'About', 'url' => ['/site/about']],
-                    ['label' => 'Contact', 'url' => ['/site/contact']],
-                    Yii::$app->user->isGuest ?
-                        ['label' => 'Login', 'url' => ['/site/login']] :
-                        ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                            'url' => ['/site/logout'],
-                            'linkOptions' => ['data-method' => 'post']],
-                ],
-            ]);
-            NavBar::end();
-        ?>
+                <p>神农放松是神农放松是神农放松是</p>
 
-        <div class="container">
+                <p>神农放松是神农放松是</p>
 
-            <?= Breadcrumbs::widget([
-                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-            ]) ?>
-            <?= $content ?>
+                <p>神农放松是</p>
+
+            </div>
+        </div>
+        <div id="aboutMe">
+            <div>个人相关信息</div>
+            <p><a href="#">我提交的bug</a></p>
+
+            <p><a href="#">指派给我的bug</a></p>
+
+            <p><a href="#">抄送给我的bug</a></p>
         </div>
     </div>
-
-    <footer class="footer">
-        <div class="container">
-            <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-            <p class="pull-right"><?= Yii::powered() ?></p>
+    <div id="rightContent">
+        <div id="rightContentInternal">
+            <div id="breadcrumbs">
+                <a href="#">首页</a> >> bug详情页
+            </div>
+            <?php echo $content; ?>
         </div>
-    </footer>
-
-<?php $this->endBody() ?>
+    </div>
+</div>
 </body>
 </html>
-<?php $this->endPage() ?>

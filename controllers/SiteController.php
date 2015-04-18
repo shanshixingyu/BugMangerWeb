@@ -1,100 +1,62 @@
 <?php
-
+/**
+ * 用户登录控制器
+ * Created by GuLang on 2015-04-16.
+ */
 namespace app\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
+use yii\web\Controller;
 
 class SiteController extends Controller
 {
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
 
     public function actions()
     {
         return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+                'foreColor' => 0x00FF00,
+                'backColor' => 0xD0F2FB,
+                'width' => 75,
+                'height' => 25,
+                'padding' => 1,
+                'minLength' => 4,
+                'maxLength' => 4,
+                'offset' => 0,
             ],
         ];
     }
 
-    public function actionIndex()
-    {
-        return $this->render('index');
-    }
-
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+        $loginForm = new LoginForm();
+        if (isset($_POST['LoginForm'])) {
+            /* 表示按了登录过后过来的 */
+            if ($loginForm->load(Yii::$app->request->post("LoginForm")) && $loginForm->login()) {
+                $this->redirect("./index.php?r=site/bug");
+            }
         }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
+        $loginForm->verifyCode = "";
+        return $this->renderPartial("login", ['loginForm' => $loginForm]);
     }
 
-    public function actionLogout()
+    public function actionBug()
     {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
+        $productDataList = ['孤狼软件', '毕设'];
+        return $this->render('bug', ["productDataList" => $productDataList]);
     }
 
-    public function actionContact()
+    public function actionTest1()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+        echo __FILE__, "<br />";
+        echo __DIR__, "<br />";
+        echo $_SERVER['PHP_SELF'], "<br />";
+        echo $_SERVER['DOCUMENT_ROOT'], "<br />";
+        echo $_SERVER['HTTP_HOST'], "<br />";
 
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
     }
 
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
-
-    public function test(){
-    }
 
 }

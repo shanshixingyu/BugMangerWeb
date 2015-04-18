@@ -1,0 +1,161 @@
+/**********************以下的这部分css样式是模板（main.php）文件的**************************/
+body {
+    width: 100%;
+    min-width: 850px;
+    /*background-color: #2aaaa0;*/
+}
+
+#header {
+    width: 100%;
+    height: 110px;
+    background: #0076CD;
+}
+
+#titleLogo {
+    width: 350px;
+    height: 85px;
+    margin-left: 50px;
+    margin-top: 10px;
+    background: url("../img/ic_logo_title.png") left top no-repeat;
+    background-size: 100% 100%;
+    float: left;
+    font-weight: normal;
+}
+
+#navigation {
+    color: #FFFFFF;
+    text-align: right;
+    height: 30px;
+    font-size: 15px;
+    float: right;
+    padding-left: 0;
+    margin-right: 20px;
+    margin-top: 75px;
+}
+
+.navigationItem {
+    list-style: none;
+    float: left;
+}
+
+.navigationItem > a {
+    color: #FFFFFF;
+}
+
+.navigationDivider {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#content {
+    margin: 10px;
+    padding: 1px;
+    border: 2px solid #e8e8e8;
+}
+
+#leftContent {
+    width: 250px;
+    height: 500px;
+    float: left;
+    background-color: #CEE7FF;
+}
+
+#productList {
+    width: 100%;
+    height: 350px;
+}
+
+#productSelector {
+    width: 100%;
+}
+
+#productContent {
+    width: 100%;
+    height: 320px;
+    padding: 5px 20px;
+    overflow: scroll;
+}
+
+#aboutMe {
+    width: 97%;
+    height: 140px;
+    margin-top: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #98fff5;
+}
+
+#aboutMe > div {
+    width: 100%;
+    padding: 8px 15px;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: #aa3317;
+}
+
+#aboutMe > p {
+    margin-left: 30px;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+#aboutMe > p > a {
+    color: #2a2a2a;
+}
+
+#rightContent {
+    margin-left: 260px;
+    height: 500px;
+    background-color: #ddfff8;
+}
+
+#rightContentInternal {
+    float: left;
+    width: 100%;
+    font-size: 15px;
+}
+
+#breadcrumbs {
+    width: 100%;
+    height: 35px;
+    font-size: 15px;
+    background-color: #ffe9c9;
+    padding: 5px;
+}
+
+/**********************以上的这部分css样式是模板（main.php）文件的**************************/
+
+/********************以下的这部分css样式是bug详细页（main.php）文件的***********************/
+
+#bugQueryCondition {
+    width: 100%;
+    height: 100px;
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #ffcea4;
+}
+
+#bugTable {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    float: left;
+    margin-top: 50px;
+}
+
+#bugTable > table {
+    width: 100%;
+    height: 100px;
+}
+
+#bugTable > table th, td {
+    padding-left: 5px;
+    padding-right: 5px;
+    /*border: 1px solid #C1C8D2;*/
+    border-top: 1px solid #C1C8D2;
+    border-bottom: 1px solid #C1C8D2;
+}
+
+/********************以上的这部分css样式是bug详细页（main.php）文件的***********************/
