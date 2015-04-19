@@ -48,13 +48,14 @@ class SiteController extends Controller
         return $this->render('bug', ["productDataList" => $productDataList]);
     }
 
+    public function actionPim()
+    {
+        return $this->render("pim");
+    }
+
+
     public function actionTest1()
     {
-        echo __FILE__, "<br />";
-        echo __DIR__, "<br />";
-        echo $_SERVER['PHP_SELF'], "<br />";
-        echo $_SERVER['DOCUMENT_ROOT'], "<br />";
-        echo $_SERVER['HTTP_HOST'], "<br />";
 
     }
 

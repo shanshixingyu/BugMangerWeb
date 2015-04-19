@@ -5,11 +5,12 @@
  */
 use app\assets\AppAsset;
 use yii\helpers\Html;
+use \yii\widgets\Breadcrumbs;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
-
 AppAsset::register($this);
+Yii::$app->homeUrl = 'index.php?r=site/bug';
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,7 +27,8 @@ AppAsset::register($this);
     <div id="titleLogo"></div>
     <ul id="navigation">
         <li class="navigationItem">欢迎你，<span style="color: #FF0000;font-weight:bold;">admin</span></li>
-        <li class="navigationItem"><span class="navigationDivider">|</span><a href="#">个人信息管理</a></li>
+        <li class="navigationItem"><span class="navigationDivider">|</span><a href="index.php?r=site/pim">个人信息管理</a>
+        </li>
         <li class="navigationItem"><span class="navigationDivider">|</span><a href="#">后台管理</a></li>
         <li class="navigationItem"><span class="navigationDivider">|</span><a href="#">退出系统</a></li>
     </ul>
@@ -57,9 +59,14 @@ AppAsset::register($this);
     </div>
     <div id="rightContent">
         <div id="rightContentInternal">
-            <div id="breadcrumbs">
-                <a href="#">首页</a> >> bug详情页
-            </div>
+            <?php echo Breadcrumbs::widget([
+                'homeLink' => [
+                    'label' => Yii::t('yii', '首页'),
+                    'url' => Yii::$app->homeUrl,
+                ],
+                'options' => ['id' => "breadcrumbs"],
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]); ?>
             <?php echo $content; ?>
         </div>
     </div>
