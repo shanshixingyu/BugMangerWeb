@@ -4,6 +4,11 @@
  * Created by GuLang on 2015-04-16.
  */
 
-defined("APP_ROOT") or define("APP_ROOT", "http://localhost/BugManagerWeb/");
-defined("IMG_PATH") or define("IMG_PATH", APP_ROOT . 'web/img/');
-defined("CSS_PATH") or define("CSS_PATH", APP_ROOT . 'web/css/');
+defined("IMG_PATH") or define("IMG_PATH", '/BugManagerWeb/web/img/');
+defined("CSS_PATH") or define("CSS_PATH", '/BugManagerWeb/web/css/');
+defined("ASSETS_PATH") or define("ASSETS_PATH", '/BugManagerWeb/web/assets/');
+
+/* 定义js中影响行数的键值 */
+defined("JS_AFFECT_ROW") or define("JS_AFFECT_ROW", 'js_affect_row');
+/* 负责人中的分隔符 */
+defined("FUZEREN_DIVIDER") or define("FUZEREN_DIVIDER", '#');

@@ -5,12 +5,20 @@
  */
 namespace app\controllers;
 
+use app\models\GroupDetail;
+use app\models\ProductModule;
+use app\models\Role;
+use app\models\User;
+use app\models\UserGroup;
+use app\models\UserModifyForm;
 use Yii;
 use app\models\LoginForm;
 use yii\web\Controller;
 
 class SiteController extends Controller
 {
+    public $oldUserModifyForm = false;
+
 
     public function actions()
     {
@@ -50,9 +58,69 @@ class SiteController extends Controller
 
     public function actionPim()
     {
-        return $this->render("pim");
+        $userModifyForm = new UserModifyForm();
+
+        if (isset($_POST['UserModifyForm']) && $userModifyForm->loadData(Yii::$app->request->post("UserModifyForm"))
+            && $userModifyForm->validate()
+        ) {
+            /* 表示修改个人信息部分过来的 */
+            $rowCount = User::updateAll(['password' => $userModifyForm->password, 'email' => $userModifyForm->email],
+                'id=:userId',
+                [':userId' => $userModifyForm->userId]);
+            $this->getView()->params[JS_AFFECT_ROW] = $rowCount;
+            //更新数据库后，还要将Yii中的user也更新下
+            // Yii::$app->user = $user;
+            //在这里不能使用refresh(),因为他会使得一些params数据不存在
+        } else {
+            if (isset($this->getView()->params[JS_AFFECT_ROW]))
+                unset($this->getView()->params[JS_AFFECT_ROW]);
+            //到这里表示修改信息验证不成功或者还没修改信息
+            /*从中获得信息，并且最好还是能够在进入界面的时候重新访问下数据库，
+                              保证数据最新,不过数据也一般只有自己能够修改，也可不修改*/
+            $user = User::findOne(2);//这句主要是为了测试用，之后要用Yii->app->user替代
+            $role = Role::findOne($user->role_id);
+            $userModifyForm->userId = $user->id;
+            $userModifyForm->userName = $user->name;
+            $userModifyForm->password = $userModifyForm->password2 = $user->password;
+            $userModifyForm->roleName = $role->name;
+            $userModifyForm->email = $user->email;
+        }
+        /* 查询指定用户id下的所有组名 */
+        $groups = UserGroup::find()->joinWith('groupDetail')->where([
+            'user_id' => $userModifyForm->userId,
+        ])->addGroupBy('group_id')->all();
+        $groupNames = [];
+        foreach ($groups as $group) {
+            $groupNames[] = $group->groupDetail->name;
+        }
+        unset($groups);
+
+        /* 参与项目与模块 */
+        $where = 'fuzeren = ' . $userModifyForm->userId; /* 只有一个的时候 eg: 1 */
+        $where .= ' or ';
+        $where .= 'fuzeren like "' . $userModifyForm->userId . FUZEREN_DIVIDER . '%"'; /*多个的开始 eg: 1# */
+        $where .= ' or ';
+        $where .= 'fuzeren like "%' . FUZEREN_DIVIDER . $userModifyForm->userId . FUZEREN_DIVIDER . '%"';/*多个的中间 eg: #1# */
+        $where .= ' or ';
+        $where .= 'fuzeren like "%' . FUZEREN_DIVIDER . $userModifyForm->userId . '"';/*多个的末尾 eg: #1 */
+        $productModules = ProductModule::find()->joinWith('product')->where($where)->all();
+        $productModuleData = [];
+        foreach ($productModules as $productModule) {
+            $productModuleData[] = ['product' => $productModule->product->name, 'module' => $productModule->name];
+        }
+        unset($productModules);
+
+        return $this->render("pim", [
+            'userModifyForm' => $userModifyForm,
+            'groupNames' => $groupNames,
+            'productModuleData' => $productModuleData,
+        ]);
     }
 
+    public function actionManager()
+    {
+        return $this->render('manager');
+    }
 
     public function actionTest1()
     {

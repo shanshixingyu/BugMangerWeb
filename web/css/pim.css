@@ -1,0 +1,128 @@
+#userInfo {
+    width: 420px;
+    height: 440px;
+    float: left;
+    /*background-color: #37ff23;*/
+}
+
+.infoArea {
+    padding: 10px 20px;
+    background-color: #FFFFFF;
+    margin: 10px;
+    /*overflow: hidden;*/
+}
+
+.infoTitle {
+    padding: 5px;
+    color: #024772;
+    font-size: 17px;
+}
+
+.infoTitleIcon {
+    width: 10px;
+    height: 25px;
+    margin-right: 8px;
+    background: url("../img/ic_content_title.png") left top no-repeat;
+    background-size: 100% 100%;
+    float: left;
+}
+
+#userInfoShow {
+    width: 100%;
+    height: 370px;
+}
+
+.infoShow {
+    margin-left: 5px;
+    margin-top: 10px;
+    border: 1px solid #D6E1EA;
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+.userInfoRow {
+    width: 100%;
+    clear: both;
+    display: block;
+    height: 34px;
+    /*background-color: #006611;*/
+}
+
+.userInfoMyRow {
+    width: 100%;
+    clear: both;
+    display: block;
+    height: 34px;
+    margin-bottom: -8px;
+}
+
+.userInfoLabel {
+    float: left;
+    width: 75px;
+    padding: 5px;
+    text-align: left;
+    height: 100%;
+    /*background-color: #51e4d6;*/
+}
+
+.userInfoInput {
+    float: left;
+    height: 100%;
+    margin-left: 15px;
+}
+
+.cannotReadableInput {
+    height: 34px;
+    border: none;
+    padding: 6px 12px;
+    background-color: #FFFFFF;
+    font-size: 14px;
+    outline: none;
+}
+
+.userInfoError {
+    float: left;
+    height: 100%;
+    font-size: 15px;
+    margin-left: 10px;
+    /*background-color: #e42e2f;*/
+}
+
+#userGroup {
+    min-width: 450px;
+    margin-left: 450px;
+    overflow: hidden; /*清除浮动属性*/
+}
+
+#userGroupShow {
+    width: 100%;
+    min-width: 300px;
+    padding-right: 15px;
+    float: left;
+    font-size: 14px;
+}
+
+.userGroupItem, .userProjectItem {
+    margin: 3px 10px 3px 0px;
+    float: left;
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+
+.userGroupItem {
+    background-color: #aefbb0;
+}
+
+#userProject {
+    /*max-width: 420px;*/
+    float: left;
+}
+
+#userProjectShow {
+    float: left;
+}
+
+.userProjectItem {
+    background-color: #fbd07e;
+}

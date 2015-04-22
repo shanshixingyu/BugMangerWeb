@@ -5,6 +5,7 @@
 /* @var $this yii\web\View */
 $this->title = 'bug列表';
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerCssFile(CSS_PATH . 'bug.css');
 ?>
 
 <div id="bugQueryCondition">

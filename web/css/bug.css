@@ -1,0 +1,28 @@
+
+#bugQueryCondition {
+    width: 100%;
+    height: 100px;
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #ffcea4;
+}
+
+#bugTable {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    float: left;
+    margin-top: 50px;
+}
+
+#bugTable > table {
+    width: 100%;
+}
+
+#bugTable > table th, td {
+    padding: 5px 5px;
+    height: 30px;
+    border-top: 1px solid #C1C8D2;
+    border-bottom: 1px solid #C1C8D2;
+    /*background-color: red;*/
+}

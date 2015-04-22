@@ -12,17 +12,18 @@ use \yii\widgets\Breadcrumbs;
 AppAsset::register($this);
 Yii::$app->homeUrl = 'index.php?r=site/bug';
 ?>
+<?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
     <title><?= Html::encode($this->title) ?></title>
-    <link href="/yii-basic-app-2.0.3/web/assets/61ba6892/css/bootstrap.css" rel="stylesheet">
-    <link href="<?php echo CSS_PATH; ?>main.css" rel="stylesheet" type="text/css">
+    <link href="<?php echo CSS_PATH; ?>main.css" rel="stylesheet" type="text/css"/>
     <?php $this->head(); ?>
 </head>
 <body>
+<?php $this->beginBody() ?>
 <div id="header">
     <div id="titleLogo"></div>
     <ul id="navigation">
@@ -58,18 +59,20 @@ Yii::$app->homeUrl = 'index.php?r=site/bug';
         </div>
     </div>
     <div id="rightContent">
+        <?php echo Breadcrumbs::widget([
+            'homeLink' => [
+                'label' => Yii::t('yii', '首页'),
+                'url' => Yii::$app->homeUrl,
+            ],
+            'options' => ['id' => "breadcrumbs"],
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        ]); ?>
         <div id="rightContentInternal">
-            <?php echo Breadcrumbs::widget([
-                'homeLink' => [
-                    'label' => Yii::t('yii', '首页'),
-                    'url' => Yii::$app->homeUrl,
-                ],
-                'options' => ['id' => "breadcrumbs"],
-                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-            ]); ?>
             <?php echo $content; ?>
         </div>
     </div>
 </div>
+<?php $this->endBody() ?>
 </body>
 </html>
+<?php $this->endPage() ?>
