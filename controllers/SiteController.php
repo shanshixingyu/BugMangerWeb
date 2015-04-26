@@ -5,7 +5,9 @@
  */
 namespace app\controllers;
 
-use app\models\GroupDetail;
+use app\controllers\action\AddProductAction;
+use app\controllers\action\GetGroupMemberAction;
+use app\models\Product;
 use app\models\ProductModule;
 use app\models\Role;
 use app\models\User;
@@ -13,7 +15,12 @@ use app\models\UserGroup;
 use app\models\UserModifyForm;
 use Yii;
 use app\models\LoginForm;
+use yii\data\ActiveDataProvider;
+use yii\helpers\Json;
 use yii\web\Controller;
+use app\controllers\action\HelloAction;
+use app\models\ProductForm;
+use app\controllers\action\AddModuleAction;
 
 class SiteController extends Controller
 {
@@ -34,6 +41,19 @@ class SiteController extends Controller
                 'maxLength' => 4,
                 'offset' => 0,
             ],
+            'addProduct' => [
+                'class' => AddProductAction::className(),
+            ],
+            'addModule' => [
+                'class' => AddModuleAction::className(),
+            ],
+            'getGroupMember' => [
+                'class' => GetGroupMemberAction::className(),
+            ],
+            'hello' => [
+                'class' => HelloAction::className(),
+            ],
+
         ];
     }
 
@@ -60,9 +80,7 @@ class SiteController extends Controller
     {
         $userModifyForm = new UserModifyForm();
 
-        if (isset($_POST['UserModifyForm']) && $userModifyForm->loadData(Yii::$app->request->post("UserModifyForm"))
-            && $userModifyForm->validate()
-        ) {
+        if (isset($_POST['UserModifyForm']) && $userModifyForm->loadData() && $userModifyForm->validate()) {
             /* 表示修改个人信息部分过来的 */
             $rowCount = User::updateAll(['password' => $userModifyForm->password, 'email' => $userModifyForm->email],
                 'id=:userId',
@@ -122,10 +140,21 @@ class SiteController extends Controller
         return $this->render('manager');
     }
 
-    public function actionTest1()
+    public function actionProductManager()
     {
-
+        $dataProvider = new ActiveDataProvider([
+            'query' => Product::find()->joinWith(['createUser', 'groupDetail']),
+            'pagination' => [
+                'pageSize' => 5,
+            ],
+        ]);
+        return $this->render('product_manager', ['dataProvider' => $dataProvider,]);
     }
 
+
+    public function actionTest()
+    {
+        return $this->render('test');
+    }
 
 }

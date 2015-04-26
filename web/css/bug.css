@@ -19,10 +19,13 @@
     width: 100%;
 }
 
-#bugTable > table th, td {
-    padding: 5px 5px;
-    height: 30px;
+#bugTable > table tr {
     border-top: 1px solid #C1C8D2;
     border-bottom: 1px solid #C1C8D2;
+}
+
+#bugTable > table th, #bugTable > table td {
+    padding: 5px 5px;
+    font-size: 15px;
     /*background-color: red;*/
 }

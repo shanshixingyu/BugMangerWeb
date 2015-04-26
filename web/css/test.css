@@ -1,0 +1,64 @@
+#addProductLeft {
+    float: left;
+    width: 100%;
+    height: 100%;
+    /*background-color: #ef23ff;*/
+}
+
+#addProductInfo,
+#addProductModule {
+    padding: 10px 20px 20px;
+    background-color: #FFFFFF;
+    overflow: hidden;
+}
+
+.addInfoTitle {
+    padding: 5px;
+    color: #024772;
+    font-size: 17px;
+}
+
+.addInfoTitleIcon {
+    width: 10px;
+    height: 25px;
+    margin-right: 8px;
+    background: url("../img/ic_content_title.png") left top no-repeat;
+    background-size: 100% 100%;
+    float: left;
+}
+
+.addInfoForm {
+    border: 1px solid #D6E1EA;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.infoRow {
+    clear: both;
+    overflow: hidden;
+}
+
+.infoLabel {
+    float: left;
+    width: 75px;
+    text-align: center;
+    padding-top: 8px;
+}
+
+.infoInput {
+    float: left;
+    width: 260px;
+    margin-left: 10px;
+}
+
+.infoError {
+    float: left;
+    margin-left: 5px;
+}
+
+#addProductRight {
+    width: 50%;
+    height: 100%;
+    float: left;
+    /*background-color: #47e446;*/
+}

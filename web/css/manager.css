@@ -1,0 +1,47 @@
+#managerWrap {
+    overflow: hidden;
+    margin: 20px;
+}
+
+.managerItem {
+    width: 150px;
+    padding: 10px;
+    height: 200px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #adffac;
+    float: left;
+    margin: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.managerItem:hover {
+    background-color: #9ae399;
+}
+
+#userManagerIcon,
+#groupManagerIcon,
+#productManagerIcon,
+#settingManagerIcon {
+    width: 100%;
+    height: 150px;
+    background-size: 100% 100%;
+    margin-bottom: 5px;
+}
+
+#userManagerIcon {
+    background: url("../img/ic_user_manager.png") left top no-repeat;
+}
+
+#groupManagerIcon {
+    background: url("../img/ic_group_manager.png") left top no-repeat;
+}
+
+#productManagerIcon {
+    background: url("../img/ic_product_manager.png") left top no-repeat;
+}
+
+#settingManagerIcon {
+    background: url("../img/ic_system_setting.png") left top no-repeat;
+}

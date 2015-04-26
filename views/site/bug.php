@@ -12,7 +12,7 @@ $this->registerCssFile(CSS_PATH . 'bug.css');
     bug信息查询条件表单
 </div>
 <div id="bugTable">
-    <table cellpadding="0">
+    <table>
         <tr>
             <th style="width:30px;">ID</th>
             <th style="width:325px;">Bug名称</th>

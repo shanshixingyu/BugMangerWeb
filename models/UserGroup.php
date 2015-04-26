@@ -16,8 +16,14 @@ class UserGroup extends ActiveRecord
         return 'user_group';
     }
 
-    public function getGroupDetail(){
-        return $this->hasOne(GroupDetail::className(),['id'=>'group_id']);
+    public function getGroupDetail()
+    {
+        return $this->hasOne(GroupDetail::className(), ['id' => 'group_id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
 }

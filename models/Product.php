@@ -16,4 +16,14 @@ class Product extends ActiveRecord
         return 'product';
     }
 
+    public function getGroupDetail()
+    {
+        return $this->hasOne(GroupDetail::className(), ['id' => 'group_id']);
+    }
+
+    public function getCreateUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'creator']);
+    }
+
 }

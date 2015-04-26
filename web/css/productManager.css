@@ -1,0 +1,79 @@
+#productWrap {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    overflow: auto;
+}
+
+#aboveProductTable {
+    width: 100%;
+    overflow: hidden;
+    margin-top: -10px;
+    padding: 10px 10px 5px;
+    /*background-color: #006611;*/
+}
+
+#productTableName {
+    float: left;
+    font-size: 23px;
+    margin-top: 5px;
+    font-weight: bold;
+    color: #006611;
+    /*background-color: red;*/
+}
+
+.addBtn {
+    width: 110px;
+    float: right;
+    color: #39BE18;
+    font-weight: bold;
+    padding: 8px 5px;
+    margin-left: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    /*background: url("../img/ic_add.png") 5px 5px no-repeat #91caff;*/
+    background: url("../img/ic_add.png") 5px 5px no-repeat #91e9ec;
+}
+
+.addBtn > span {
+    margin-left: 30px;
+}
+
+.addBtn:hover,
+.addBtn:active,
+.addBtn:visited,
+.addBtn:link {
+    background-color: #91e9ec;
+    text-decoration: none;
+    color: #39BE18;
+    cursor: pointer;
+}
+
+.addBtn:hover {
+    background-color: #82d1d4;
+}
+
+.productTableTh {
+    color: #337AC5;
+    /*font-size: 16px;*/
+    font-weight: bolder;
+}
+
+#paginationWidget {
+    margin: -10px 0 0;
+    float: left;
+}
+
+.productSummary {
+    float: right;
+    clear: right;
+    font-size: 14px;
+    padding: 5px;
+    margin: -10px 20px 0px;
+    font-weight: bold;
+    /*color: #337AC5;*/
+}
+
+#w0 {
+    clear: both;
+}

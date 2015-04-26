@@ -10,5 +10,8 @@ defined("ASSETS_PATH") or define("ASSETS_PATH", '/BugManagerWeb/web/assets/');
 
 /* 定义js中影响行数的键值 */
 defined("JS_AFFECT_ROW") or define("JS_AFFECT_ROW", 'js_affect_row');
-/* 负责人中的分隔符 */
-defined("FUZEREN_DIVIDER") or define("FUZEREN_DIVIDER", '#');
+defined("OPT_RESULT") or define("OPT_RESULT", 'opt_result');
+
+/* 添加产品的错误状态 */
+defined("PRODUCT_HAS_EXIST_ERROR") or define("PRODUCT_HAS_EXIST_ERROR", 'product_has_exist_error');
+defined("ADD_PRODUCT_OTHER_ERROR") or define("ADD_PRODUCT_OTHER_ERROR", 'add_product_other_error');

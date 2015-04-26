@@ -6,9 +6,7 @@
 namespace app\models;
 
 
-use yii\base\Model;
-
-class UserModifyForm extends Model
+class UserModifyForm extends BaseForm
 {
     public $userId;
     public $userName;
@@ -37,22 +35,4 @@ class UserModifyForm extends Model
             'email' => '邮箱',
         ];
     }
-
-    public function loadData($data)
-    {
-        $formName = $this->formName();
-        if (isset($data) && isset($data[$formName])) {
-            $formData = $data[$formName];
-            foreach ($formData as $key => $value) {
-                try {
-                    $this->$key = $value;
-                } catch (Exception $e) {
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-
 }

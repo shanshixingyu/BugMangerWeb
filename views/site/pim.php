@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(CSS_PATH . 'pim.css');
 
 if (isset($this->params[JS_AFFECT_ROW]) && $this->params[JS_AFFECT_ROW] > 0) {
-    $this->registerJs('window.onload=function hello(){alert("个人信息修改成功!");}');
+    $this->registerJs('window.onload=function(){alert("个人信息修改成功!");}');
     unset($this->params[JS_AFFECT_ROW]);
 }
 
@@ -46,7 +46,7 @@ if (isset($this->params[JS_AFFECT_ROW]) && $this->params[JS_AFFECT_ROW] > 0) {
         <?php echo $form->field($userModifyForm, 'email')->textInput(['size' => 15]); ?>
 
         <?php echo Html::submitButton('修改', ['class' => 'btn btn-primary', 'style' => 'margin-left:100px;margin-top:15px;']) ?>
-        <?php $form = ActiveForm::end(); ?>
+        <?php ActiveForm::end(); ?>
     </div>
 </div>
 <div id="userGroup" class="infoArea">

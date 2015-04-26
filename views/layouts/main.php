@@ -30,7 +30,7 @@ Yii::$app->homeUrl = 'index.php?r=site/bug';
         <li class="navigationItem">欢迎你，<span style="color: #FF0000;font-weight:bold;">admin</span></li>
         <li class="navigationItem"><span class="navigationDivider">|</span><a href="index.php?r=site/pim">个人信息管理</a>
         </li>
-        <li class="navigationItem"><span class="navigationDivider">|</span><a href="#">后台管理</a></li>
+        <li class="navigationItem"><span class="navigationDivider">|</span><a href="index.php?r=site/manager">后台管理</a></li>
         <li class="navigationItem"><span class="navigationDivider">|</span><a href="#">退出系统</a></li>
     </ul>
 </div>
