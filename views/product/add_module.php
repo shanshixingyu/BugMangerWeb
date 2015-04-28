@@ -12,7 +12,7 @@ use yii\helpers\ArrayHelper;
 $this->title = '添加产品模块';
 $this->params['breadcrumbs'] = [
     ['label' => '后台管理', 'url' => 'index.php?r=site/manager'],
-    ['label' => '产品管理', 'url' => 'index.php?r=site/product-manager'],
+    ['label' => '产品管理', 'url' => 'index.php?r=product/index'],
     $this->title,
 ];
 $this->registerCssFile(CSS_PATH . 'addProductOrModule.css');
@@ -27,7 +27,7 @@ $changedProductJs = <<<JS
 $('#moduleform-productid').change(function(data){
     var productId=$('#moduleform-productid').find('option:selected').val();
     //alert('改变选项'+productId);
-    $.get('index.php?r=site/getGroupMember',{productId:productId},function(data){
+    $.get('index.php?r=product/getGroupMember',{productId:productId},function(data){
         var members=jQuery.parseJSON(data);
         $('#moduleform-fuzeren').empty();
         $.each(members,function(idx,member){

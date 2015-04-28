@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
 $this->title = '添加产品';
 $this->params['breadcrumbs'] = [
     ['label' => '后台管理', 'url' => 'index.php?r=site/manager'],
-    ['label' => '产品管理', 'url' => 'index.php?r=site/product-manager'],
+    ['label' => '产品管理', 'url' => 'index.php?r=product/index'],
     $this->title,
 ];
 $this->registerCssFile(CSS_PATH . 'addProductOrModule.css');

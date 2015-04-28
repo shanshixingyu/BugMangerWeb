@@ -17,7 +17,6 @@ Yii::$app->homeUrl = 'index.php?r=site/bug';
 <html>
 <head>
     <meta charset="utf-8">
-    <!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
     <title><?= Html::encode($this->title) ?></title>
     <link href="<?php echo CSS_PATH; ?>main.css" rel="stylesheet" type="text/css"/>
     <?php $this->head(); ?>

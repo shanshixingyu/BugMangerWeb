@@ -6,7 +6,6 @@
 namespace app\controllers;
 
 use app\controllers\action\AddProductAction;
-use app\controllers\action\GetGroupMemberAction;
 use app\models\Product;
 use app\models\ProductModule;
 use app\models\Role;
@@ -16,11 +15,8 @@ use app\models\UserModifyForm;
 use Yii;
 use app\models\LoginForm;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Json;
 use yii\web\Controller;
 use app\controllers\action\HelloAction;
-use app\models\ProductForm;
-use app\controllers\action\AddModuleAction;
 
 class SiteController extends Controller
 {
@@ -40,15 +36,6 @@ class SiteController extends Controller
                 'minLength' => 4,
                 'maxLength' => 4,
                 'offset' => 0,
-            ],
-            'addProduct' => [
-                'class' => AddProductAction::className(),
-            ],
-            'addModule' => [
-                'class' => AddModuleAction::className(),
-            ],
-            'getGroupMember' => [
-                'class' => GetGroupMemberAction::className(),
             ],
             'hello' => [
                 'class' => HelloAction::className(),
@@ -114,13 +101,7 @@ class SiteController extends Controller
         unset($groups);
 
         /* 参与项目与模块 */
-        $where = 'fuzeren = ' . $userModifyForm->userId; /* 只有一个的时候 eg: 1 */
-        $where .= ' or ';
-        $where .= 'fuzeren like "' . $userModifyForm->userId . FUZEREN_DIVIDER . '%"'; /*多个的开始 eg: 1# */
-        $where .= ' or ';
-        $where .= 'fuzeren like "%' . FUZEREN_DIVIDER . $userModifyForm->userId . FUZEREN_DIVIDER . '%"';/*多个的中间 eg: #1# */
-        $where .= ' or ';
-        $where .= 'fuzeren like "%' . FUZEREN_DIVIDER . $userModifyForm->userId . '"';/*多个的末尾 eg: #1 */
+        $where = 'fuzeren like "%\"' . $userModifyForm->userId . '\"%"';
         $productModules = ProductModule::find()->joinWith('product')->where($where)->all();
         $productModuleData = [];
         foreach ($productModules as $productModule) {

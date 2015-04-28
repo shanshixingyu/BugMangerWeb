@@ -6,6 +6,7 @@
 
 defined("IMG_PATH") or define("IMG_PATH", '/BugManagerWeb/web/img/');
 defined("CSS_PATH") or define("CSS_PATH", '/BugManagerWeb/web/css/');
+defined("JS_PATH") or define("JS_PATH", '/BugManagerWeb/web/js/');
 defined("ASSETS_PATH") or define("ASSETS_PATH", '/BugManagerWeb/web/assets/');
 
 /* 定义js中影响行数的键值 */

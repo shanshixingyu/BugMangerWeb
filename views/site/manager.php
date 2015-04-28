@@ -18,7 +18,7 @@ $this->registerCssFile(CSS_PATH . 'manager.css');
         <div id="groupManagerIcon"></div>
         团队管理
     </a>
-    <a href="index.php?r=site/product-manager" class="managerItem">
+    <a href="index.php?r=product/index" class="managerItem">
         <div id="productManagerIcon"></div>
         产品管理
     </a>

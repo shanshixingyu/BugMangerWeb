@@ -7,7 +7,7 @@ use yii\grid\GridView;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
-use yii\bootstrap\ActiveForm;
+use yii\bootstrap\Nav;
 
 /* @var $this yii\web\View */
 $this->title = '产品管理';
@@ -16,16 +16,37 @@ $this->params['breadcrumbs'] = [
     $this->title,
 ];
 $this->registerCssFile(CSS_PATH . 'productManager.css');
-$this->registerCssFile(CSS_PATH . 'addProduct.css');
-
+$this->registerJsFile(JS_PATH . 'product_manager.js', [
+    'depends' => [\app\assets\AppAsset::className()]
+]);
 
 ?>
 
 <div id="productWrap">
     <div id="aboveProductTable">
         <div id="productTableName">产品信息表</div>
-        <a class="addBtn" href="index.php?r=site/addModule"><span>添加模块</span></a>
-        <a class="addBtn" href="index.php?r=site/addProduct"><span>添加产品</span></a>
+        <?php
+        echo Nav::widget([
+            'options' => ['class' => 'dropDownBtn'],
+            'items' => [
+                [
+                    'label' => '添加产品/模块',
+//                    'label' => '添加操作',
+                    'linkOptions' => ['id' => 'dropDownOpt'],
+                    'items' => [
+                        [
+                            'label' => '添加产品',
+                            'url' => ['product/add-product'],
+                        ],
+                        [
+                            'label' => '添加模块',
+                            'url' => ['product/add-module'],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+        ?>
     </div>
     <?php
     echo GridView::widget([
@@ -36,16 +57,11 @@ $this->registerCssFile(CSS_PATH . 'addProduct.css');
         'dataColumnClass' => \yii\grid\DataColumn::className(),
         'columns' => [
             [
-                'attribute' => 'id',
-                'label' => 'ID',
-                'enableSorting' => false,
-                'headerOptions' => ['class' => 'productTableTh', 'width' => '4%'],
-            ],
-            [
                 'attribute' => 'name',
                 'label' => '产品名称',
+                'contentOptions' => ['class' => 'productName'],
                 'enableSorting' => false,
-                'headerOptions' => ['class' => 'productTableTh', 'width' => '10%'],
+                'headerOptions' => ['class' => 'productTableTh', 'width' => '11%'],
             ],
             [
                 'label' => '负责用户组',
@@ -79,39 +95,48 @@ $this->registerCssFile(CSS_PATH . 'addProduct.css');
             ],
             [
                 'class' => ActionColumn::className(),
-                'template' => '{seeModule}&nbsp;{update}&nbsp;{delete}&nbsp;{sb}',
+                'template' => '{seeModule}&nbsp;{modify-product}&nbsp;{modify-module}&nbsp;{deleteProduct}',
                 'header' => '操作',
+                'headerOptions' => [
+                    'class' => 'productTableTh',
+                    'width' => '10%',
+                ],
                 'buttons' => [
                     'seeModule' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 'javascript:void(0);', [
                             'title' => '查看模块',
-                            'data-pjax' => '0',
+                            'class' => 'seeModule',
                         ]);
                     },
-                    'update' => function ($url, $model, $key) {
+                    'modify-product' => function ($url, $model, $key) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
-                            'title' => '编辑',
-                            'data-pjax' => '0',
+                            'title' => '修改产品信息',
                         ]);
                     },
-                    'delete' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                    'modify-module' => function ($url, $model, $key) {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                            'title' => '修改模块信息',
+                        ]);
+                    },
+                    'deleteProduct' => function ($url, $model, $key) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', 'javascript:void(0);', [
                             'title' => '删除',
-                            'data-confirm' => '确定删除该项产品信息?',
-                            'data-method' => 'post',
-                            'data-pjax' => '0',
+                            'class' => 'deleteProduct',
                         ]);
                     },
 
-                ],
-                'headerOptions' => [
-                    'class' => 'productTableTh',
-                    'width' => '8%',
                 ],
             ],
         ],
     ]);
     ?>
-
 </div>
+
+<?php Modal::begin([
+    'id' => 'showModuleModal',
+    'header' => '<div id="showModalHeader">产品模块详情</div>',
+    'size' => Modal::SIZE_LARGE,
+]); ?>
+<?php echo $this->render('show_module') ?>
+<?php Modal::end(); ?>
 

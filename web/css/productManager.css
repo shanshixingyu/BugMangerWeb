@@ -7,10 +7,11 @@
 
 #aboveProductTable {
     width: 100%;
-    overflow: hidden;
+    height: 50px;
+    /*overflow: hidden;*/
     margin-top: -10px;
-    padding: 10px 10px 5px;
-    /*background-color: #006611;*/
+    padding: 5px 10px;
+    /*background-color: #ff13bf;*/
 }
 
 #productTableName {
@@ -22,35 +23,18 @@
     /*background-color: red;*/
 }
 
-.addBtn {
-    width: 110px;
+.dropDownBtn {
     float: right;
-    color: #39BE18;
+    clear: none;
     font-weight: bold;
-    padding: 8px 5px;
-    margin-left: 10px;
     border-radius: 5px;
     text-decoration: none;
-    /*background: url("../img/ic_add.png") 5px 5px no-repeat #91caff;*/
-    background: url("../img/ic_add.png") 5px 5px no-repeat #91e9ec;
+    /*background-color: #91e9ec;*/
 }
 
-.addBtn > span {
-    margin-left: 30px;
-}
-
-.addBtn:hover,
-.addBtn:active,
-.addBtn:visited,
-.addBtn:link {
-    background-color: #91e9ec;
-    text-decoration: none;
+#dropDownOpt {
     color: #39BE18;
-    cursor: pointer;
-}
-
-.addBtn:hover {
-    background-color: #82d1d4;
+    font-size: 16px;
 }
 
 .productTableTh {
@@ -72,8 +56,4 @@
     margin: -10px 20px 0px;
     font-weight: bold;
     /*color: #337AC5;*/
-}
-
-#w0 {
-    clear: both;
 }

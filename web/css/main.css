@@ -48,7 +48,7 @@ body {
 
 #content {
     margin: 10px;
-    height: 500px;
+    height: 525px;
     padding: 1px;
     border: 2px solid #e8e8e8;
 }
@@ -62,7 +62,7 @@ body {
 
 #productList {
     width: 100%;
-    height: 350px;
+    height: 365px;
 }
 
 #productSelector {
@@ -71,7 +71,7 @@ body {
 
 #productContent {
     width: 100%;
-    height: 320px;
+    height: 340px;
     padding: 5px 20px;
     overflow: scroll;
 }
@@ -141,7 +141,7 @@ body {
 #rightContentInternal {
     float: left;
     width: 100%;
-    height: 450px;
+    height: 470px;
     font-size: 15px;
     overflow: auto;
     margin-top: -8px;

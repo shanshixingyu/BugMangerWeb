@@ -1,0 +1,34 @@
+#showModalHeader {
+    color: #1e57ff;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#showModuleTable {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#showModuleTable tr {
+    /*background-color: #ff3eed;*/
+}
+
+#showModuleTable th,
+#showModuleTable td {
+    padding: 5px;
+    border: 1px solid #C1C8D2;
+}
+
+#showModuleTable th {
+    font-size: 16px;
+}
+
+#showModuleTable td {
+    font-size: 15px;
+}
+
+#closeModalBtn {
+    /*text-align: center;*/
+    margin: 5px auto;
+}
