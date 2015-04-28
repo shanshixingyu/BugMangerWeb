@@ -1,17 +1,17 @@
-.addProductOrModuleInfo {
+.editProductOrModuleInfo {
     margin: 3px 10px 0;
     padding: 10px 20px 20px;
     background-color: #FFFFFF;
     overflow: hidden;
 }
 
-.addInfoTitle {
+.editInfoTitle {
     padding: 5px;
     color: #024772;
     font-size: 17px;
 }
 
-.addInfoTitleIcon {
+.editInfoTitleIcon {
     width: 10px;
     height: 25px;
     margin-right: 8px;
@@ -20,7 +20,7 @@
     float: left;
 }
 
-.addInfoForm {
+.editInfoForm {
     border: 1px solid #D6E1EA;
     margin-top: 10px;
     padding: 20px;
@@ -61,4 +61,12 @@
     margin-left: 120px;
     margin-top: 10px;
     margin-bottom: 5px;
+}
+
+/* 修改模块界面中的选择产品和模块部分的样式 */
+.test {
+    float: left;
+    margin: 0 5%;
+    width: 40% !important;
+    display: inline !important;
 }

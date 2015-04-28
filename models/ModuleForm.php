@@ -12,33 +12,56 @@ use yii\helpers\Json;
 
 class ModuleForm extends BaseForm
 {
+    public $id;/* 主要是在修改模块信息的时候有用 */
     public $name;
     public $productId;
+    public $productName;/* 主要是在修改模块信息的时候有用 */
     public $fuzeren;
     public $introduce;
 
+    public $isModify = false;
+
     public function rules()
     {
-        return [
+        $tempRules = [
             ['name', 'required', 'message' => '模块名称必填'],
-            ['productId', 'required', 'message' => '产品名称必选'],
             ['productId', 'validateProductExist'],
             ['name', 'validateNameUnique'],/* 同一个产品下的模块名称必须唯一*/
             ['fuzeren', 'required', 'message' => '模块负责人必选'],
             ['fuzeren', 'validateFuZeRenExist'],
         ];
+        if ($this->isModify) {
+            $tempRules[] = ['name', 'validateModuleExist'];/* 修改的时候验证模块是否存在 */
+        } else {
+            $tempRules[] = ['productId', 'required', 'message' => '产品名称必选'];
+        }
+        return $tempRules;
+    }
+
+    public function validateModuleExist($attribute, $params)
+    {
+        if ($this->isModify && !isset($this->id))
+            $this->addError('模块不存在');
     }
 
     /**
-     * 验证同一个产品下的名称是否唯一
+     * 验证同一个产品下的名称的唯一性
      * @param $attribute
      * @param $params
      */
     public function validateNameUnique($attribute, $params)
     {
         $productModule = ProductModule::findOne(['name' => $this->name, 'product_id' => $this->productId]);
-        if ($productModule !== null)
-            $this->addError($attribute, "指定产品下该模块已存在");
+        if ($productModule !== null) {
+            /* 验证唯一性的时候，如果是修改，且修改的名字没改变的话
+                                 (即模块id与name同时和查询出来的记录相同)，允许验证通过 */
+            if ($this->isModify && $this->id == $productModule->id) {
+
+            } else {
+                $this->addError($attribute, "指定产品下该模块已存在");
+            }
+        }
+
     }
 
     /**
@@ -75,7 +98,9 @@ class ModuleForm extends BaseForm
     public function attributeLabels()
     {
         return [
-            'productId' => '产品列表',
+            'productId' => '产品名称',
+            'productName' => '产品名称',
+            'id' => '模块选择',
             'name' => '模块名称',
             'fuzeren' => '负责人',
             'introduce' => '模块简介',
@@ -100,6 +125,16 @@ class ModuleForm extends BaseForm
             $result = false;
         }
         return $result;
+    }
+
+    public function modifyModuleOfDb()
+    {
+//        var_dump($this);
+        return ProductModule::updateAll([
+            'name' => $this->name,
+            'fuzeren' => Json::encode($this->fuzeren),
+            'introduce' => $this->introduce,
+        ], ['id' => isset($this->id) ? $this->id : 0]) > 0;
     }
 
 

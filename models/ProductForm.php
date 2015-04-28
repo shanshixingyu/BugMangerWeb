@@ -11,6 +11,8 @@ use yii\base\Exception;
 
 class ProductForm extends BaseForm
 {
+    public $id;
+    public $isModify = false;
     public $name;
     public $groupId;
     public $introduce;
@@ -19,18 +21,36 @@ class ProductForm extends BaseForm
     {
         return [
             ['name', 'required', 'message' => '产品名称必填'],
-            ['name', 'validateNameExist'],
+            ['name', 'validateNameUnique'],
             ['groupId', 'validateGroupExist'],//验证用户组是否还存在
         ];
     }
 
-    public function validateNameExist($attribute, $params)
+    /**
+     * 验证产品名称是否唯一
+     * @param $attribute
+     * @param $params
+     */
+    public function validateNameUnique($attribute, $params)
     {
         $product = Product::findOne(['name' => $this->name]);
-        if ($product !== null)
-            $this->addError($attribute, '产品名称已经存在');
+        if ($product !== null) {
+            /* 验证唯一性的时候，如果是修改，且修改的名字没改变的话
+                (即模块id与name同时和查询出来的记录相同)，允许验证通过 */
+            if ($this->isModify && $product->id == $this->id) {
+
+            } else {
+                $this->addError($attribute, '产品名称已经存在');
+            }
+        }
+
     }
 
+    /**
+     * 验证负责用户组是否存在
+     * @param $attribute
+     * @param $params
+     */
     public function validateGroupExist($attribute, $params)
     {
         $groupDetail = GroupDetail::findOne(['id' => $this->groupId]);
@@ -50,7 +70,7 @@ class ProductForm extends BaseForm
 
     /**
      * 添加产品到数据库中
-     * @return bool|array 当添加成功则返回true，没有添加成功则返回false，抛出异常则返回数组
+     * @return bool 当添加成功则返回true，没有添加成功则返回false，
      */
     public function addProductToDb()
     {
@@ -69,6 +89,19 @@ class ProductForm extends BaseForm
             $result = false;
         }
         return $result;
+    }
+
+    /**
+     * 修改数据库中的产品信息
+     * @return bool 当修改成功则返回true，没有修改成功则返回false
+     */
+    public function modifyProductOfDb()
+    {
+        return Product::updateAll([
+            'name' => $this->name,
+            'group_id' => $this->groupId,
+            'introduce' => $this->introduce
+        ], ['id' => isset($this->id) ? $this->id : 0]) > 0;//使用0是因为没有这项
     }
 
 

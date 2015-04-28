@@ -34,5 +34,16 @@ $this->params['breadcrumbs'][] = $this->title;
     'size' => 'modal-lg',
 ]); ?>
     <div id="showModal">
-        <div>
+    </div>
 <?php Modal::end(); ?>
+
+
+<?php if (true): ?>
+    sdafnsda osd no
+<?php elseif (true): ?>
+    sdfmsop mo
+<?php endif; ?>
+
+<?php if (true): ?>
+<?php else: ?>
+<?php endif; ?>
