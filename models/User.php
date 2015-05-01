@@ -16,6 +16,23 @@ class User extends ActiveRecord implements IdentityInterface
         return 'user';
     }
 
+
+    public function getRole()
+    {
+        return $this->hasOne(Role::className(), ['id' => 'role_id']);
+    }
+
+    /**
+     * 数据库表自身连接需要注意要给表起别名
+     * @return static
+     */
+    public function getCreateUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'creator'])->from(['second' => User::tableName()]);
+//        return $this->hasOne(User::className(), ['id' => 'creator'])->from(User::tableName() . ' second');
+    }
+
+
     public static function findIdentity($id)
     {
     }

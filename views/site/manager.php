@@ -10,11 +10,11 @@ $this->registerCssFile(CSS_PATH . 'manager.css');
 ?>
 
 <div id="managerWrap">
-    <a href="#" class="managerItem">
+    <a href="index.php?r=user/index" class="managerItem">
         <div id="userManagerIcon"></div>
         用户管理
     </a>
-    <a href="#" class="managerItem">
+    <a href="index.php?r=group/index" class="managerItem">
         <div id="groupManagerIcon"></div>
         团队管理
     </a>

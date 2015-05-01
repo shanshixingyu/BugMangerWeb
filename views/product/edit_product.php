@@ -24,11 +24,11 @@ $this->params['breadcrumbs'] = [
     ['label' => '产品管理', 'url' => 'index.php?r=product/index'],
     $this->title,
 ];
-$this->registerCssFile(CSS_PATH . 'edit_product_module.css');
+$this->registerCssFile(CSS_PATH . 'edit.css');
 
 ?>
 
-<div class="editProductOrModuleInfo">
+<div class="editInfo">
     <div class="editInfoTitle">
         <div class="editInfoTitleIcon"></div>
         <?php
@@ -48,9 +48,10 @@ $this->registerCssFile(CSS_PATH . 'edit_product_module.css');
         <?php echo $form->field($productForm, 'groupId')->dropDownList(ArrayHelper::map($groupDetails, 'id', 'name')); ?>
         <?php echo $form->field($productForm, 'introduce', [
             'template' => '<div class="infoRow"><div class="infoLabel">{label}</div><div class="infoInputArea">{input}</div></div>',
-        ])->textarea(['rows' => 6]) ?>
+        ])->textarea(['rows' => 6, 'style' => 'resize: none;']) ?>
         <?php echo Html::submitButton($isAddProductView ? '添加' : '修改', [
-            'class' => 'btn btn-primary submitBtn',
+            'class' => 'btn btn-primary',
+            'id' => 'submitBtn'
         ]) ?>
         <? ActiveForm::end(); ?>
     </div>

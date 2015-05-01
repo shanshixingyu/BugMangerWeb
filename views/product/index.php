@@ -15,16 +15,16 @@ $this->params['breadcrumbs'] = [
     ['label' => '后台管理', 'url' => 'index.php?r=site/manager'],
     $this->title,
 ];
-$this->registerCssFile(CSS_PATH . 'productManager.css');
+$this->registerCssFile(CSS_PATH . 'show_manager.css');
 $this->registerJsFile(JS_PATH . 'product_manager.js', [
     'depends' => [\app\assets\AppAsset::className()]
 ]);
 
 ?>
 
-<div id="productWrap">
-    <div id="aboveProductTable">
-        <div id="productTableName">产品信息表</div>
+<div id="showInfoWrap">
+    <div id="aboveShowInfTable">
+        <div id="showInfoTableName">产品信息表</div>
         <?php
         echo Nav::widget([
             'options' => ['class' => 'dropDownBtn'],
@@ -52,7 +52,7 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'layout' => "{items}\n{pager}\n{summary}",
-        'summary' => '<div class="productSummary">当前页&nbsp;{begin}-{end}&nbsp;&nbsp;&nbsp;总记录数&nbsp;{totalCount}<br/></div>',
+        'summary' => '<div class="showInfoSummary">当前页&nbsp;{begin}-{end}&nbsp;&nbsp;&nbsp;总记录数&nbsp;{totalCount}<br/></div>',
         'pager' => ['options' => ['id' => 'paginationWidget', 'class' => 'pagination',]],
         'dataColumnClass' => \yii\grid\DataColumn::className(),
         'columns' => [
@@ -61,14 +61,14 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
                 'label' => '产品名称',
                 'contentOptions' => ['class' => 'productName'],
                 'enableSorting' => false,
-                'headerOptions' => ['class' => 'productTableTh', 'width' => '11%'],
+                'headerOptions' => ['class' => 'showInfoTableTh', 'width' => '11%'],
             ],
             [
-                'label' => '负责用户组',
+                'label' => '负责团队',
                 'value' => function ($data) {
                     return isset($data->groupDetail->name) ? $data->groupDetail->name : '';
                 },
-                'headerOptions' => ['class' => 'productTableTh', 'width' => '12%'],
+                'headerOptions' => ['class' => 'showInfoTableTh', 'width' => '12%'],
             ],
             [
                 'label' => '产品介绍',
@@ -76,7 +76,7 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
                 'value' => function ($data) {
                     return isset($data->introduce) ? $data->introduce : '';
                 },
-                'headerOptions' => ['class' => 'productTableTh', 'width' => '50%'],
+                'headerOptions' => ['class' => 'showInfoTableTh', 'width' => '50%'],
             ],
             [
                 'label' => '创建者',
@@ -84,21 +84,21 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
                     return isset($data->createUser->name) ? $data->createUser->name : '';
                 },
                 'enableSorting' => false,
-                'headerOptions' => ['class' => 'productTableTh', 'width' => '8%'],
+                'headerOptions' => ['class' => 'showInfoTableTh', 'width' => '8%'],
             ],
             [
                 'attribute' => 'create_time',
                 'label' => '创建时间',
                 'format' => ['date', 'php:Y-m-d H:i:s'],
                 'enableSorting' => false,
-                'headerOptions' => ['class' => 'productTableTh', 'width' => '8%'],
+                'headerOptions' => ['class' => 'showInfoTableTh', 'width' => '8%'],
             ],
             [
                 'class' => ActionColumn::className(),
                 'template' => '{seeModule}&nbsp;{modify-product}&nbsp;{modify-module}&nbsp;{deleteProduct}',
                 'header' => '操作',
                 'headerOptions' => [
-                    'class' => 'productTableTh',
+                    'class' => 'showInfoTableTh',
                     'width' => '10%',
                 ],
                 'buttons' => [

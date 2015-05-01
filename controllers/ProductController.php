@@ -229,4 +229,10 @@ class ProductController extends Controller
         }
     }
 
+
+    public function actionTest($id)
+    {
+        echo 'actionTest ' . $id;
+    }
+
 }
