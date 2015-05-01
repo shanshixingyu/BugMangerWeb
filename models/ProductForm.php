@@ -53,7 +53,7 @@ class ProductForm extends BaseForm
      */
     public function validateGroupExist($attribute, $params)
     {
-        $groupDetail = GroupDetail::findOne(['id' => $this->groupId]);
+        $groupDetail = Group::findOne(['id' => $this->groupId]);
         if ($groupDetail === null) {
             $this->addError('负责团队数据过时，请刷新重试');
         }

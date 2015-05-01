@@ -66,7 +66,7 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
             [
                 'label' => '负责团队',
                 'value' => function ($data) {
-                    return isset($data->groupDetail->name) ? $data->groupDetail->name : '';
+                    return isset($data->group->name) ? $data->group->name : '';
                 },
                 'headerOptions' => ['class' => 'showInfoTableTh', 'width' => '12%'],
             ],

@@ -11,9 +11,9 @@ $this->title = '个人信息管理';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(CSS_PATH . 'pim.css');
 
-if (isset($this->params[JS_AFFECT_ROW]) && $this->params[JS_AFFECT_ROW] > 0) {
+if (isset($this->params[OPT_RESULT]) && $this->params[OPT_RESULT]) {
     $this->registerJs('window.onload=function(){alert("个人信息修改成功!");}');
-    unset($this->params[JS_AFFECT_ROW]);
+    unset($this->params[OPT_RESULT]);
 }
 
 ?>
@@ -41,8 +41,9 @@ if (isset($this->params[JS_AFFECT_ROW]) && $this->params[JS_AFFECT_ROW] > 0) {
         ])->textInput(['size' => 15, 'class' => 'cannotReadableInput', 'readonly' => 'true']); ?>
 
         <div style="background-color: #717171;width:350px;height: 1px;margin-top: -5px;margin-bottom: 10px;"></div>
-        <?php echo $form->field($userModifyForm, 'password')->passwordInput(['size' => 15]); ?>
-        <?php echo $form->field($userModifyForm, 'password2')->passwordInput(['size' => 15]); ?>
+        <?php echo $form->field($userModifyForm, 'oldPassword')->passwordInput(['size' => 15, 'placeHolder' => '不修改时留空']); ?>
+        <?php echo $form->field($userModifyForm, 'password')->passwordInput(['size' => 15, 'placeHolder' => '不修改时留空']); ?>
+        <?php echo $form->field($userModifyForm, 'password2')->passwordInput(['size' => 15, 'placeHolder' => '不修改时留空']); ?>
         <?php echo $form->field($userModifyForm, 'email')->textInput(['size' => 15]); ?>
 
         <?php echo Html::submitButton('修改', ['class' => 'btn btn-primary', 'style' => 'margin-left:100px;margin-top:15px;']) ?>

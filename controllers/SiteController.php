@@ -5,18 +5,16 @@
  */
 namespace app\controllers;
 
-use app\controllers\action\AddProductAction;
 use app\models\Product;
-use app\models\ProductModule;
+use app\models\Module;
 use app\models\Role;
 use app\models\User;
-use app\models\UserGroup;
+use app\models\Group;
 use app\models\UserModifyForm;
 use Yii;
 use app\models\LoginForm;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
-use app\controllers\action\HelloAction;
 
 class SiteController extends Controller
 {
@@ -37,10 +35,6 @@ class SiteController extends Controller
                 'maxLength' => 4,
                 'offset' => 0,
             ],
-            'hello' => [
-                'class' => HelloAction::className(),
-            ],
-
         ];
     }
 
@@ -69,16 +63,17 @@ class SiteController extends Controller
 
         if (isset($_POST['UserModifyForm']) && $userModifyForm->loadData() && $userModifyForm->validate()) {
             /* 表示修改个人信息部分过来的 */
-            $rowCount = User::updateAll(['password' => $userModifyForm->password, 'email' => $userModifyForm->email],
-                'id=:userId',
-                [':userId' => $userModifyForm->userId]);
-            $this->getView()->params[JS_AFFECT_ROW] = $rowCount;
+            $result = $userModifyForm->modifyPimOfDb();
+            $this->getView()->params[OPT_RESULT] = $result;
             //更新数据库后，还要将Yii中的user也更新下
             // Yii::$app->user = $user;
             //在这里不能使用refresh(),因为他会使得一些params数据不存在
+            $userModifyForm->oldPassword = "";
+            $userModifyForm->password = "";
+            $userModifyForm->password2 = "";
         } else {
-            if (isset($this->getView()->params[JS_AFFECT_ROW]))
-                unset($this->getView()->params[JS_AFFECT_ROW]);
+            if (isset($this->getView()->params[OPT_RESULT]))
+                unset($this->getView()->params[OPT_RESULT]);
             //到这里表示修改信息验证不成功或者还没修改信息
             /*从中获得信息，并且最好还是能够在进入界面的时候重新访问下数据库，
                               保证数据最新,不过数据也一般只有自己能够修改，也可不修改*/
@@ -86,23 +81,20 @@ class SiteController extends Controller
             $role = Role::findOne($user->role_id);
             $userModifyForm->userId = $user->id;
             $userModifyForm->userName = $user->name;
-            $userModifyForm->password = $userModifyForm->password2 = $user->password;
             $userModifyForm->roleName = $role->name;
             $userModifyForm->email = $user->email;
         }
         /* 查询指定用户id下的所有组名 */
-        $groups = UserGroup::find()->joinWith('groupDetail')->where([
-            'user_id' => $userModifyForm->userId,
-        ])->addGroupBy('group_id')->all();
+        $groups = Group::find()->where('member like "%' . $userModifyForm->userId . '%"')->all();
         $groupNames = [];
         foreach ($groups as $group) {
-            $groupNames[] = $group->groupDetail->name;
+            $groupNames[] = $group->name;
         }
         unset($groups);
 
         /* 参与项目与模块 */
         $where = 'fuzeren like "%\"' . $userModifyForm->userId . '\"%"';
-        $productModules = ProductModule::find()->joinWith('product')->where($where)->all();
+        $productModules = Module::find()->joinWith('product')->where($where)->all();
         $productModuleData = [];
         foreach ($productModules as $productModule) {
             $productModuleData[] = ['product' => $productModule->product->name, 'module' => $productModule->name];

@@ -22,6 +22,12 @@ $this->params['breadcrumbs'] = [
     ['label' => '用户管理', 'url' => 'index.php?r=user/index'],
     $this->title,
 ];
+
+if (Yii::$app->session->hasFlash(OPT_RESULT)) {
+    $this->registerJs('alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");');
+    Yii::$app->session->removeFlash(OPT_RESULT);
+}
+
 $this->registerCssFile(CSS_PATH . 'edit.css');
 ?>
 <div class="editInfo">
@@ -46,7 +52,7 @@ $this->registerCssFile(CSS_PATH . 'edit.css');
         echo $form->field($userForm, 'roleId')->dropDownList(ArrayHelper::map($roles, 'id', 'name'));
         echo $form->field($userForm, 'email')->textInput();
 
-        echo Html::submitButton($isAddUserView ? '添加' : '修改', ['class' => 'btn btn-primary submitBtn']);
+        echo Html::submitButton($isAddUserView ? '添加' : '修改', ['class' => 'btn btn-primary', 'id' => 'submitBtn']);
 
         ActiveForm::end(); ?>
 

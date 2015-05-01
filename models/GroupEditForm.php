@@ -7,12 +7,14 @@
 namespace app\models;
 
 
+use yii\helpers\Json;
+use yii\base\Exception;
+
 class GroupEditForm extends BaseForm
 {
     public $id;
     public $name;
     public $creator;
-    public $create_time;
     public $member;
     public $introduce;
 
@@ -30,14 +32,19 @@ class GroupEditForm extends BaseForm
 
     /***
      * 验证团队名字的唯一性
+     * 注意：当修改的时候，如果存在相同的并且id相同，则说明name没有发生改变
      * @param $attribute
      * @param $param
      */
     public function validateNameUnique($attribute, $param)
     {
-        $groupDetail = GroupDetail::find()->where(['name' => $this->name])->one();
-        if ($groupDetail != null) {
-            $this->addError($attribute, "团队名称已存在");
+        $group = Group::find()->where(['name' => $this->name])->one();
+        if ($group != null) {
+            if ($this->isModify && $this->id == $group->id) {
+
+            } else {
+                $this->addError($attribute, "团队名称已存在");
+            }
         }
     }
 
@@ -74,7 +81,40 @@ class GroupEditForm extends BaseForm
      */
     public function addGroupToDb()
     {
-
+        $group = new Group();
+        $group->name = $this->name;
+        $group->member = Json::encode($this->member);
+        $group->introduce = $this->introduce;
+        $group->creator = $this->creator;
+        date_default_timezone_set('Asia/Shanghai');
+        $group->create_time = date('Y-m-d H:i:s', time());
+        $group->setIsNewRecord(true);
+        $result = false;
+        try {
+            $result = $group->save();
+        } catch (Exception $e) {
+            $result = false;
+        }
+        return $result;
     }
+
+    /**
+     * 修改团队信息
+     */
+    public function modifyGroupOfDb()
+    {
+        $result = false;
+        try {
+            $result = Group::updateAll([
+                    'name' => $this->name,
+                    'member' => Json::encode($this->member),
+                    'introduce' => $this->introduce,
+                ], ['id' => $this->id]) > 0;
+        } catch (Exception $e) {
+            $result = false;
+        }
+        return $result;
+    }
+
 
 }

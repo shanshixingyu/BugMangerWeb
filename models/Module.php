@@ -9,7 +9,7 @@ namespace app\models;
 
 use yii\db\ActiveRecord;
 
-class ProductModule extends ActiveRecord
+class Module extends ActiveRecord
 {
     public $tempCreateUser;/*备用*/
     public $tempProduct;/*备用*/
@@ -17,7 +17,7 @@ class ProductModule extends ActiveRecord
 
     public static function tableName()
     {
-        return 'product_module';
+        return 'module';
     }
 
     public function getProduct()

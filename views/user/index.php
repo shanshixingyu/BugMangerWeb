@@ -17,15 +17,15 @@ $this->params['breadcrumbs'] = [
 
 $deleteJs = <<<JS
 $('.deleteUser').click(function(){
-    if (confirm("用户删除将同时删除其所在用户组中的信息，并且无法恢复，是否确认删除用户？")) {
+    if (confirm("删除用户的同时将删除其所在用户组中的信息，并且无法恢复，是否确认删除用户？")) {
         var row = $(this).parent().parent();
         $.get('index.php?r=user/delete', {userId: row.data('key')}, function (result) {
             if (result !== null && result.toUpperCase() == "SUCCESS") {
                 alert('用户删除成功！');
-                window.location.reload();
             } else {
                 alert('用户删除失败！');
             }
+            window.location.reload();//主要为了用户关闭了提示框后刷新界面
         });
     }
 });

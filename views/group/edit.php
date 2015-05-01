@@ -12,15 +12,14 @@ use yii\web\View;
 /* @var $pagination yii\data\Pagination */
 
 $isAddGroupView = true;
-//if (isset($isAdd) && $isAdd) {
-//    $isAddGroupView = true;
-//    $this->title = '添加团队';
-//} else {
-//    $isAddGroupView = false;
-//    $this->title = '修改团队';
-//}
+if (isset($isAdd) && $isAdd) {
+    $isAddGroupView = true;
+    $this->title = '新建团队';
+} else {
+    $isAddGroupView = false;
+    $this->title = '修改团队信息';
+}
 
-$this->title = '添加团队';
 $this->params['breadcrumbs'] = [
     ['label' => '后台管理', 'url' => 'index.php?r=site/manager'],
     ['label' => '团队管理', 'url' => 'index.php?r=group/index'],
@@ -28,6 +27,10 @@ $this->params['breadcrumbs'] = [
 ];
 $this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::POS_HEAD]);
 $this->registerCssFile(CSS_PATH . 'edit.css');
+if (Yii::$app->session->hasFlash(OPT_RESULT)) {
+    $this->registerJs('alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");');
+    Yii::$app->session->removeFlash(OPT_RESULT);
+}
 
 ?>
 <div class="editInfo">
@@ -35,7 +38,7 @@ $this->registerCssFile(CSS_PATH . 'edit.css');
         <div class="editInfoTitleIcon"></div>
         <?php
         if ($isAddGroupView) {
-            echo '添加团队';
+            echo '新建团队';
         } else {
             echo '修改团队信息';
         }

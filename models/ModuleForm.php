@@ -51,7 +51,7 @@ class ModuleForm extends BaseForm
      */
     public function validateNameUnique($attribute, $params)
     {
-        $productModule = ProductModule::findOne(['name' => $this->name, 'product_id' => $this->productId]);
+        $productModule = Module::findOne(['name' => $this->name, 'product_id' => $this->productId]);
         if ($productModule !== null) {
             /* 验证唯一性的时候，如果是修改，且修改的名字没改变的话
                                  (即模块id与name同时和查询出来的记录相同)，允许验证通过 */
@@ -109,7 +109,7 @@ class ModuleForm extends BaseForm
 
     public function addModuleToDb()
     {
-        $productModule = new ProductModule();
+        $productModule = new Module();
         $productModule->name = $this->name;
         $productModule->product_id = $this->productId;
         $productModule->fuzeren = Json::encode($this->fuzeren);
@@ -130,7 +130,7 @@ class ModuleForm extends BaseForm
     public function modifyModuleOfDb()
     {
 //        var_dump($this);
-        return ProductModule::updateAll([
+        return Module::updateAll([
             'name' => $this->name,
             'fuzeren' => Json::encode($this->fuzeren),
             'introduce' => $this->introduce,

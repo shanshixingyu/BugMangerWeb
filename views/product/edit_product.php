@@ -19,13 +19,17 @@ if (isset($isAdd) && $isAdd) {
     $isAddProductView = false;
 }
 
+if (Yii::$app->session->hasFlash(OPT_RESULT)) {
+    $this->registerJs('alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");');
+    Yii::$app->session->removeFlash(OPT_RESULT);
+}
+
 $this->params['breadcrumbs'] = [
     ['label' => '后台管理', 'url' => 'index.php?r=site/manager'],
     ['label' => '产品管理', 'url' => 'index.php?r=product/index'],
     $this->title,
 ];
 $this->registerCssFile(CSS_PATH . 'edit.css');
-
 ?>
 
 <div class="editInfo">
@@ -45,7 +49,7 @@ $this->registerCssFile(CSS_PATH . 'edit.css');
             ],
         ]); ?>
         <?php echo $form->field($productForm, 'name')->textInput(); ?>
-        <?php echo $form->field($productForm, 'groupId')->dropDownList(ArrayHelper::map($groupDetails, 'id', 'name')); ?>
+        <?php echo $form->field($productForm, 'groupId')->dropDownList(ArrayHelper::map($groups, 'id', 'name')); ?>
         <?php echo $form->field($productForm, 'introduce', [
             'template' => '<div class="infoRow"><div class="infoLabel">{label}</div><div class="infoInputArea">{input}</div></div>',
         ])->textarea(['rows' => 6, 'style' => 'resize: none;']) ?>

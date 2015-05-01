@@ -6,36 +6,25 @@
 
 namespace app\controllers;
 
-use app\models\ProductModule;
+use app\models\Module;
 use yii\base\Exception;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 use app\models\Product;
 use app\models\ProductForm;
-use app\models\GroupDetail;
-use app\models\UserGroup;
+use app\models\Group;
 use app\models\ModuleForm;
-use app\controllers\action\GetGroupMemberAction;
 use app\models\User;
 use Yii;
 
 
 class ProductController extends Controller
 {
-    public function actions()
-    {
-        return [
-            'getGroupMember' => [
-                'class' => GetGroupMemberAction::className(),
-            ],
-        ];
-    }
-
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Product::find()->joinWith(['createUser', 'groupDetail']),
+            'query' => Product::find()->joinWith(['createUser', 'group']),
             'pagination' => [
                 'pageSize' => 5,
             ],
@@ -45,7 +34,7 @@ class ProductController extends Controller
 
     public function actionSeeModule($productId)
     {
-        $productModules = ProductModule::find()->joinWith(['createUser'])->where(['product_id' => $productId])->all();
+        $productModules = Module::find()->joinWith(['createUser'])->where(['product_id' => $productId])->all();
 
         foreach ($productModules as $productModule) {
             /* 对模块创建者信息进行二次处理 */
@@ -86,17 +75,18 @@ class ProductController extends Controller
             $result = $productForm->addProductToDb();
             if ($result) {
                 /* 数据修改成功 */
-                return $this->render('opt_result', ['resultCode' => 200, 'message' => '产品信息添加成功！']);
+                Yii::$app->session->setFlash(OPT_RESULT, '产品信息添加成功！');
+                return $this->refresh();
             } else {
                 /* 数据修改失败 */
-                return $this->render('opt_result', ['message' => '产品信息添加失败！']);
+                Yii::$app->session->setFlash(OPT_RESULT, '产品信息添加失败！');
             }
         }
 
-        $groupDetails = GroupDetail::find()->select(['id', 'name'])->all();
+        $groups = Group::find()->select(['id', 'name'])->all();
         return $this->render('edit_product', [
             'productForm' => $productForm,
-            'groupDetails' => $groupDetails,
+            'groups' => $groups,
             'isAdd' => true
         ]);
     }
@@ -112,10 +102,11 @@ class ProductController extends Controller
                 $result = $productForm->modifyProductOfDb($id);
                 if ($result) {
                     /* 数据修改成功 */
-                    return $this->render('opt_result', ['resultCode' => 200, 'message' => '产品信息修改成功！']);
+                    Yii::$app->session->setFlash(OPT_RESULT, '产品信息修改成功！');
+                    return $this->refresh();
                 } else {
                     /* 数据修改失败 */
-                    return $this->render('opt_result', ['message' => '产品信息修改失败！']);
+                    Yii::$app->session->setFlash(OPT_RESULT, '产品信息修改失败！');
                 }
             }
         } else {
@@ -125,10 +116,10 @@ class ProductController extends Controller
             $productForm->introduce = $product->introduce;
         }
 
-        $groupDetails = GroupDetail::find()->select(['id', 'name'])->all();
+        $groups = Group::find()->select(['id', 'name'])->all();
         return $this->render('edit_product', [
             'productForm' => $productForm,
-            'groupDetails' => $groupDetails,
+            'groups' => $groups,
             'isAdd' => false
         ]);
     }
@@ -140,19 +131,27 @@ class ProductController extends Controller
             $result = $moduleForm->addModuleToDb();
             if ($result) {
                 /* 数据修改成功 */
-                return $this->render('opt_result', ['resultCode' => 200, 'message' => '产品模块信息添加成功！']);
+                Yii::$app->session->setFlash(OPT_RESULT, '产品模块信息添加成功！');
+                return $this->refresh();
             } else {
                 /* 数据修改失败 */
-                return $this->render('opt_result', ['message' => '产品模块信息添加失败！']);
+                Yii::$app->session->setFlash(OPT_RESULT, '产品模块信息添加失败！');
             }
         }
 
         /* 获得所有产品信息 */
         $products = Product::find()->select(['id', 'name', 'group_id'])->all();
-        if (count($products) > 0)
-            $groupMembers = UserGroup::find()->joinWith('user')->where(['group_id' => $products[0]->group_id])->all();
-        else
+        if (count($products) > 0) {
+            $group = Group::find()->select(['member'])->where(['id' => $products[0]->group_id])->one();
+            if ($group != null) {
+                $memberIds = Json::decode($group->member);
+                $groupMembers = User::find()->select(['id', 'name'])->where(['id' => $memberIds])->all();
+            } else {
+                $groupMembers = [];
+            }
+        } else {
             $groupMembers = [];
+        }
 
         return $this->render('edit_module', [
             'moduleForm' => $moduleForm,
@@ -173,12 +172,12 @@ class ProductController extends Controller
                 $result = $moduleForm->modifyModuleOfDb();
                 if ($result) {
                     /* 数据修改成功 */
-                    return $this->render('opt_result', ['resultCode' => 200, 'message' => '产品模块信息修改成功！']);
+                    Yii::$app->session->setFlash(OPT_RESULT, '产品模块信息修改成功！');
+                    return $this->refresh();
                 } else {
                     /* 数据修改失败 */
-                    return $this->render('opt_result', ['message' => '产品模块信息修改失败！']);
+                    Yii::$app->session->setFlash(OPT_RESULT, '产品模块信息修改失败！');
                 }
-            } else {
             }
         }
 
@@ -189,7 +188,7 @@ class ProductController extends Controller
         if ($product != null) {
             $moduleForm->productName = $product->name;
 //            $modules = ProductModule::findAll(['product_id' => $id]);
-            $modules = ProductModule::find()->select(['id', 'name', 'fuzeren', 'introduce'])->where(['product_id' => $id])->all();
+            $modules = Module::find()->select(['id', 'name', 'fuzeren', 'introduce'])->where(['product_id' => $id])->all();
             if (count($modules) > 0) {
                 $moduleForm->id = $modules[0]->id;
                 $moduleForm->name = $modules[0]->name;
@@ -197,7 +196,12 @@ class ProductController extends Controller
                 $moduleForm->introduce = $modules[0]->introduce;
             }
 
-            $groupMembers = UserGroup::find()->joinWith('user')->where(['group_id' => $product->group_id])->all();
+//            $groupMembers = UserGroup::find()->joinWith('user')->where(['group_id' => $product->group_id])->all();
+            $group = Group::find()->where(['id' => $product->group_id])->one();
+            if ($group != null)
+                $groupMembers = User::find()->select(['id', 'name'])->where(['id' => Json::decode($group->member)])->all();
+            else
+                $groupMembers = [];
         }
 
         return $this->render('edit_module', [
@@ -210,8 +214,23 @@ class ProductController extends Controller
 
     public function actionGetModule($moduleId)
     {
-        $module = ProductModule::find()->select(['name', 'fuzeren', 'introduce'])->where(['id' => $moduleId])->one();
+        $module = Module::find()->select(['name', 'fuzeren', 'introduce'])->where(['id' => $moduleId])->one();
         echo Json::encode($module);
+    }
+
+    public function actionGetGroupMember($productId)
+    {
+        //由产品id找到groupId，然后由groupId找到userId,然后从userId找到useName
+        $chooseProduct = Product::find()->select(['group_id'])->where(['id' => $productId])->one();
+        if ($chooseProduct == null)
+            return '';
+        $group = Group::find()->select(['member'])->where(['id' => $chooseProduct->group_id])->one();
+        if ($group != null)
+            $allMembers = User::find()->select(['id', 'name'])->where(['id' => Json::decode($group->member)])->all();
+        else
+            $allMembers = [];
+
+        return Json::encode($allMembers);
     }
 
     public function actionDeleteProduct($productId)
@@ -219,7 +238,7 @@ class ProductController extends Controller
         /* 删除产品的同时，也需要将产品的模块删除 */
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            ProductModule::deleteAll(['product_id' => $productId]);
+            Module::deleteAll(['product_id' => $productId]);
             Product::deleteAll(['id' => $productId]);
             $transaction->commit();
             echo 'success';
@@ -227,12 +246,6 @@ class ProductController extends Controller
             $transaction->rollBack();
             echo 'failure';
         }
-    }
-
-
-    public function actionTest($id)
-    {
-        echo 'actionTest ' . $id;
     }
 
 }

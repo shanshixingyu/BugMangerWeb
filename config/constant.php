@@ -10,7 +10,6 @@ defined("JS_PATH") or define("JS_PATH", '/BugManagerWeb/web/js/');
 defined("ASSETS_PATH") or define("ASSETS_PATH", '/BugManagerWeb/web/assets/');
 
 /* 定义js中影响行数的键值 */
-defined("JS_AFFECT_ROW") or define("JS_AFFECT_ROW", 'js_affect_row');
 defined("OPT_RESULT") or define("OPT_RESULT", 'opt_result');
 
 /* 添加产品的错误状态 */

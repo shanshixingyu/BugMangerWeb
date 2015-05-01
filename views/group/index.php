@@ -14,19 +14,21 @@ $this->params['breadcrumbs'] = [
 ];
 
 $deleteJs = <<<JS
-$('.deleteUser').click(function(){
-    if (confirm("用户删除将同时删除其所在用户组中的信息，并且无法恢复，是否确认删除用户？")) {
+$('.deleteGroup').click(function(){
+    if (confirm("删除后将无法恢复，是否确认删除？")) {
         var row = $(this).parent().parent();
-        $.get('index.php?r=user/delete', {userId: row.data('key')}, function (result) {
-            if (result !== null && result.toUpperCase() == "SUCCESS") {
-                alert('用户删除成功！');
-                window.location.reload();
+        $.get('index.php?r=group/delete', {id: row.data('key')}, function (data) {
+            var result=$.parseJSON(data);
+            if (result !== null) {
+                alert(result.message);
             } else {
-                alert('用户删除失败！');
+                alert('删除失败！');
             }
+            window.location.reload();//主要为了用户关闭了提示框后刷新界面
         });
     }
 });
+
 JS;
 $this->registerJs($deleteJs);
 $this->registerCssFile(CSS_PATH . 'show_manager.css');
@@ -35,7 +37,7 @@ $this->registerCssFile(CSS_PATH . 'show_manager.css');
 <div id="showInfoWrap">
     <div id="aboveShowInfTable">
         <div id="showInfoTableName">团队信息表</div>
-        <a href="index.php?r=group/add" class="optBtn">添加团队</a>
+        <a href="index.php?r=group/add" class="optBtn">新建团队</a>
     </div>
     <table class="table table-striped table-bordered">
         <thead>
@@ -49,31 +51,28 @@ $this->registerCssFile(CSS_PATH . 'show_manager.css');
         </tr>
         </thead>
         <tbody>
-        <?php if (isset($groupDetails) && count($groupDetails) > 0): ?>
-            <?php foreach ($groupDetails as $groupDetail): ?>
-                <tr>
-                    <td><?php echo $groupDetail->name; ?></td>
+        <?php if (isset($groups) && count($groups) > 0): ?>
+            <?php foreach ($groups as $group): ?>
+                <tr data-key="<?php echo $group->id; ?>">
+                    <td><?php echo $group->name; ?></td>
                     <td>
                         <?php
-                        if (isset($groupDetail->member) && is_array($groupDetail->member)) {
-                            foreach ($groupDetail->member as $one) {
+                        if (isset($group->member) && is_array($group->member)) {
+                            foreach ($group->member as $one) {
                                 echo '<div class="showCellInfoItem">', $one->name, '</div>';
                             }
                         }
                         ?>
                     </td>
-                    <td><?php echo $groupDetail->introduce; ?></td>
+                    <td><?php echo $group->introduce; ?></td>
                     <td>
-                        <?php echo (isset($groupDetail->createUser) && isset($groupDetail->createUser->name)) ? $groupDetail->createUser->name : ''; ?>
+                        <?php echo (isset($group->createUser) && isset($group->createUser->name)) ? $group->createUser->name : ''; ?>
                     </td>
-                    <td><?php echo $groupDetail->create_time; ?></td>
+                    <td><?php echo $group->create_time; ?></td>
                     <td>
-                        <a href="#" title="编辑">
+                        <a href="index.php?r=group/modify&id=<?php echo $group->id; ?>" title="编辑">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </a>
-                        <!--                        <a href="index.php?r=group/xxx&id=-->
-                        <?php //echo $groupDetail->id; ?><!--" title="编辑"><span-->
-                        <!--                                class="glyphicon glyphicon-pencil"></span></a>-->
                         &nbsp;&nbsp;
                         <a class="deleteGroup" href="javascript:void(0)" title="删除">
                             <span class="glyphicon glyphicon-trash"></span>

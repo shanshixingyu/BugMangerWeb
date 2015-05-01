@@ -25,6 +25,10 @@ $this->params['breadcrumbs'] = [
     ['label' => '产品管理', 'url' => 'index.php?r=product/index'],
     $this->title,
 ];
+if (Yii::$app->session->hasFlash(OPT_RESULT)) {
+    $this->registerJs('alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");');
+    Yii::$app->session->removeFlash(OPT_RESULT);
+}
 $this->registerCssFile(CSS_PATH . 'edit.css');
 $this->registerJsFile(JS_PATH . 'edit_module.js', [
     'depends' => [\app\assets\AppAsset::className()]
@@ -62,7 +66,7 @@ $this->registerJsFile(JS_PATH . 'edit_module.js', [
                 <?php endif; ?>
 
                 <?php echo $form->field($moduleForm, 'name')->textInput(); ?>
-                <?php echo $form->field($moduleForm, 'fuzeren')->dropDownList(ArrayHelper::map($groupMembers, 'user_id', 'user.name'), ['multiple' => 'multiple']) ?>
+                <?php echo $form->field($moduleForm, 'fuzeren')->dropDownList(ArrayHelper::map($groupMembers, 'id', 'name'), ['multiple' => 'multiple']) ?>
                 <?php echo $form->field($moduleForm, 'introduce', ['template' => '<div class="infoRow"><div class="infoLabel">{label}</div><div class="infoInputArea">{input}</div></div>',])
                     ->textarea(['rows' => 6, 'style' => 'resize: none;']) ?>
 

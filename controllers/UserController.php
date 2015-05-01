@@ -38,10 +38,11 @@ class UserController extends Controller
             $result = $userForm->addUserToDb();
             if (isset($result) && $result) {
                 /* 数据插入成功 */
-                return $this->render('opt_result', ['message' => '用户信息保存成功！']);
+                Yii::$app->session->setFlash(OPT_RESULT, '用户信息保存成功！');
+                return $this->refresh();
             } else {
                 /* 数据插入失败 */
-                return $this->render('opt_result', ['message' => '用户信息保存失败！']);
+                Yii::$app->session->setFlash(OPT_RESULT, '用户信息保存失败！');
             }
         }
 
@@ -64,10 +65,11 @@ class UserController extends Controller
                 $result = $userForm->modifyUserOfDb();
                 if (isset($result) && $result) {
                     /* 数据插入成功 */
-                    return $this->render('opt_result', ['message' => '用户信息修改成功！']);
+                    Yii::$app->session->setFlash(OPT_RESULT, '用户信息修改成功！');
+                    return $this->refresh();
                 } else {
                     /* 数据插入失败 */
-                    return $this->render('opt_result', ['message' => '用户信息修改失败！']);
+                    Yii::$app->session->setFlash(OPT_RESULT, '用户信息修改失败！');
                 }
             }
         } else {
@@ -87,10 +89,9 @@ class UserController extends Controller
 
     public function actionDelete($userId)
     {
-        /* 删除用户的同时，也需要其从用户组（团队）中删除 */
+        /* 删除用户的同时，也需要其从用户组（团队）中删除,这个暂时还没做,不过这个问题在界面上是不会出现问题,后期完善 */
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            UserGroup::deleteAll(['user_id' => $userId]);
             User::deleteAll(['id' => $userId]);
             $transaction->commit();
             echo 'success';

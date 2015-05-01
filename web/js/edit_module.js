@@ -1,10 +1,10 @@
 $('#moduleform-productid').change(function(data){
     var productId=$(this).find('option:selected').val();
-    $.get('index.php?r=product/getGroupMember',{productId:productId},function(data){
+    $.get('index.php?r=product/get-group-member',{productId:productId},function(data){
         var members=jQuery.parseJSON(data);
         $('#moduleform-fuzeren').empty();
         $.each(members,function(idx,member){
-            $('#moduleform-fuzeren').append('<option value="'+member.userId+'">'+member.userName+'</option>');
+            $('#moduleform-fuzeren').append('<option value="'+member.id+'">'+member.name+'</option>');
         });
     });
 });
