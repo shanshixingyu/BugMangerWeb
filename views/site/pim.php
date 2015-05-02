@@ -11,11 +11,6 @@ $this->title = '个人信息管理';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(CSS_PATH . 'pim.css');
 
-if (isset($this->params[OPT_RESULT]) && $this->params[OPT_RESULT]) {
-    $this->registerJs('window.onload=function(){alert("个人信息修改成功!");}');
-    unset($this->params[OPT_RESULT]);
-}
-
 ?>
 <div id="userInfo" class="infoArea">
     <div class="infoTitle">

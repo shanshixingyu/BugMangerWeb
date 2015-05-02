@@ -113,7 +113,7 @@ class ModuleForm extends BaseForm
         $productModule->name = $this->name;
         $productModule->product_id = $this->productId;
         $productModule->fuzeren = Json::encode($this->fuzeren);
-        $productModule->creator = 2; //后期优化***************
+        $productModule->creator = \Yii::$app->user->identity->getId();
         date_default_timezone_set('Asia/Shanghai');
         $productModule->create_time = date('Y-m-d H:i:s', time());
         $productModule->introduce = $this->introduce;

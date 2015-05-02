@@ -77,7 +77,7 @@ class ProductForm extends BaseForm
         $product = new Product();
         $product->name = $this->name;
         $product->group_id = $this->groupId;
-        $product->creator = 2;//将在后期使用：Yii::$app->user->id替代;
+        $product->creator = Yii::$app->user->identity->getId();
         date_default_timezone_set('Asia/Shanghai');
         $product->create_time = date('Y-m-d H:i:s', time());
         $product->introduce = $this->introduce;

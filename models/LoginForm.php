@@ -1,6 +1,7 @@
 <?php
 namespace app\models;
 
+use app\controllers\BaseController;
 use Yii;
 use yii\base\Model;
 
@@ -53,11 +54,11 @@ class LoginForm extends Model
      */
     public function  validateUser($attribute, $params)
     {
-//        //对用户信息进行md5加密,添加用户完成后再开启该功能
-//        $this->password=md5($this->password);
-        $this->user = User::findOne(['name' => $this->username, 'password' => $this->password]);
-        if (!$this->user) {
-            $this->addError($attribute, '用户名不存在或者密码不正确');
+        //先对登录密码信息进行加密,好和数据库比对
+        $encryptedPassword = BaseController::getEncryptedPassword($this->password);
+        $this->user = User::findOne(['name' => $this->username, 'password' => $encryptedPassword]);
+        if ($this->user === null) {
+            $this->addError($attribute, '用户不存在或者密码不正确');
         }
     }
 
@@ -74,6 +75,10 @@ class LoginForm extends Model
         }
     }
 
+    /**
+     * 找到当前用户
+     * @return User|null
+     */
     private function getUser()
     {
         if ($this->user === false) {

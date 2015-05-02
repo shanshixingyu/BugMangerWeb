@@ -11,14 +11,37 @@ use Yii;
 use app\models\Role;
 use app\models\User;
 use app\models\UserForm;
-use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 use yii\base\Exception;
+use yii\filters\AccessControl;
+use yii\helpers\Url;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'add', 'modify'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => false,
+                        'verbs' => ['?']
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
+        $this->auth();
+
         $dataProvider = new ActiveDataProvider([
             'query' => User::find()->joinWith(['role', 'createUser']),
             'pagination' => [
@@ -32,8 +55,9 @@ class UserController extends Controller
 
     public function actionAdd()
     {
-        $userForm = new UserForm();
+        $this->auth();
 
+        $userForm = new UserForm();
         if (isset($_POST['UserForm']) && $userForm->loadData() && $userForm->validate()) {
             $result = $userForm->addUserToDb();
             if (isset($result) && $result) {
@@ -56,6 +80,8 @@ class UserController extends Controller
 
     public function actionModify($id)
     {
+        $this->auth();
+
         $userForm = new UserForm();
         $userForm->isModify = true;
         $userForm->id = $id;

@@ -6,6 +6,8 @@
 namespace app\models;
 
 
+use app\controllers\BaseController;
+
 class UserModifyForm extends BaseForm
 {
     public $userId;
@@ -37,7 +39,7 @@ class UserModifyForm extends BaseForm
 
     public function validateOldCorrect($attribute, $param)
     {
-        $user = User::find()->where(['id' => $this->userId, 'password' => $this->oldPassword])->one();
+        $user = User::find()->where(['id' => $this->userId, 'password' => BaseController::getEncryptedPassword($this->oldPassword)])->one();
         if ($user === null) {
             $this->addError($attribute, '原密码不正确');
         }
@@ -74,7 +76,7 @@ class UserModifyForm extends BaseForm
     public function modifyPimOfDb()
     {
         if ($this->modifyPassword) {
-            $changedItem = ['password' => $this->password, 'email' => $this->email];
+            $changedItem = ['password' => BaseController::getEncryptedPassword($this->password), 'email' => $this->email];
         } else {
             $changedItem = ['email' => $this->email];
         }

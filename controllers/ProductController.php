@@ -8,8 +8,8 @@ namespace app\controllers;
 
 use app\models\Module;
 use yii\base\Exception;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
-use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 use app\models\Product;
 use app\models\ProductForm;
@@ -19,10 +19,32 @@ use app\models\User;
 use Yii;
 
 
-class ProductController extends Controller
+class ProductController extends BaseController
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'add-product', 'modify-product', 'add-module', 'modify-module'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => false,
+                        'verbs' => ['?']
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
+        $this->auth();
+
         $dataProvider = new ActiveDataProvider([
             'query' => Product::find()->joinWith(['createUser', 'group']),
             'pagination' => [
@@ -34,8 +56,9 @@ class ProductController extends Controller
 
     public function actionSeeModule($productId)
     {
-        $productModules = Module::find()->joinWith(['createUser'])->where(['product_id' => $productId])->all();
+        $this->auth();
 
+        $productModules = Module::find()->joinWith(['createUser'])->where(['product_id' => $productId])->all();
         foreach ($productModules as $productModule) {
             /* 对模块创建者信息进行二次处理 */
             if (isset($productModule->createUser) && isset($productModule->createUser->name)) {
@@ -69,6 +92,8 @@ class ProductController extends Controller
 
     public function actionAddProduct()
     {
+        $this->auth();
+
         $productForm = new ProductForm();
 
         if (isset($_POST['ProductForm']) && $productForm->loadData() && $productForm->validate()) {
@@ -93,6 +118,8 @@ class ProductController extends Controller
 
     public function actionModifyProduct($id)
     {
+        $this->auth();
+
         $productForm = new ProductForm();
 
         if (isset($_POST['ProductForm']) && $productForm->loadData()) {
@@ -126,6 +153,8 @@ class ProductController extends Controller
 
     public function actionAddModule()
     {
+        $this->auth();
+
         $moduleForm = new ModuleForm();
         if (isset($_POST['ModuleForm']) && $moduleForm->loadData() && $moduleForm->validate()) {
             $result = $moduleForm->addModuleToDb();
@@ -163,6 +192,8 @@ class ProductController extends Controller
 
     public function actionModifyModule($id)
     {
+        $this->auth();
+
         $moduleForm = new ModuleForm();
 
         if (isset($_POST['ModuleForm']) && $moduleForm->loadData()) {
@@ -214,12 +245,16 @@ class ProductController extends Controller
 
     public function actionGetModule($moduleId)
     {
+        $this->auth();
+
         $module = Module::find()->select(['name', 'fuzeren', 'introduce'])->where(['id' => $moduleId])->one();
         echo Json::encode($module);
     }
 
     public function actionGetGroupMember($productId)
     {
+//        $this->auth();
+
         //由产品id找到groupId，然后由groupId找到userId,然后从userId找到useName
         $chooseProduct = Product::find()->select(['group_id'])->where(['id' => $productId])->one();
         if ($chooseProduct == null)
@@ -235,6 +270,8 @@ class ProductController extends Controller
 
     public function actionDeleteProduct($productId)
     {
+//        $this->auth();
+
         /* 删除产品的同时，也需要将产品的模块删除 */
         $transaction = Yii::$app->db->beginTransaction();
         try {

@@ -15,3 +15,6 @@ defined("OPT_RESULT") or define("OPT_RESULT", 'opt_result');
 /* 添加产品的错误状态 */
 defined("PRODUCT_HAS_EXIST_ERROR") or define("PRODUCT_HAS_EXIST_ERROR", 'product_has_exist_error');
 defined("ADD_PRODUCT_OTHER_ERROR") or define("ADD_PRODUCT_OTHER_ERROR", 'add_product_other_error');
+
+/* 该常量主要用于用户密码的加密 */
+defined("PASSWORD_KEY") or define("PASSWORD_KEY", 'GuLang');

@@ -2,6 +2,7 @@
 namespace app\models;
 
 use yii\db\ActiveRecord;
+use yii\helpers\Json;
 use yii\web\IdentityInterface;
 
 
@@ -15,7 +16,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return 'user';
     }
-
 
     public function getRole()
     {
@@ -35,22 +35,32 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findIdentity($id)
     {
+        return User::findOne(['id' => $id]);
     }
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
+        return null;
     }
 
     public function getId()
     {
+        return $this->id;
     }
 
     public function getAuthKey()
     {
+        $authKey = ['id' => $this->id, 'password' => $this->password];
+        return Json::encode($authKey);
     }
 
     public function validateAuthKey($authKey)
     {
+        $keys = Json::decode($authKey);
+        if (isset($keys) && $keys->id == $this->id && $keys->password == $this->password)
+            return true;
+        else
+            return false;
     }
 
 

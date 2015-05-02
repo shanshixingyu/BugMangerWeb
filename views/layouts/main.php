@@ -6,11 +6,25 @@
 use app\assets\AppAsset;
 use yii\helpers\Html;
 use \yii\widgets\Breadcrumbs;
+use yii\helpers\ArrayHelper;
+use yii\web\View;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
 AppAsset::register($this);
 Yii::$app->homeUrl = 'index.php?r=site/bug';
+
+if (Yii::$app->session->hasFlash(OPT_RESULT)) {
+    $this->registerJs('window.onload=function(){alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");}');
+    Yii::$app->session->removeFlash(OPT_RESULT);
+}
+$productModuleInfo = [];
+if (isset($this->context->productModuleInfo)) {
+    $productModuleInfo = $this->context->productModuleInfo;
+} else {
+    $productModuleInfo = ['products' => [], 'modules' => []];
+}
+$this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::POS_HEAD]);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -26,27 +40,36 @@ Yii::$app->homeUrl = 'index.php?r=site/bug';
 <div id="header">
     <div id="titleLogo"></div>
     <ul id="navigation">
-        <li class="navigationItem">欢迎你，<span style="color: #FF0000;font-weight:bold;">admin</span></li>
+        <li class="navigationItem">欢迎你，
+            <span style="color: #FF0000;font-weight:bold;">
+                <?php echo Yii::$app->user->identity->name; ?>
+            </span>
+            ( <?php echo Yii::$app->user->identity->role->name; ?>)
+        </li>
         <li class="navigationItem"><span class="navigationDivider">|</span><a href="index.php?r=site/pim">个人信息管理</a>
         </li>
-        <li class="navigationItem"><span class="navigationDivider">|</span><a href="index.php?r=site/manager">后台管理</a></li>
-        <li class="navigationItem"><span class="navigationDivider">|</span><a href="#">退出系统</a></li>
+        <?php if (isset(Yii::$app->user->identity->role_id) && Yii::$app->user->identity->role_id < 2): //只有超级管理员和管理人员才有后台管理的权限?>
+            <li class="navigationItem"><span class="navigationDivider">|</span>
+                <a href="index.php?r=site/manager">后台管理</a>
+            </li>
+        <?php endif; ?>
+        <li class="navigationItem"><span class="navigationDivider">|</span><a href="index.php?r=site/logout">退出系统</a>
+        </li>
     </ul>
 </div>
 <div id="content">
     <div id="leftContent">
         <div id="productList">
-            <?php echo Html::dropDownList("productSelector", null, ['孤狼软件', '毕设'], ["id" => 'productSelector']); ?>
-            <div id="productContent">
-                <p>神农放松是神农放松是神农放松是神农放松是</p>
+            <?php
+            echo Html::dropDownList("productSelector", null,
+                ArrayHelper::map($productModuleInfo['products'], 'id', 'name'), ["id" => 'productSelector']);
+            ?>
+            <ul id="moduleContent">
+                <?php foreach ($productModuleInfo['modules'] as $module): ?>
+                    <li class="moduleItem"><?php echo $module->name; ?></li>
+                <?php endforeach; ?>
 
-                <p>神农放松是神农放松是神农放松是</p>
-
-                <p>神农放松是神农放松是</p>
-
-                <p>神农放松是</p>
-
-            </div>
+            </ul>
         </div>
         <div id="aboutMe">
             <div>个人相关信息</div>
@@ -71,6 +94,20 @@ Yii::$app->homeUrl = 'index.php?r=site/bug';
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $('document').ready(function () {
+        $('#productSelector').change(function () {
+            $.get('index.php?r=site/get-module', {productId: $(this).val()}, function (data) {
+                $('#moduleContent').empty();
+                var result = $.parseJSON(data);
+                $.each(result, function (idx, module) {
+                    $('#moduleContent').append('<li class="moduleItem">' + module.name + '</li>');
+                });
+
+            });
+        });
+    });
+</script>
 <?php $this->endBody() ?>
 </body>
 </html>

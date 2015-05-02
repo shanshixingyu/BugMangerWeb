@@ -25,12 +25,8 @@ $this->params['breadcrumbs'] = [
     ['label' => '团队管理', 'url' => 'index.php?r=group/index'],
     $this->title,
 ];
-$this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::POS_HEAD]);
+//$this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::POS_HEAD]);
 $this->registerCssFile(CSS_PATH . 'edit.css');
-if (Yii::$app->session->hasFlash(OPT_RESULT)) {
-    $this->registerJs('alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");');
-    Yii::$app->session->removeFlash(OPT_RESULT);
-}
 
 ?>
 <div class="editInfo">

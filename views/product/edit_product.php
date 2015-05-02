@@ -19,11 +19,6 @@ if (isset($isAdd) && $isAdd) {
     $isAddProductView = false;
 }
 
-if (Yii::$app->session->hasFlash(OPT_RESULT)) {
-    $this->registerJs('alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");');
-    Yii::$app->session->removeFlash(OPT_RESULT);
-}
-
 $this->params['breadcrumbs'] = [
     ['label' => '后台管理', 'url' => 'index.php?r=site/manager'],
     ['label' => '产品管理', 'url' => 'index.php?r=product/index'],

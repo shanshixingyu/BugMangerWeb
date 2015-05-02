@@ -19,7 +19,7 @@ AppAsset::register($this);
 <head>
     <meta charset="utf-8">
     <title>系统登录</title>
-    <link href="/yii-basic-app-2.0.3/web/assets/61ba6892/css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo ASSETS_PATH; ?>61ba6892/css/bootstrap.css" rel="stylesheet">
     <link href="<?php echo CSS_PATH; ?>login.css" rel="stylesheet" type="text/css">
 </head>
 <body>

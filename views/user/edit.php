@@ -23,11 +23,6 @@ $this->params['breadcrumbs'] = [
     $this->title,
 ];
 
-if (Yii::$app->session->hasFlash(OPT_RESULT)) {
-    $this->registerJs('alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");');
-    Yii::$app->session->removeFlash(OPT_RESULT);
-}
-
 $this->registerCssFile(CSS_PATH . 'edit.css');
 ?>
 <div class="editInfo">

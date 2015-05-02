@@ -12,14 +12,36 @@ use app\models\Product;
 use app\models\User;
 use yii\data\Pagination;
 use yii\helpers\Json;
-use yii\web\Controller;
 use Yii;
 use yii\base\Exception;
+use yii\filters\AccessControl;
 
-class GroupController extends Controller
+class GroupController extends BaseController
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'add', 'modify'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => false,
+                        'verbs' => ['?']
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
+        $this->auth();
+
         $query = Group::find()->joinWith(['createUser']);
         $countQuery = clone $query;
         $pagination = new Pagination([
@@ -39,8 +61,10 @@ class GroupController extends Controller
 
     public function actionAdd()
     {
+        $this->auth();
+
         $groupEditForm = new GroupEditForm();
-        $groupEditForm->creator = 2;//\Yii::$app->user
+        $groupEditForm->creator = Yii::$app->user->identity->getId();
         $groupEditForm->isModify = false;
 
         if (isset($_POST['GroupEditForm']) && $groupEditForm->loadData() && $groupEditForm->validate()) {
@@ -69,8 +93,9 @@ class GroupController extends Controller
 
     public function actionModify($id)
     {
+        $this->auth();
+
         $groupEditForm = new GroupEditForm();
-        $groupEditForm->creator = 2;//\Yii::$app->user
         $groupEditForm->id = $id;
         $groupEditForm->isModify = true;
 

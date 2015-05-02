@@ -6,6 +6,7 @@
 
 namespace app\models;
 
+use app\controllers\BaseController;
 use yii\base\Exception;
 
 class UserForm extends BaseForm
@@ -71,9 +72,10 @@ class UserForm extends BaseForm
     {
         $user = new User();
         $user->name = $this->name;
+        $user->password = BaseController::getEncryptedPassword();
         $user->role_id = $this->roleId;
         $user->email = $this->email;
-        $user->creator = 2;//这个在后期还需要更改
+        $user->creator = \Yii::$app->user->identity->getId();
         date_default_timezone_set('Asia/Shanghai');
         $user->create_time = date('Y-m-d H:i:s', time());
         $user->setIsNewRecord(true);

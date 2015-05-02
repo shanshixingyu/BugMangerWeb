@@ -25,10 +25,6 @@ $this->params['breadcrumbs'] = [
     ['label' => '产品管理', 'url' => 'index.php?r=product/index'],
     $this->title,
 ];
-if (Yii::$app->session->hasFlash(OPT_RESULT)) {
-    $this->registerJs('alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");');
-    Yii::$app->session->removeFlash(OPT_RESULT);
-}
 $this->registerCssFile(CSS_PATH . 'edit.css');
 $this->registerJsFile(JS_PATH . 'edit_module.js', [
     'depends' => [\app\assets\AppAsset::className()]

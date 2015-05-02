@@ -121,6 +121,7 @@
 
 #userProjectShow {
     float: left;
+    min-width: 150px;
 }
 
 .userProjectItem {
