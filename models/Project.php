@@ -1,6 +1,6 @@
 <?php
 /**
- * 产品信息模型
+ * 项目信息模型
  * Created by GuLang on 2015-04-22.
  */
 
@@ -10,11 +10,11 @@ namespace app\models;
 use yii\db\ActiveRecord;
 
 
-class Product extends ActiveRecord
+class Project extends ActiveRecord
 {
     public static function tableName()
     {
-        return 'product';
+        return 'project';
     }
 
     public function getGroup()

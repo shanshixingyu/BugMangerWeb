@@ -12,9 +12,9 @@ defined("ASSETS_PATH") or define("ASSETS_PATH", '/BugManagerWeb/web/assets/');
 /* 定义js中影响行数的键值 */
 defined("OPT_RESULT") or define("OPT_RESULT", 'opt_result');
 
-/* 添加产品的错误状态 */
-defined("PRODUCT_HAS_EXIST_ERROR") or define("PRODUCT_HAS_EXIST_ERROR", 'product_has_exist_error');
-defined("ADD_PRODUCT_OTHER_ERROR") or define("ADD_PRODUCT_OTHER_ERROR", 'add_product_other_error');
+///* 添加项目的错误状态 */
+//defined("PROJECT_HAS_EXIST_ERROR") or define("PROJECT_HAS_EXIST_ERROR", 'project_has_exist_error');
+//defined("ADD_PROJECT_OTHER_ERROR") or define("ADD_PROJECT_OTHER_ERROR", 'add_project_other_error');
 
 /* 该常量主要用于用户密码的加密 */
 defined("PASSWORD_KEY") or define("PASSWORD_KEY", 'GuLang');

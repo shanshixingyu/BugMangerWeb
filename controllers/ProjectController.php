@@ -7,26 +7,26 @@
 namespace app\controllers;
 
 use app\models\Module;
+use app\models\Project;
 use yii\base\Exception;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\data\ActiveDataProvider;
-use app\models\Product;
-use app\models\ProductForm;
 use app\models\Group;
 use app\models\ModuleForm;
 use app\models\User;
+use app\models\ProjectForm;
 use Yii;
 
 
-class ProductController extends BaseController
+class ProjectController extends BaseController
 {
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'add-product', 'modify-product', 'add-module', 'modify-module'],
+                'only' => ['index', 'add-project', 'modify-project', 'add-module', 'modify-module'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -46,7 +46,7 @@ class ProductController extends BaseController
         $this->auth();
 
         $dataProvider = new ActiveDataProvider([
-            'query' => Product::find()->joinWith(['createUser', 'group']),
+            'query' => Project::find()->joinWith(['createUser', 'group']),
             'pagination' => [
                 'pageSize' => 5,
             ],
@@ -54,21 +54,21 @@ class ProductController extends BaseController
         return $this->render('index', ['dataProvider' => $dataProvider,]);
     }
 
-    public function actionSeeModule($productId)
+    public function actionSeeModule($projectId)
     {
         $this->auth();
 
-        $productModules = Module::find()->joinWith(['createUser'])->where(['product_id' => $productId])->all();
-        foreach ($productModules as $productModule) {
+        $projectModules = Module::find()->joinWith(['createUser'])->where(['project_id' => $projectId])->all();
+        foreach ($projectModules as $projectModule) {
             /* 对模块创建者信息进行二次处理 */
-            if (isset($productModule->createUser) && isset($productModule->createUser->name)) {
-                $productModule->creator = $productModule->createUser->name;
+            if (isset($projectModule->createUser) && isset($projectModule->createUser->name)) {
+                $projectModule->creator = $projectModule->createUser->name;
             } else {
-                $productModule->creator = "";
+                $projectModule->creator = "";
             }
             /* 对负责人信息进行二次处理 */
-            if (isset($productModule->fuzeren)) {
-                $fzrs = Json::decode($productModule->fuzeren);
+            if (isset($projectModule->fuzeren)) {
+                $fzrs = Json::decode($projectModule->fuzeren);
                 if (is_array($fzrs)) {
                     $fzrUsers = User::find()->select('name')->where(['id' => $fzrs])->all();
                     $tempFzr = '';
@@ -78,74 +78,74 @@ class ProductController extends BaseController
                     $tempFzr = substr($tempFzr, 0, strlen($tempFzr) - 3);/*去掉最后的' , ' */
                     if ($tempFzr === false)/* 当数据库中出现‘[]’或者‘[""]’的时候截取字符串会返回false */
                         $tempFzr = '';
-                    $productModule->fuzeren = $tempFzr;
+                    $projectModule->fuzeren = $tempFzr;
                 } else {
-                    $productModule->fuzeren .= '';
+                    $projectModule->fuzeren .= '';
                 }
             } else {
-                $productModule->fuzeren = '';
+                $projectModule->fuzeren = '';
             }
         }
 
-        return Json::encode($productModules);
+        return Json::encode($projectModules);
     }
 
-    public function actionAddProduct()
+    public function actionAddProject()
     {
         $this->auth();
 
-        $productForm = new ProductForm();
+        $projectForm = new ProjectForm();
 
-        if (isset($_POST['ProductForm']) && $productForm->loadData() && $productForm->validate()) {
-            $result = $productForm->addProductToDb();
+        if (isset($_POST['ProjectForm']) && $projectForm->loadData() && $projectForm->validate()) {
+            $result = $projectForm->addProjectToDb();
             if ($result) {
                 /* 数据修改成功 */
-                Yii::$app->session->setFlash(OPT_RESULT, '产品信息添加成功！');
+                Yii::$app->session->setFlash(OPT_RESULT, '项目信息添加成功！');
                 return $this->refresh();
             } else {
                 /* 数据修改失败 */
-                Yii::$app->session->setFlash(OPT_RESULT, '产品信息添加失败！');
+                Yii::$app->session->setFlash(OPT_RESULT, '项目信息添加失败！');
             }
         }
 
         $groups = Group::find()->select(['id', 'name'])->all();
-        return $this->render('edit_product', [
-            'productForm' => $productForm,
+        return $this->render('edit_project', [
+            'projectForm' => $projectForm,
             'groups' => $groups,
             'isAdd' => true
         ]);
     }
 
-    public function actionModifyProduct($id)
+    public function actionModifyProject($id)
     {
         $this->auth();
 
-        $productForm = new ProductForm();
+        $projectForm = new ProjectForm();
 
-        if (isset($_POST['ProductForm']) && $productForm->loadData()) {
-            $productForm->id = $id;
-            $productForm->isModify = true;
-            if ($productForm->validate()) {
-                $result = $productForm->modifyProductOfDb($id);
+        if (isset($_POST['ProjectForm']) && $projectForm->loadData()) {
+            $projectForm->id = $id;
+            $projectForm->isModify = true;
+            if ($projectForm->validate()) {
+                $result = $projectForm->modifyProjectOfDb($id);
                 if ($result) {
                     /* 数据修改成功 */
-                    Yii::$app->session->setFlash(OPT_RESULT, '产品信息修改成功！');
+                    Yii::$app->session->setFlash(OPT_RESULT, '项目信息修改成功！');
                     return $this->refresh();
                 } else {
                     /* 数据修改失败 */
-                    Yii::$app->session->setFlash(OPT_RESULT, '产品信息修改失败！');
+                    Yii::$app->session->setFlash(OPT_RESULT, '项目信息修改失败！');
                 }
             }
         } else {
-            $product = Product::findOne(['id' => $id]);
-            $productForm->name = $product->name;
-            $productForm->groupId = $product->group_id;
-            $productForm->introduce = $product->introduce;
+            $project = Project::findOne(['id' => $id]);
+            $projectForm->name = $project->name;
+            $projectForm->groupId = $project->group_id;
+            $projectForm->introduce = $project->introduce;
         }
 
         $groups = Group::find()->select(['id', 'name'])->all();
-        return $this->render('edit_product', [
-            'productForm' => $productForm,
+        return $this->render('edit_project', [
+            'projectForm' => $projectForm,
             'groups' => $groups,
             'isAdd' => false
         ]);
@@ -160,18 +160,18 @@ class ProductController extends BaseController
             $result = $moduleForm->addModuleToDb();
             if ($result) {
                 /* 数据修改成功 */
-                Yii::$app->session->setFlash(OPT_RESULT, '产品模块信息添加成功！');
+                Yii::$app->session->setFlash(OPT_RESULT, '项目模块信息添加成功！');
                 return $this->refresh();
             } else {
                 /* 数据修改失败 */
-                Yii::$app->session->setFlash(OPT_RESULT, '产品模块信息添加失败！');
+                Yii::$app->session->setFlash(OPT_RESULT, '项目模块信息添加失败！');
             }
         }
 
-        /* 获得所有产品信息 */
-        $products = Product::find()->select(['id', 'name', 'group_id'])->all();
-        if (count($products) > 0) {
-            $group = Group::find()->select(['member'])->where(['id' => $products[0]->group_id])->one();
+        /* 获得所有项目信息 */
+        $projects = Project::find()->select(['id', 'name', 'group_id'])->all();
+        if (count($projects) > 0) {
+            $group = Group::find()->select(['member'])->where(['id' => $projects[0]->group_id])->one();
             if ($group != null) {
                 $memberIds = Json::decode($group->member);
                 $groupMembers = User::find()->select(['id', 'name'])->where(['id' => $memberIds])->all();
@@ -184,7 +184,7 @@ class ProductController extends BaseController
 
         return $this->render('edit_module', [
             'moduleForm' => $moduleForm,
-            'products' => $products,
+            'projects' => $projects,
             'groupMembers' => $groupMembers,
             'isAdd' => true,
         ]);
@@ -198,28 +198,28 @@ class ProductController extends BaseController
 
         if (isset($_POST['ModuleForm']) && $moduleForm->loadData()) {
             $moduleForm->isModify = true;
-            $moduleForm->productId = $id;
+            $moduleForm->projectId = $id;
             if ($moduleForm->validate()) {
                 $result = $moduleForm->modifyModuleOfDb();
                 if ($result) {
                     /* 数据修改成功 */
-                    Yii::$app->session->setFlash(OPT_RESULT, '产品模块信息修改成功！');
+                    Yii::$app->session->setFlash(OPT_RESULT, '项目模块信息修改成功！');
                     return $this->refresh();
                 } else {
                     /* 数据修改失败 */
-                    Yii::$app->session->setFlash(OPT_RESULT, '产品模块信息修改失败！');
+                    Yii::$app->session->setFlash(OPT_RESULT, '项目模块信息修改失败！');
                 }
             }
         }
 
-        /* 获得所有产品信息 */
-        $product = Product::find()->select(['name', 'group_id'])->where(['id' => $id])->one();
+        /* 获得所有项目信息 */
+        $project = Project::find()->select(['name', 'group_id'])->where(['id' => $id])->one();
         $modules = [];
         $groupMembers = [];
-        if ($product != null) {
-            $moduleForm->productName = $product->name;
-//            $modules = ProductModule::findAll(['product_id' => $id]);
-            $modules = Module::find()->select(['id', 'name', 'fuzeren', 'introduce'])->where(['product_id' => $id])->all();
+        if ($project != null) {
+            $moduleForm->projectName = $project->name;
+//            $modules = ProjectModule::findAll(['project_id' => $id]);
+            $modules = Module::find()->select(['id', 'name', 'fuzeren', 'introduce'])->where(['project_id' => $id])->all();
             if (count($modules) > 0) {
                 $moduleForm->id = $modules[0]->id;
                 $moduleForm->name = $modules[0]->name;
@@ -227,8 +227,8 @@ class ProductController extends BaseController
                 $moduleForm->introduce = $modules[0]->introduce;
             }
 
-//            $groupMembers = UserGroup::find()->joinWith('user')->where(['group_id' => $product->group_id])->all();
-            $group = Group::find()->where(['id' => $product->group_id])->one();
+//            $groupMembers = UserGroup::find()->joinWith('user')->where(['group_id' => $project->group_id])->all();
+            $group = Group::find()->where(['id' => $project->group_id])->one();
             if ($group != null)
                 $groupMembers = User::find()->select(['id', 'name'])->where(['id' => Json::decode($group->member)])->all();
             else
@@ -251,15 +251,15 @@ class ProductController extends BaseController
         echo Json::encode($module);
     }
 
-    public function actionGetGroupMember($productId)
+    public function actionGetGroupMember($projectId)
     {
 //        $this->auth();
 
-        //由产品id找到groupId，然后由groupId找到userId,然后从userId找到useName
-        $chooseProduct = Product::find()->select(['group_id'])->where(['id' => $productId])->one();
-        if ($chooseProduct == null)
+        //由项目id找到groupId，然后由groupId找到userId,然后从userId找到useName
+        $chooseProject = Project::find()->select(['group_id'])->where(['id' => $projectId])->one();
+        if ($chooseProject == null)
             return '';
-        $group = Group::find()->select(['member'])->where(['id' => $chooseProduct->group_id])->one();
+        $group = Group::find()->select(['member'])->where(['id' => $chooseProject->group_id])->one();
         if ($group != null)
             $allMembers = User::find()->select(['id', 'name'])->where(['id' => Json::decode($group->member)])->all();
         else
@@ -268,15 +268,15 @@ class ProductController extends BaseController
         return Json::encode($allMembers);
     }
 
-    public function actionDeleteProduct($productId)
+    public function actionDeleteProject($projectId)
     {
 //        $this->auth();
 
-        /* 删除产品的同时，也需要将产品的模块删除 */
+        /* 删除项目的同时，也需要将项目的模块删除 */
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            Module::deleteAll(['product_id' => $productId]);
-            Product::deleteAll(['id' => $productId]);
+            Module::deleteAll(['project_id' => $projectId]);
+            Project::deleteAll(['id' => $projectId]);
             $transaction->commit();
             echo 'success';
         } catch (Exception $e) {

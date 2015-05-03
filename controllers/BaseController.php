@@ -8,13 +8,13 @@ namespace app\controllers;
 
 
 use app\models\Module;
-use app\models\Product;
+use app\models\Project;
 use yii\web\Controller;
 use Yii;
 
 class BaseController extends Controller
 {
-    public $productModuleInfo;
+    public $projectModuleInfo;
 
     /**
      * 用户身份控制,没登录的用户不允许访问
@@ -34,20 +34,20 @@ class BaseController extends Controller
 
     public function init()
     {
-        $this->productModuleInfo = $this->getProductModuleInfo();
+        $this->projectModuleInfo = $this->getProjectModuleInfo();
     }
 
 
-    public function getProductModuleInfo()
+    public function getProjectModuleInfo()
     {
-        $products = Product::find()->select(['id', 'name'])->all();
+        $projects = Project::find()->select(['id', 'name'])->all();
         $modules = [];
-        if (count($products) > 0) {
-            $modules = Module::find()->select(['id', 'name'])->where(['product_id' => $products[0]->id])->all();
+        if (count($projects) > 0) {
+            $modules = Module::find()->select(['id', 'name'])->where(['project_id' => $projects[0]->id])->all();
         } else {
             $modules = [];
         }
-        return ['products' => $products, 'modules' => $modules];
+        return ['projects' => $projects, 'modules' => $modules];
     }
 
 

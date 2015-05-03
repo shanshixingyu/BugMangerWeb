@@ -9,7 +9,7 @@ namespace app\models;
 use Yii;
 use yii\base\Exception;
 
-class ProductForm extends BaseForm
+class ProjectForm extends BaseForm
 {
     public $id;
     public $isModify = false;
@@ -20,27 +20,27 @@ class ProductForm extends BaseForm
     public function rules()
     {
         return [
-            ['name', 'required', 'message' => '产品名称必填'],
+            ['name', 'required', 'message' => '项目名称必填'],
             ['name', 'validateNameUnique'],
             ['groupId', 'validateGroupExist'],//验证用户组是否还存在
         ];
     }
 
     /**
-     * 验证产品名称是否唯一
+     * 验证项目名称是否唯一
      * @param $attribute
      * @param $params
      */
     public function validateNameUnique($attribute, $params)
     {
-        $product = Product::findOne(['name' => $this->name]);
-        if ($product !== null) {
+        $project = Project::findOne(['name' => $this->name]);
+        if ($project !== null) {
             /* 验证唯一性的时候，如果是修改，且修改的名字没改变的话
                 (即模块id与name同时和查询出来的记录相同)，允许验证通过 */
-            if ($this->isModify && $product->id == $this->id) {
+            if ($this->isModify && $project->id == $this->id) {
 
             } else {
-                $this->addError($attribute, '产品名称已经存在');
+                $this->addError($attribute, '项目名称已经存在');
             }
         }
 
@@ -62,29 +62,29 @@ class ProductForm extends BaseForm
     public function attributeLabels()
     {
         return [
-            'name' => '产品名称',
+            'name' => '项目名称',
             'groupId' => '负责团队',
-            'introduce' => '产品简介',
+            'introduce' => '项目简介',
         ];
     }
 
     /**
-     * 添加产品到数据库中
+     * 添加项目到数据库中
      * @return bool 当添加成功则返回true，没有添加成功则返回false，
      */
-    public function addProductToDb()
+    public function addProjectToDb()
     {
-        $product = new Product();
-        $product->name = $this->name;
-        $product->group_id = $this->groupId;
-        $product->creator = Yii::$app->user->identity->getId();
+        $project = new Project();
+        $project->name = $this->name;
+        $project->group_id = $this->groupId;
+        $project->creator = Yii::$app->user->identity->getId();
         date_default_timezone_set('Asia/Shanghai');
-        $product->create_time = date('Y-m-d H:i:s', time());
-        $product->introduce = $this->introduce;
-        $product->setIsNewRecord(true);
+        $project->create_time = date('Y-m-d H:i:s', time());
+        $project->introduce = $this->introduce;
+        $project->setIsNewRecord(true);
         $result = null;
         try {
-            $result = $product->save();
+            $result = $project->save();
         } catch (Exception $e) {
             $result = false;
         }
@@ -92,12 +92,12 @@ class ProductForm extends BaseForm
     }
 
     /**
-     * 修改数据库中的产品信息
+     * 修改数据库中的项目信息
      * @return bool 当修改成功则返回true，没有修改成功则返回false
      */
-    public function modifyProductOfDb()
+    public function modifyProjectOfDb()
     {
-        return Product::updateAll([
+        return Project::updateAll([
             'name' => $this->name,
             'group_id' => $this->groupId,
             'introduce' => $this->introduce

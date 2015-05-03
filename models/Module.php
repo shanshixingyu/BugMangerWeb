@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
 class Module extends ActiveRecord
 {
     public $tempCreateUser;/*备用*/
-    public $tempProduct;/*备用*/
+    public $tempProject;/*备用*/
 
 
     public static function tableName()
@@ -20,9 +20,9 @@ class Module extends ActiveRecord
         return 'module';
     }
 
-    public function getProduct()
+    public function getProject()
     {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+        return $this->hasOne(Project::className(), ['id' => 'project_id']);
     }
 
     public function getCreateUser()

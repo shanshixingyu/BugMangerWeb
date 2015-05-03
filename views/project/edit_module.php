@@ -1,6 +1,6 @@
 <?php
 /**
- * 添加/修改产品模块界面
+ * 添加/修改项目模块界面
  * Created by GuLang on 2015-04-25.
  */
 
@@ -12,17 +12,17 @@ use yii\helpers\ArrayHelper;
 
 $isAddModuleView = false;
 if (isset($isAdd) && $isAdd) {
-    //是添加产品信息界面
-    $this->title = '添加产品模块信息';
+    //是添加项目信息界面
+    $this->title = '添加项目模块信息';
     $isAddModuleView = true;
 } else {
-    //是修改产品信息界面
-    $this->title = '修改产品模块信息';
+    //是修改项目信息界面
+    $this->title = '修改项目模块信息';
     $isAddModuleView = false;
 }
 $this->params['breadcrumbs'] = [
     ['label' => '后台管理', 'url' => 'index.php?r=site/manager'],
-    ['label' => '产品管理', 'url' => 'index.php?r=product/index'],
+    ['label' => '项目管理', 'url' => 'index.php?r=project/index'],
     $this->title,
 ];
 $this->registerCssFile(CSS_PATH . 'edit.css');
@@ -36,29 +36,29 @@ $this->registerJsFile(JS_PATH . 'edit_module.js', [
         <div class="editInfoTitleIcon"></div>
         <?php
         if ($isAddModuleView)
-            echo '添加产品模块信息';
+            echo '添加项目模块信息';
         else
-            echo '修改产品模块信息';
+            echo '修改项目模块信息';
         ?>
     </div>
     <div class="editInfoForm">
-        <?php if ($isAddModuleView && count($products) <= 0): ?>
-        不好意思，暂时还没有任何产品信息，请先<a href="index.php?r=product/add-product">添加产品信息！
+        <?php if ($isAddModuleView && count($projects) <= 0): ?>
+        不好意思，暂时还没有任何项目信息，请先<a href="index.php?r=project/add-project">添加项目信息！
             <?php elseif (!$isAddModuleView && count($modules) <= 0): ?>
-                不好意思，暂时还没有产品
+                不好意思，暂时还没有项目
                 <span style="margin: 0 5px;font-weight: bold;color: #FF0000;">
-                “<?php echo $moduleForm->productName; ?>”
+                “<?php echo $moduleForm->projectName; ?>”
             </span>
-                的任何模块信息，请先<a href="index.php?r=product/add-module">添加模块</a>信息！
+                的任何模块信息，请先<a href="index.php?r=project/add-module">添加模块</a>信息！
             <?php else: ?>
                 <?php $form = ActiveForm::begin(['fieldConfig' => ['template' => '<div class="infoRow"><div class="infoLabel">{label}</div><div class="infoInput">{input}</div><div class="infoError">{error}</div></div>',],]); ?>
                 <?php if (!$isAddModuleView): ?>
-                    <?php echo $form->field($moduleForm, 'productName')->textInput(['readonly' => 'true']); ?>
+                    <?php echo $form->field($moduleForm, 'projectName')->textInput(['readonly' => 'true']); ?>
                     <?php echo $form->field($moduleForm, 'id')->dropDownList(ArrayHelper::map($modules, 'id', 'name')); ?>
                     <div
                         style="background-color: #717171;width:100%;height: 1px;margin-top: -5px;margin-bottom: 10px;"></div>
                 <?php else: ?>
-                    <?php echo $form->field($moduleForm, 'productId')->dropDownList(ArrayHelper::map($products, 'id', 'name')); ?>
+                    <?php echo $form->field($moduleForm, 'projectId')->dropDownList(ArrayHelper::map($projects, 'id', 'name')); ?>
                 <?php endif; ?>
 
                 <?php echo $form->field($moduleForm, 'name')->textInput(); ?>

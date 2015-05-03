@@ -9,7 +9,7 @@ namespace app\models;
 
 class SearchBugForm extends BaseForm
 {
-    public $productId;
+    public $projectId;
     public $moduleId;
     public $seriousId;
     public $assignId;
@@ -28,7 +28,7 @@ class SearchBugForm extends BaseForm
     public function attributeLabels()
     {
         return [
-            'productId' => '产品',
+            'projectId' => '项目',
             'moduleId' => '模块',
             'seriousId' => '严重程度',
             'assignId' => '指派给',

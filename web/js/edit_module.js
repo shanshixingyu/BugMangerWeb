@@ -1,6 +1,6 @@
-$('#moduleform-productid').change(function(data){
-    var productId=$(this).find('option:selected').val();
-    $.get('index.php?r=product/get-group-member',{productId:productId},function(data){
+$('#moduleform-projectid').change(function(data){
+    var projectId=$(this).find('option:selected').val();
+    $.get('index.php?r=project/get-group-member',{projectId:projectId},function(data){
         var members=jQuery.parseJSON(data);
         $('#moduleform-fuzeren').empty();
         $.each(members,function(idx,member){
@@ -10,7 +10,7 @@ $('#moduleform-productid').change(function(data){
 });
 $('#moduleform-id').change(function(data){
     var moduleId=$(this).find('option:selected').val();
-    $.get('index.php?r=product/get-module',{moduleId:moduleId},function(data){
+    $.get('index.php?r=project/get-module',{moduleId:moduleId},function(data){
         var module=jQuery.parseJSON(data);
         $('#moduleform-name').val(module.name);
         try{

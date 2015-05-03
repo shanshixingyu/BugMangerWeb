@@ -28,3 +28,4 @@ phpunit.phar
 .bowerrc
 yii
 yii.bat
+runtime/

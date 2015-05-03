@@ -18,11 +18,11 @@ if (Yii::$app->session->hasFlash(OPT_RESULT)) {
     $this->registerJs('window.onload=function(){alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");}');
     Yii::$app->session->removeFlash(OPT_RESULT);
 }
-$productModuleInfo = [];
-if (isset($this->context->productModuleInfo)) {
-    $productModuleInfo = $this->context->productModuleInfo;
+$projectModuleInfo = [];
+if (isset($this->context->projectModuleInfo)) {
+    $productModuleInfo = $this->context->projectModuleInfo;
 } else {
-    $productModuleInfo = ['products' => [], 'modules' => []];
+    $productModuleInfo = ['projects' => [], 'modules' => []];
 }
 $this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::POS_HEAD]);
 ?>
@@ -62,7 +62,7 @@ $this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::P
         <div id="productList">
             <?php
             echo Html::dropDownList("productSelector", null,
-                ArrayHelper::map($productModuleInfo['products'], 'id', 'name'), ["id" => 'productSelector']);
+                ArrayHelper::map($productModuleInfo['projects'], 'id', 'name'), ["id" => 'projectSelector']);
             ?>
             <ul id="moduleContent">
                 <?php foreach ($productModuleInfo['modules'] as $module): ?>
@@ -96,8 +96,8 @@ $this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::P
 </div>
 <script type="text/javascript">
     $('document').ready(function () {
-        $('#productSelector').change(function () {
-            $.get('index.php?r=site/get-module', {productId: $(this).val()}, function (data) {
+        $('#projectSelector').change(function () {
+            $.get('index.php?r=site/get-module', {projectId: $(this).val()}, function (data) {
                 $('#moduleContent').empty();
                 var result = $.parseJSON(data);
                 $.each(result, function (idx, module) {

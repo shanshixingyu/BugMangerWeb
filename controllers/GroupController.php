@@ -8,7 +8,7 @@ namespace app\controllers;
 
 use app\models\Group;
 use app\models\GroupEditForm;
-use app\models\Product;
+use app\models\Project;
 use app\models\User;
 use yii\data\Pagination;
 use yii\helpers\Json;
@@ -132,13 +132,13 @@ class GroupController extends BaseController
 
     public function actionDelete($id)
     {
-        /* 删除团队信息之前，要先确认是否有产品是该团队负责的，如果有，则不允许删除 */
+        /* 删除团队信息之前，要先确认是否有项目是该团队负责的，如果有，则不允许删除 */
         $group = Group::find()->where(['id' => $id])->one();
         if ($group === null) {
             echo '{"type":"failure","message":"指定的团队不存在！"}';
         } else {
-            $product = Product::find()->where(['group_id' => $id])->one();
-            if ($product === null) {//可删除
+            $project = Project::find()->where(['group_id' => $id])->one();
+            if ($project === null) {//可删除
                 try {
                     $result = $group->DELETE();
                 } catch (Exception $e) {
@@ -148,8 +148,8 @@ class GroupController extends BaseController
                     echo '{"type":"success","message":"删除成功！"}';
                 else
                     echo '{"type":"failure","message":"删除失败！"}';
-            } else {//还有产品在改团队的负责下
-                echo '{"type":"failure","message":"该团队还负责着一些产品，无法删除！"}';
+            } else {//还有项目在改团队的负责下
+                echo '{"type":"failure","message":"该团队还负责着一些项目，无法删除！"}';
             }
         }
     }

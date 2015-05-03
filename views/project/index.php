@@ -1,6 +1,6 @@
 <?php
 /**
- * 产品管理界面
+ * 项目管理界面
  * Created by GuLang on 2015-04-22.
  */
 use yii\grid\GridView;
@@ -10,13 +10,13 @@ use yii\bootstrap\Modal;
 use yii\bootstrap\Nav;
 
 /* @var $this yii\web\View */
-$this->title = '产品管理';
+$this->title = '项目管理';
 $this->params['breadcrumbs'] = [
     ['label' => '后台管理', 'url' => 'index.php?r=site/manager'],
     $this->title,
 ];
 $this->registerCssFile(CSS_PATH . 'show_manager.css');
-$this->registerJsFile(JS_PATH . 'product_manager.js', [
+$this->registerJsFile(JS_PATH . 'project_manager.js', [
     'depends' => [\app\assets\AppAsset::className()]
 ]);
 
@@ -24,23 +24,23 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
 
 <div id="showInfoWrap">
     <div id="aboveShowInfTable">
-        <div id="showInfoTableName">产品信息表</div>
+        <div id="showInfoTableName">项目信息表</div>
         <?php
         echo Nav::widget([
             'options' => ['class' => 'dropDownBtn'],
             'items' => [
                 [
-                    'label' => '添加产品/模块',
+                    'label' => '添加项目/模块',
 //                    'label' => '添加操作',
                     'linkOptions' => ['id' => 'dropDownOpt'],
                     'items' => [
                         [
-                            'label' => '添加产品',
-                            'url' => ['product/add-product'],
+                            'label' => '添加项目',
+                            'url' => ['project/add-project'],
                         ],
                         [
                             'label' => '添加模块',
-                            'url' => ['product/add-module'],
+                            'url' => ['project/add-module'],
                         ],
                     ],
                 ],
@@ -58,8 +58,8 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
         'columns' => [
             [
                 'attribute' => 'name',
-                'label' => '产品名称',
-                'contentOptions' => ['class' => 'productName'],
+                'label' => '项目名称',
+                'contentOptions' => ['class' => 'projectName'],
                 'enableSorting' => false,
                 'headerOptions' => ['class' => 'showInfoTableTh', 'width' => '11%'],
             ],
@@ -71,7 +71,7 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
                 'headerOptions' => ['class' => 'showInfoTableTh', 'width' => '12%'],
             ],
             [
-                'label' => '产品介绍',
+                'label' => '项目介绍',
                 'enableSorting' => false,
                 'value' => function ($data) {
                     return isset($data->introduce) ? $data->introduce : '';
@@ -95,7 +95,7 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
             ],
             [
                 'class' => ActionColumn::className(),
-                'template' => '{seeModule}&nbsp;{modify-product}&nbsp;{modify-module}&nbsp;{deleteProduct}',
+                'template' => '{seeModule}&nbsp;{modify-project}&nbsp;{modify-module}&nbsp;{deleteProject}',
                 'header' => '操作',
                 'headerOptions' => [
                     'class' => 'showInfoTableTh',
@@ -108,9 +108,9 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
                             'class' => 'seeModule',
                         ]);
                     },
-                    'modify-product' => function ($url, $model, $key) {
+                    'modify-project' => function ($url, $model, $key) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
-                            'title' => '修改产品信息',
+                            'title' => '修改项目信息',
                         ]);
                     },
                     'modify-module' => function ($url, $model, $key) {
@@ -118,10 +118,10 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
                             'title' => '修改模块信息',
                         ]);
                     },
-                    'deleteProduct' => function ($url, $model, $key) {
+                    'deleteProject' => function ($url, $model, $key) {
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', 'javascript:void(0);', [
                             'title' => '删除',
-                            'class' => 'deleteProduct',
+                            'class' => 'deleteProject',
                         ]);
                     },
 
@@ -134,7 +134,7 @@ $this->registerJsFile(JS_PATH . 'product_manager.js', [
 
 <?php Modal::begin([
     'id' => 'showModuleModal',
-    'header' => '<div id="showModalHeader">产品模块详情</div>',
+    'header' => '<div id="showModalHeader">项目模块详情</div>',
     'size' => Modal::SIZE_LARGE,
 ]); ?>
 <?php echo $this->render('show_module') ?>

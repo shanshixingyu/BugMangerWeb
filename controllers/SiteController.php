@@ -121,17 +121,17 @@ class SiteController extends BaseController
 
         /* 参与项目与模块 */
         $where = 'fuzeren like "%\"' . $userModifyForm->userId . '\"%"';
-        $productModules = Module::find()->joinWith('product')->where($where)->all();
-        $productModuleData = [];
-        foreach ($productModules as $productModule) {
-            $productModuleData[] = ['product' => $productModule->product->name, 'module' => $productModule->name];
+        $projectModules = Module::find()->joinWith('project')->where($where)->all();
+        $projectModuleData = [];
+        foreach ($projectModules as $projectModule) {
+            $projectModuleData[] = ['project' => $projectModule->project->name, 'module' => $projectModule->name];
         }
-        unset($productModules);
+        unset($projectModules);
 
         return $this->render("pim", [
             'userModifyForm' => $userModifyForm,
             'groupNames' => $groupNames,
-            'productModuleData' => $productModuleData,
+            'projectModuleData' => $projectModuleData,
         ]);
     }
 
@@ -152,9 +152,9 @@ class SiteController extends BaseController
         return $this->redirect('index.php?r=site/login');
     }
 
-    public function actionGetModule($productId)
+    public function actionGetModule($projectId)
     {
-        $modules = Module::find()->select(['name'])->where(['product_id' => $productId])->all();
+        $modules = Module::find()->select(['name'])->where(['project_id' => $projectId])->all();
         echo Json::encode($modules);
     }
 
