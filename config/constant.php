@@ -18,3 +18,8 @@ defined("ADD_PRODUCT_OTHER_ERROR") or define("ADD_PRODUCT_OTHER_ERROR", 'add_pro
 
 /* 该常量主要用于用户密码的加密 */
 defined("PASSWORD_KEY") or define("PASSWORD_KEY", 'GuLang');
+
+/* 设置bug的当前状态常量，因为常量只能是普通的变量 */
+defined("BUG_STATUS") or define("BUG_STATUS", \yii\helpers\Json::encode(['0' => '关闭', '1' => '未解决', '2' => '解决', '3' => '重新激活', '4' => '其它']));
+/* 严重程度，因为常量只能是普通的变量 */
+defined("BUG_SERIOUS") or define("BUG_SERIOUS", \yii\helpers\Json::encode(['0' => '影响不大', '1' => '不严重', '2' => '严重', '3' => '较严重', '4' => '非常严重']));

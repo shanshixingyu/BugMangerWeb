@@ -64,28 +64,19 @@ class SiteController extends BaseController
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            $this->redirect('index.php?r=site/bug');
+            $this->redirect('index.php?r=bug/index');
         }
 
         $loginForm = new LoginForm();
         if (isset($_POST['LoginForm'])) {
             /* 表示按了登录过后过来的 */
             if ($loginForm->load(Yii::$app->request->post("LoginForm")) && $loginForm->login()) {
-                $this->redirect("./index.php?r=site/bug");
+                $this->redirect("index.php?r=bug/index");
             }
         }
 
         $loginForm->verifyCode = "";
         return $this->renderPartial("login", ['loginForm' => $loginForm]);
-    }
-
-    public function actionBug()
-    {
-        $this->auth();
-
-//        var_dump(Yii::$app->user->identity);
-        $productDataList = ['孤狼软件', '毕设'];
-        return $this->render('bug', ["productDataList" => $productDataList]);
     }
 
     public function actionPim()

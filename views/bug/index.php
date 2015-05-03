@@ -2,36 +2,34 @@
 /**
  * bug详情页面
  */
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Json;
+use yii\helpers\Html;
+
 /* @var $this yii\web\View */
-$this->title = 'bug列表';
+/* @var $this yii\web\View */
+$this->title = '产品缺陷概况';
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile(CSS_PATH . 'bug.css');
 ?>
-
-<div id="bugQueryCondition">
-    bug信息查询条件表单
-</div>
 <div id="bugTable">
     <table>
         <tr>
-            <th style="width:30px;">ID</th>
-            <th style="width:325px;">Bug名称</th>
-            <th style="width:100px;">产品名称</th>
-            <th style="width:100px;">当前状态</th>
-            <th style="width:75px;">严重程度</th>
-            <th style="width:50px;">指派给</th>
-            <th style="width:50px;">提交者</th>
-            <th style="width:50px;">提交时间</th>
+            <th style="width:40%;">项目名称</th>
+            <th style="width:12px;">Bug总数</th>
+            <th style="width:12px;">未解决Bug数</th>
+            <th style="width:12px;">当前激活Bug数</th>
+            <th style="width:12px;">已解决Bug数</th>
+            <th style="width:12px;">关闭Bug数</th>
         </tr>
-        <tr>
-            <td>1232</td>
-            <td><a href="#">手动bug</a></td>
-            <td>孤狼软件</td>
-            <td>解决未审核</td>
-            <td>非常严重</td>
-            <td>hwz</td>
-            <td>孤狼</td>
-            <td>2014-12-05</td>
-        </tr>
+<!--        <tr>-->
+        <!--            <td><a href="#">手动bug</a></td>-->
+        <!--            <td>孤狼软件</td>-->
+        <!--            <td>解决未审核</td>-->
+        <!--            <td>非常严重</td>-->
+        <!--            <td>hwz</td>-->
+        <!--            <td>孤狼</td>-->
+        <!--            <td>2014-12-05</td>-->
+        <!--        </tr>-->
     </table>
 </div>

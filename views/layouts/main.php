@@ -12,7 +12,7 @@ use yii\web\View;
 /* @var $this \yii\web\View */
 /* @var $content string */
 AppAsset::register($this);
-Yii::$app->homeUrl = 'index.php?r=site/bug';
+Yii::$app->homeUrl = 'index.php?r=bug/index';
 
 if (Yii::$app->session->hasFlash(OPT_RESULT)) {
     $this->registerJs('window.onload=function(){alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");}');
