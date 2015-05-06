@@ -19,7 +19,7 @@ $this->registerCssFile(CSS_PATH . 'manager.css');
         团队管理
     </a>
     <a href="index.php?r=project/index" class="managerItem">
-        <div id="productManagerIcon"></div>
+        <div id="projectManagerIcon"></div>
         项目管理
     </a>
     <a href="#" class="managerItem">

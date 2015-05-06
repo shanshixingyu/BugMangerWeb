@@ -11,6 +11,7 @@ class SearchBugForm extends BaseForm
 {
     public $projectId;
     public $moduleId;
+    public $priority;
     public $seriousId;
     public $assignId;
     public $creatorId;
@@ -30,7 +31,8 @@ class SearchBugForm extends BaseForm
         return [
             'projectId' => '项目',
             'moduleId' => '模块',
-            'seriousId' => '严重程度',
+            'priority' => '优先级',
+            'seriousId' => '影响程度',
             'assignId' => '指派给',
             'creatorId' => '提交者',
             'statusId' => '当前状态',

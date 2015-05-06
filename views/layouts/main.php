@@ -20,9 +20,9 @@ if (Yii::$app->session->hasFlash(OPT_RESULT)) {
 }
 $projectModuleInfo = [];
 if (isset($this->context->projectModuleInfo)) {
-    $productModuleInfo = $this->context->projectModuleInfo;
+    $projectModuleInfo = $this->context->projectModuleInfo;
 } else {
-    $productModuleInfo = ['projects' => [], 'modules' => []];
+    $projectModuleInfo = ['projects' => [], 'modules' => []];
 }
 $this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::POS_HEAD]);
 ?>
@@ -59,13 +59,13 @@ $this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::P
 </div>
 <div id="content">
     <div id="leftContent">
-        <div id="productList">
+        <div id="projectList">
             <?php
-            echo Html::dropDownList("productSelector", null,
-                ArrayHelper::map($productModuleInfo['projects'], 'id', 'name'), ["id" => 'projectSelector']);
+            echo Html::dropDownList("projectSelector", null,
+                ArrayHelper::map($projectModuleInfo['projects'], 'id', 'name'), ["id" => 'projectSelector']);
             ?>
             <ul id="moduleContent">
-                <?php foreach ($productModuleInfo['modules'] as $module): ?>
+                <?php foreach ($projectModuleInfo['modules'] as $module): ?>
                     <li class="moduleItem"><?php echo $module->name; ?></li>
                 <?php endforeach; ?>
 

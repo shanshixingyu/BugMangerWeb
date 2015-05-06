@@ -13,7 +13,6 @@ use yii\captcha\Captcha;
 
 AppAsset::register($this);
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>

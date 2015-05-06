@@ -13,31 +13,17 @@ $this->params['breadcrumbs'] = [
     $this->title,
 ];
 
-$deleteJs = <<<JS
-$('.deleteGroup').click(function(){
-    if (confirm("删除后将无法恢复，是否确认删除？")) {
-        var row = $(this).parent().parent();
-        $.get('index.php?r=group/delete', {id: row.data('key')}, function (data) {
-            var result=$.parseJSON(data);
-            if (result !== null) {
-                alert(result.message);
-            } else {
-                alert('删除失败！');
-            }
-            window.location.reload();//主要为了用户关闭了提示框后刷新界面
-        });
-    }
-});
-
-JS;
-$this->registerJs($deleteJs);
 $this->registerCssFile(CSS_PATH . 'show_manager.css');
 ?>
 
 <div id="showInfoWrap">
     <div id="aboveShowInfTable">
         <div id="showInfoTableName">团队信息表</div>
-        <a href="index.php?r=group/add" class="optBtn">新建团队</a>
+        <?php
+        $myRole = Yii::$app->user->identity->role_id;
+        if ($myRole == 0 || $myRole == 1):?>
+            <a href="index.php?r=group/add" class="optBtn">新建团队</a>
+        <?php endif; ?>
     </div>
     <table class="table table-striped table-bordered">
         <thead>
@@ -70,13 +56,17 @@ $this->registerCssFile(CSS_PATH . 'show_manager.css');
                     </td>
                     <td><?php echo $group->create_time; ?></td>
                     <td>
-                        <a href="index.php?r=group/modify&id=<?php echo $group->id; ?>" title="编辑">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </a>
-                        &nbsp;&nbsp;
-                        <a class="deleteGroup" href="javascript:void(0)" title="删除">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </a>
+                        <?php if ($group->creator == Yii::$app->user->identity->getId() || Yii::$app->user->identity->role_id == 0): ?>
+                            <a href="index.php?r=group/modify&id=<?php echo $group->id; ?>" title="编辑">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a class="deleteGroup" href="javascript:void(0)" title="删除">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        <?php else: ?>
+                            无权限
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -108,3 +98,21 @@ $this->registerCssFile(CSS_PATH . 'show_manager.css');
         'pagination' => $pagination,
     ]); ?>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.deleteGroup').click(function () {
+            if (confirm("删除后将无法恢复，是否确认删除？")) {
+                var row = $(this).parent().parent();
+                $.get('index.php?r=group/delete', {id: row.data('key')}, function (data) {
+                    var result = $.parseJSON(data);
+                    if (result !== null) {
+                        alert(result.message);
+                    } else {
+                        alert('删除失败！');
+                    }
+                    window.location.reload();//主要为了用户关闭了提示框后刷新界面
+                });
+            }
+        });
+    });
+</script>

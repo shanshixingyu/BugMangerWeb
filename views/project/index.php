@@ -26,26 +26,29 @@ $this->registerJsFile(JS_PATH . 'project_manager.js', [
     <div id="aboveShowInfTable">
         <div id="showInfoTableName">项目信息表</div>
         <?php
-        echo Nav::widget([
-            'options' => ['class' => 'dropDownBtn'],
-            'items' => [
-                [
-                    'label' => '添加项目/模块',
+        $myRole = Yii::$app->user->identity->role_id;
+        if ($myRole == 0 || $myRole == 1) {
+            echo Nav::widget([
+                'options' => ['class' => 'dropDownBtn'],
+                'items' => [
+                    [
+                        'label' => '添加项目/模块',
 //                    'label' => '添加操作',
-                    'linkOptions' => ['id' => 'dropDownOpt'],
-                    'items' => [
-                        [
-                            'label' => '添加项目',
-                            'url' => ['project/add-project'],
-                        ],
-                        [
-                            'label' => '添加模块',
-                            'url' => ['project/add-module'],
+                        'linkOptions' => ['id' => 'dropDownOpt'],
+                        'items' => [
+                            [
+                                'label' => '添加项目',
+                                'url' => ['project/add-project'],
+                            ],
+                            [
+                                'label' => '添加模块',
+                                'url' => ['project/add-module'],
+                            ],
                         ],
                     ],
                 ],
-            ],
-        ]);
+            ]);
+        }
         ?>
     </div>
     <?php
@@ -109,20 +112,32 @@ $this->registerJsFile(JS_PATH . 'project_manager.js', [
                         ]);
                     },
                     'modify-project' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
-                            'title' => '修改项目信息',
-                        ]);
+                        if ($model->creator == Yii::$app->user->identity->getId() || Yii::$app->user->identity->role_id == 0) {
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                                'title' => '修改项目信息',
+                            ]);
+                        } else {
+                            return '';
+                        }
                     },
                     'modify-module' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
-                            'title' => '修改模块信息',
-                        ]);
+                        if ($model->creator == Yii::$app->user->identity->getId() || Yii::$app->user->identity->role_id == 0) {
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                                'title' => '修改模块信息',
+                            ]);
+                        } else {
+                            return '';
+                        }
                     },
                     'deleteProject' => function ($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', 'javascript:void(0);', [
-                            'title' => '删除',
-                            'class' => 'deleteProject',
-                        ]);
+                        if ($model->creator == Yii::$app->user->identity->getId() || Yii::$app->user->identity->getId() == 0) {
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', 'javascript:void(0);', [
+                                'title' => '删除',
+                                'class' => 'deleteProject',
+                            ]);
+                        } else {
+                            return '';
+                        }
                     },
 
                 ],

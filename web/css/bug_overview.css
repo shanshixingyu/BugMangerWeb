@@ -1,3 +1,48 @@
 #projectBugTable {
     width: 100%;
+    padding: 10px;
+    /*background-color: #09fffc;*/
+}
+
+#aboveOfTable {
+    width: 100%;
+    margin-bottom: 10px;
+    overflow: hidden;
+    /*background-color: #ff0000;*/
+}
+
+#projectBugTable #pageTitle {
+    font-size: 23px;
+    margin-top: 5px;
+    font-weight: bold;
+    color: #006611;
+    float: left;
+}
+
+.optBtn {
+    height: 35px;
+    float: right;
+    width: 130px;
+    color: #39BE18;
+    padding: 7px 5px 7px 35px;
+    margin-left: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    background: url("../img/ic_add.png") 5px 5px no-repeat #91e9ec;
+
+}
+
+.optBtn:hover,
+.optBtn:active,
+.optBtn:visited,
+.optBtn:link {
+    background-color: #91e9ec;
+    text-decoration: none;
+    color: #39BE18;
+    cursor: pointer;
+}
+
+.optBtn:hover {
+    background-color: #82d1d4 !important;
 }

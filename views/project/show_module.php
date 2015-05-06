@@ -8,7 +8,6 @@ use yii\helpers\Html;
 /* @var $this \yii\web\View */
 $this->registerCssFile(CSS_PATH . "show_module.css");
 ?>
-<!--<img src="--><?php //echo IMG_PATH; ?><!--ic_user_manager.png">-->
 <table id="showModuleTable">
     <tr>
         <th style="width:17.65%;">模块名称</th>

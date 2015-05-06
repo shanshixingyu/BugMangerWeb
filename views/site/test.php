@@ -6,7 +6,7 @@
 use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
-$this->title = '产品管理';
+$this->title = '项目管理';
 $this->params['breadcrumbs'][] = ['label' => '后台管理', 'url' => 'index.php?r=site/manager'];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -17,20 +17,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 alert(data);
             });
         });
-        //        $("#productModal").modal();
+        //        $("#projectModal").modal();
     </script>
 
 
-    <!--    <a href="index.php?r=site/test1" data-toggle="modal" data-target="#productModal">点击测试</a>-->
-    <button value="index.php?r=site/test" data-toggle="modal" data-target="#productModal" id="modalButton">
+    <!--    <a href="index.php?r=site/test1" data-toggle="modal" data-target="#projectModal">点击测试</a>-->
+    <button value="index.php?r=site/test" data-toggle="modal" data-target="#projectModal" id="modalButton">
         点击测试
     </button>
 
 
-    <!--    <!--添加产品模态框-->-->
+    <!--    <!--添加项目模态框-->-->
 <?php Modal::begin([
-    'header' => '添加产品',
-    'id' => 'productModal',
+    'header' => '添加项目',
+    'id' => 'projectModal',
     'size' => 'modal-lg',
 ]); ?>
     <div id="showModal">

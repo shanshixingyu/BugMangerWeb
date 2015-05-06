@@ -67,12 +67,12 @@ $this->registerCssFile(CSS_PATH . 'pim.css');
         参与项目与模块
     </div>
     <div id="userProjectShow" class="infoShow">
-        <?php if (!isset($productModuleData) || !is_array($productModuleData) || count($productModuleData) <= 0) {
+        <?php if (!isset($projectModuleData) || !is_array($projectModuleData) || count($projectModuleData) <= 0) {
             echo '暂无';
         } else {
-            foreach ($productModuleData as $data) {
+            foreach ($projectModuleData as $data) {
                 if (isset($data) && is_array($data))
-                    echo '<div class="userProjectItem">【', $data['product'], '】', $data['module'], '</div>';
+                    echo '<div class="userProjectItem">【', $data['project'], '】', $data['module'], '</div>';
             }
         }
         ?>

@@ -15,6 +15,7 @@ class BaseForm extends Model
     /**
      * 从Yii::$app->request->post("formName") 中加载数据
      * @return bool
+     * @throws Exception
      */
     public function loadData()
     {

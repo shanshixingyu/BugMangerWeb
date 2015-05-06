@@ -1,0 +1,111 @@
+#showBugWrap {
+    margin: 10px;
+    /*background-color: #ff0000;*/
+}
+
+.bugInfoItem {
+    font-size: 18px;
+    margin: 10px;
+    overflow: hidden;
+    /*background-color: #ff1ed1;*/
+}
+
+.bugInfoItem > .itemTitle {
+    font-size: 18px;
+    width: 150px;
+    font-weight: bold;
+    float: left;
+    /*background-color: #ff0000;*/
+}
+
+.bugInfoItem > .itemArea,
+.bugInfoItem > .itemContent {
+    margin-left: 150px;
+}
+
+.bugInfoItem > .itemArea {
+    min-height: 30px;
+    padding: 5px;
+    border: 1px solid #C1C8D2;
+    font-size: 16px;
+    max-height: 150px;
+    overflow: auto;
+}
+
+.introduceTitle {
+    font-size: 10px;
+    background-color: #dcdce7;
+
+}
+
+.introduceContent {
+    font-size: 16px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+#opt_area {
+    /*width: 200px;*/
+    /*height: 100px;*/
+    /*background-color: #ff0000;*/
+    float: right;
+}
+
+#opt_area > a {
+    margin: 0 5px;
+}
+
+/*********************截图横向滑动的效果**********/
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.swiper-container {
+    width: 660px;
+    height: 250px;
+    color: #fff;
+    text-align: center;
+}
+
+.swiper-slide {
+    height: 100%;
+}
+
+.swiper-slide .title {
+    font-style: italic;
+    font-size: 42px;
+    margin-top: 80px;
+    margin-bottom: 0;
+    line-height: 45px;
+}
+
+.pagination {
+    position: absolute;
+    z-index: 20;
+    left: 10px;
+    bottom: 10px;
+}
+
+.swiper-pagination-switch {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
+    background: #222;
+    margin-right: 8px;
+    opacity: 0.8;
+    border: 1px solid #fff;
+    cursor: pointer;
+}
+
+.swiper-visible-switch {
+    background: #aaa;
+}
+
+.swiper-active-switch {
+    background: #fff;
+}

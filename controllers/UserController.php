@@ -18,6 +18,15 @@ use yii\helpers\Url;
 
 class UserController extends BaseController
 {
+    public function init()
+    {
+        parent::init();
+        $myRole = Yii::$app->user->identity->role_id;
+        if ($myRole != 0 && $myRole != 1) {
+            $this->redirect('index.php?r=bug/index');
+        }
+    }
+
     public function behaviors()
     {
         return [
