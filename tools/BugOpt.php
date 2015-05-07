@@ -29,7 +29,7 @@ class BugOpt
     }
 
     /**
-     * 给bug添加introduce信息
+     * 给bug添加introduce信息,新加入的元素放在最前面
      * @param $oldIntroduce
      * @param $introduce
      * @param string $type
@@ -42,11 +42,13 @@ class BugOpt
             date_default_timezone_set('Asia/Shanghai');
             $dateTime = date('Y-m-d H:i:s', time());
         }
-        $tempIntroduce = Json::decode($oldIntroduce);
-        $tempIntroduce[] = [
-            'title' => $dateTime . ' ' . $type . ' by ' . \Yii::$app->user->identity->name,
+        $tempOldIntroduce = Json::decode($oldIntroduce);
+        $tempIntroduce = [
+            'title' => $dateTime . '   ' . $type . '   by   ' . \Yii::$app->user->identity->name,
             'content' => $introduce
         ];
-        return Json::encode($tempIntroduce);
+        array_unshift($tempOldIntroduce, $tempIntroduce);
+
+        return Json::encode($tempOldIntroduce);
     }
 }

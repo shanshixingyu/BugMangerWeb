@@ -37,16 +37,20 @@ class ResolveForm extends BaseForm
     {
         $bugStatus = Json::decode(BUG_STATUS);
 
-        /* 需改变：1、状态(改成已解决或者其它)；  2、introduce */
+        /* 需改变：1、状态(改成已解决或者其它)；  2、introduce*/
         $bug = Bug::find()->where(['id' => $this->bugId])->one();
         if ($bug !== null) {
             try {
+                $bug->resolve_id = \Yii::$app->user->identity->getId();
+                date_default_timezone_set('Asia/Shanghai');
+                $dateTime = date('Y-m-d H:i:s', time());
+                $bug->resolve_id = $dateTime;
                 if ($this->type == 0) {
                     $bug->status = array_search(BUG_STATUS_SOLVED, $bugStatus);
-                    $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $this->introduce, '解决');
+                    $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $this->introduce, '解决', $dateTime);
                 } else {
                     $bug->status = array_search(BUG_STATUS_OTHER, $bugStatus);
-                    $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $this->introduce, '改成其他状态');
+                    $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $this->introduce, '改成其他状态', $dateTime);
                 }
                 $result = $bug->save();
             } catch (Exception $e) {

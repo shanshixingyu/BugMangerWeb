@@ -9,6 +9,7 @@ namespace app\controllers;
 
 use app\models\Module;
 use app\models\Project;
+use app\tools\BaseUtils;
 use yii\helpers\Json;
 use yii\web\Controller;
 use Yii;
@@ -17,8 +18,6 @@ use app\models\User;
 
 class BaseController extends Controller
 {
-    public $projectModuleInfo;
-
     /**
      * 用户身份控制,没登录的用户不允许访问
      * @return \yii\web\Response
@@ -33,24 +32,6 @@ class BaseController extends Controller
     protected function permission()
     {
 
-    }
-
-    public function init()
-    {
-        $this->projectModuleInfo = $this->getProjectModuleInfo();
-    }
-
-
-    public function getProjectModuleInfo()
-    {
-        $projects = Project::find()->select(['id', 'name'])->all();
-        $modules = [];
-        if (count($projects) > 0) {
-            $modules = Module::find()->select(['id', 'name'])->where(['project_id' => $projects[0]->id])->all();
-        } else {
-            $modules = [];
-        }
-        return ['projects' => $projects, 'modules' => $modules];
     }
 
     /**

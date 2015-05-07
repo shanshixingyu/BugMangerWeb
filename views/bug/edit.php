@@ -1,6 +1,6 @@
 <?php
 /**
- * 添加bug界面
+ * 编辑bug界面
  * Created by GuLang on 2015-05-04.
  */
 use yii\bootstrap\ActiveForm;
@@ -9,7 +9,15 @@ use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
-$this->title = '提交新BUG';
+/* @var $bugForm app\models\BugForm */
+$isModify = false;
+if (isset($bugForm->isModify) && $bugForm->isModify) {
+    $this->title = '修改BUG';
+    $isModify = true;
+} else {
+    $this->title = '提交新BUG';
+    $isModify = false;
+}
 $this->params['breadcrumbs'] = [
     ['label' => '项目缺陷概况', 'url' => 'index.php?r=bug/index'],
     $this->title,
@@ -19,7 +27,7 @@ $this->registerCssFile(CSS_PATH . 'edit.css');
 <div class="editInfo">
     <div class="editInfoTitle">
         <div class="editInfoTitleIcon"></div>
-        提交新bug
+        <?php echo $isModify ? '修改Bug' : '提交新bug'; ?>
     </div>
     <div class="editInfoForm">
         <?php $form = ActiveForm::begin([
@@ -48,7 +56,7 @@ $this->registerCssFile(CSS_PATH . 'edit.css');
         echo $form->field($bugForm, 'introduce')->textarea(['rows' => 6, 'style' => 'resize:none;width:480px;',]);
         echo $form->field($bugForm, 'reappear')->textarea(['rows' => 6, 'style' => 'resize:none;width:480px;',]);
 
-        echo Html::submitButton('提交', ['class' => 'btn btn-primary', 'id' => 'submitBtn']);
+        echo Html::submitButton($isModify ? '修改' : '提交', ['class' => 'btn btn-primary', 'id' => 'submitBtn']);
         ActiveForm::end(); ?>
 
     </div>

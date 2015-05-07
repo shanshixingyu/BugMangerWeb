@@ -1,0 +1,14 @@
+#chartsWrap {
+    /*background-color: #ff41ed;*/
+    padding: 10px;
+}
+
+#chartChoice {
+    text-align: center;
+    background-color: #ffc3c6;
+    height: 100px;
+}
+
+#chartContent {
+    background-color: #fffdc1;
+}

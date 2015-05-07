@@ -7,12 +7,12 @@ use app\models\Module;
 use yii\helpers\Json;
 use app\tools\MyConstant;
 use yii\bootstrap\Modal;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 $this->title = '项目缺陷详情';
 $this->params['breadcrumbs'] = [
     ['label' => '项目缺陷概况', 'url' => 'index.php?r=bug/index'],
-//    isset($_SERVER['HTTP_REFERER']) ? ['label' => '项目缺陷列表', 'url' => $_SERVER['HTTP_REFERER']] : null,
     $this->title,
 ];
 $bugStatus = Json::decode(BUG_STATUS);
@@ -31,18 +31,28 @@ $bugStatus = Json::decode(BUG_STATUS);
     </div>
     <div class="editInfoForm">
         <div id="opt_area">
+            <!--     对于解决操作按钮，只有当Bug状态为“未解决”或者“重新激活”时才显示       -->
             <?php if ($bug->status == array_search(BUG_STATUS_UNSOLVED, $bugStatus) || $bug->status == array_search(BUG_STATUS_ACTIVE, $bugStatus)): ?>
                 <a href="#" id="resolveBug"><img src="<?php echo IMG_PATH; ?>ic_resolve.png">&nbsp;解决</a>
             <?php endif; ?>
+            <!--    以下几个按钮只有在登录用户为bug创建用户时才显示 -->
             <?php if ($bug->creator_id == Yii::$app->user->identity->getId()): ?>
                 <?php if ($bug->status == array_search(BUG_STATUS_UNSOLVED, $bugStatus)): ?>
-                    <a href="index.php?r=bug/test"><img src="<?php echo IMG_PATH; ?>ic_pan.png">&nbsp;修改</a>
+                    <a href="index.php?r=bug/modify&bugId=<?php echo $bug->id; ?>">
+                        <img src="<?php echo IMG_PATH; ?>ic_pan.png">&nbsp;修改
+                    </a>
+                <?php endif; ?>
+                <?php if ($bug->status == array_search(BUG_STATUS_SOLVED, $bugStatus)
+                    || $bug->status == array_search(BUG_STATUS_CLOSED, $bugStatus)
+                    || $bug->status == array_search(BUG_STATUS_OTHER, $bugStatus)
+                ): ?>
+                    <a href="#" id="activeBug"><img src="<?php echo IMG_PATH; ?>ic_active.png">&nbsp;激活</a>
                 <?php endif; ?>
                 <?php if ($bug->status == array_search(BUG_STATUS_SOLVED, $bugStatus)): ?>
-                    <a href="#"><img src="<?php echo IMG_PATH; ?>ic_active.png">&nbsp;激活</a>
-                    <a href="#"><img src="<?php echo IMG_PATH; ?>ic_close.png">&nbsp;关闭</a>
+                    <a href="#" id="closeBug"><img src="<?php echo IMG_PATH; ?>ic_close.png">&nbsp;关闭</a>
                 <?php endif; ?>
-                <a href="#"><img src="<?php echo IMG_PATH; ?>ic_delete.png">&nbsp;删除</a>
+                <a href="index.php?r=bug/delete&bugId=<?php echo $bug->id; ?>" data-confirm="删除后将不能够恢复，确定删除？"><img
+                        src="<?php echo IMG_PATH; ?>ic_delete.png">&nbsp;删除</a>
             <?php endif; ?>
 
         </div>
@@ -104,7 +114,6 @@ $bugStatus = Json::decode(BUG_STATUS);
                 if (count($imagesNames) > 0):?>
                     <div class="swiper-container" style="width: 100%">
                         <div class="swiper-wrapper">
-
                             <?php foreach ($imagesNames as $imagesName) : ?>
                                 <div class="swiper-slide">
                                     <img src="<?php echo MyConstant::BIG_IMAGE_PATH, $imagesName; ?>" alt="缺陷截图">
@@ -120,7 +129,7 @@ $bugStatus = Json::decode(BUG_STATUS);
         </div>
         <div class="bugInfoItem">
             <div class="itemTitle">Bug注释：</div>
-            <div class="itemArea">
+            <div class="itemArea" style="border: 1px solid #C1C8D2;padding:5px;">
                 <?php $introduces = Json::decode($bug->introduce); ?>
                 <?php foreach ($introduces as $introduce): ?>
                     <div class="introduceTitle"><?php echo $introduce['title'], '<br/>'; ?></div>
@@ -133,7 +142,13 @@ $bugStatus = Json::decode(BUG_STATUS);
         <div class="bugInfoItem">
             <div class="itemTitle">重现步骤：</div>
             <?php if (isset($bug->reappear) && trim($bug->reappear) != ''): ?>
-                <div class="itemArea"><?php echo $bug->reappear, '<br/>'; ?></div>
+                <div class="itemArea" style="padding:0;">
+                    <?php echo Html::textarea('reappear', $bug->reappear, [
+                        'readonly' => true,
+                        'rows' => 5,
+                        'style' => 'resize:none;width:100%;height:100%;float:left;padding:5px;'
+                    ]); ?>
+                </div>
             <?php else: ?>
                 <div class="itemContent"></div>
             <?php endif; ?>
@@ -160,10 +175,36 @@ $bugStatus = Json::decode(BUG_STATUS);
 $resolveForm = new \app\models\ResolveForm();
 echo $this->render('resolve', ['bug' => $bug, 'resolveForm' => $resolveForm]);
 Modal::end(); ?>
+
+<?php Modal::begin([
+    'id' => 'activeBugModal',
+    'header' => '<div id="showModalHeader">激活Bug</div>',
+    'size' => Modal::SIZE_DEFAULT,
+]);
+$activeForm = new \app\models\ActiveBugForm();
+echo $this->render('active', ['bug' => $bug, 'activeForm' => $activeForm]);
+Modal::end(); ?>
+
+<?php Modal::begin([
+    'id' => 'closeBugModal',
+    'header' => '<div id="showModalHeader">关闭Bug</div>',
+    'size' => Modal::SIZE_DEFAULT,
+]);
+$closeForm = new \app\models\CloseBugForm();
+echo $this->render('close', ['bug' => $bug, 'closeForm' => $closeForm]);
+Modal::end(); ?>
+
+
 <script>
     $(document).ready(function () {
         $('#resolveBug').click(function () {
             $('#resolveBugModal').modal('toggle');
+        });
+        $('#activeBug').click(function () {
+            $('#activeBugModal').modal('toggle');
+        });
+        $('#closeBug').click(function () {
+            $('#closeBugModal').modal('toggle');
         });
 
     });

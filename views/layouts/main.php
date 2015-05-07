@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use \yii\widgets\Breadcrumbs;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
+use app\tools\BaseUtils;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -18,12 +19,7 @@ if (Yii::$app->session->hasFlash(OPT_RESULT)) {
     $this->registerJs('window.onload=function(){alert("' . Yii::$app->session->getFlash(OPT_RESULT) . '");}');
     Yii::$app->session->removeFlash(OPT_RESULT);
 }
-$projectModuleInfo = [];
-if (isset($this->context->projectModuleInfo)) {
-    $projectModuleInfo = $this->context->projectModuleInfo;
-} else {
-    $projectModuleInfo = ['projects' => [], 'modules' => []];
-}
+$projectModuleInfo = BaseUtils::getProjectModuleInfo();
 $this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::POS_HEAD]);
 ?>
 <?php $this->beginPage() ?>
@@ -73,9 +69,17 @@ $this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::P
         </div>
         <div id="aboutMe">
             <div>个人相关信息</div>
-            <p><a href="#">我提交的bug</a></p>
+            <p>
+                <a href="index.php?r=person/submit">我提交的bug&nbsp;
+                    ( <span style="font-weight: bold;"><?php echo BaseUtils::getMySubmitBugCount(); ?></span> )
+                </a>
+            </p>
 
-            <p><a href="#">指派给我的bug</a></p>
+            <p>
+                <a href="index.php?r=person/assign">指派给我的bug&nbsp;
+                    ( <span style="font-weight: bold;"><?php echo BaseUtils::getAssignToMeBugCount(); ?></span> )
+                </a>
+            </p>
 
             <p><a href="#">抄送给我的bug</a></p>
         </div>

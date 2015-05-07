@@ -1,32 +1,34 @@
 <?php
 /**
- * 测试页面
- * Created by GuLang on 2015-04-23.
+ * 生成报表的界面
+ * Created by GuLang on 2015-05-07.
  */
-use yii\bootstrap\Modal;
-
 /* @var $this yii\web\View */
-$this->title = '项目管理';
-$this->params['breadcrumbs'][] = ['label' => '后台管理', 'url' => 'index.php?r=site/manager'];
-$this->params['breadcrumbs'][] = $this->title;
 
+
+$this->title = '报表';
+$this->params['breadcrumbs'] = [
+    ['label' => '项目缺陷概况', 'url' => 'index.php?r=bug/index'],
+    $this->title,
+];
 $this->registerJsFile('laydate/laydate.js');
 $this->registerCssFile('laydate/need/laydate.css');
-
-$this->registerJsFile('js/echarts/echarts.js', ['position' => \yii\web\View::POS_HEAD]);
-
-
+$this->registerJsFile('js/echarts/echarts.js');
+$this->registerCssFile('css/charts.css');
 ?>
-<label>测试
-    <input type="text" name="test_input" id="testInput1" placeholder="开始时间" class="laydate-icon"/>
-    <input type="text" name="test_input" id="testInput2" placeholder="开始时间" class="laydate-icon"/>
-</label>
 
-<div style="width: 500px;height: 400px;" id="testChart">
+<div id="chartsWrap">
+    <div id="chartChoice">
+        <label>测试
+            <input type="text" name="test_input" id="testInput1" placeholder="开始时间" class="laydate-icon"/>
+            <input type="text" name="test_input" id="testInput2" placeholder="结束时间" class="laydate-icon"/>
+        </label>
+    </div>
 
+    <div id="chartContent">
+        <div style="height: 400px;" id="testChart"></div>
+    </div>
 </div>
-
-
 <script type="text/javascript">
     $(document).ready(function () {
         $('#testInput1').click(function () {
@@ -95,5 +97,3 @@ $this->registerJsFile('js/echarts/echarts.js', ['position' => \yii\web\View::POS
         );
     });
 </script>
-
-

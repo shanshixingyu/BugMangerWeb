@@ -7,12 +7,15 @@
 namespace app\models;
 
 use app\tools\BugOpt;
+use app\tools\ImageUtils;
 use Yii;
 use yii\helpers\Json;
 use yii\base\Exception;
+use app\tools\MyConstant;
 
 class BugForm extends BaseForm
 {
+    public $bugId;
     public $name;
     public $projectId;
     public $moduleId;
@@ -23,6 +26,8 @@ class BugForm extends BaseForm
     public $attachment;
     public $introduce;
     public $reappear;
+
+    public $isModify = false;
 
     public function rules()
     {
@@ -37,7 +42,7 @@ class BugForm extends BaseForm
             ['priority', 'in', 'range' => array_keys(Json::decode(BUG_PRIORITY)), 'message' => '优先级信息过期'],
             ['seriousId', 'required', 'message' => '影响程度必选'],
             ['seriousId', 'in', 'range' => array_keys(Json::decode(BUG_SERIOUS)), 'message' => '影响程度信息过期'],
-            ['images', 'file', 'extensions' => 'gif,jpg,jpeg,png', 'maxFiles' => 5, 'mimeTypes' => 'image/jpeg,image/gif,image/png', 'skipOnEmpty' => true],
+            ['images', 'file', 'extensions' => 'gif,jpg,jpeg,png', 'maxFiles' => 4, 'maxSize' => 8 * 1024 * 1024 * 8, 'mimeTypes' => 'image/jpeg,image/gif,image/png', 'skipOnEmpty' => true],
             ['attachment', 'file', 'skipOnEmpty' => true],
 
         ];
@@ -129,6 +134,46 @@ class BugForm extends BaseForm
             $result = false;
         }
         return $result;
+    }
+
+    /**
+     * @param Bug $bug
+     * @return bool
+     * @throws Exception
+     */
+    public function modifyBugOfDb($bug)
+    {
+        if (!isset($bug))
+            throw new Exception("修改bug信息方法中传入的bug信息为空!");
+        if (!isset($this->bugId))
+            throw new Exception('修改bug信息方法中bugId没有传入');
+        $bug->id = $this->bugId;
+        $bug->name = $this->name;
+        $bug->project_id = $this->projectId;
+        $bug->module_id = $this->moduleId;
+        $bug->assign_id = $this->assignId;
+        $bug->priority = $this->priority;
+        $bug->serious_id = $this->seriousId;
+        //修改截图的时候注意要把原来的图片删除
+        ImageUtils::deleteImage($bug->img_path);
+        //把原来的福建删除了
+        if (isset($attachment) && trim($attachment) != '') {
+            unlink(MyConstant::ATTACHMENT_PATH . $attachment);
+        }
+        $bug->img_path = $this->images;
+        $bug->file_path = $this->attachment;
+        date_default_timezone_set('Asia/Shanghai');
+        $tempTime = date('Y-m-d H:i:s', time());
+        $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $this->introduce, '修改', $tempTime);
+        $bug->reappear = $this->reappear;
+        $result = false;
+        try {
+            $result = $bug->update();
+        } catch (Exception $e) {
+            $result = false;
+        }
+        return $result;
+
     }
 
 

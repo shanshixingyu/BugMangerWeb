@@ -1,14 +1,25 @@
 <?php
 /**
- * 项目bug详情页面
+ * 我提交的Bug信息页面
+ * Created by GuLang on 2015-05-08.
  */
-use yii\bootstrap\ActiveForm;
-use yii\helpers\Json;
-use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
-
 /* @var $this yii\web\View */
-$this->title = '项目缺陷列表';
+use yii\helpers\Json;
+use app\tools\MyConstant;
+
+$requestType = MyConstant::PERSON_TYPE_SUBMIT;
+if (isset($type)) {
+    $requestType = $type;
+}
+switch ($requestType) {
+    case MyConstant::PERSON_TYPE_SUBMIT:
+        $this->title = '我提交的Bug';
+        break;
+    case MyConstant::PERSON_TYPE_ASSIGN:
+        $this->title = '指派给我的Bug';
+        break;
+}
+
 $this->params['breadcrumbs'] = [
     ['label' => '项目缺陷概况', 'url' => 'index.php?r=bug/index'],
     $this->title,
@@ -18,36 +29,9 @@ $bugStatus = Json::decode(BUG_STATUS);
 $bugPriority = Json::decode(BUG_PRIORITY);
 $bugSerious = Json::decode(BUG_SERIOUS);
 ?>
-
-<div id="bugQueryCondition">
-    <?php
-    $form = ActiveForm::begin([
-        'fieldConfig' => [
-            'template' =>
-                '<div class="searchItem">
-                    <div class="searchLabel">{label}</div>
-                    <div class="searchInput">{input}</div>
-                </div>',
-            'inputOptions' => ['class' => 'searchInputOption form-control'],
-        ]
-    ]);
-    echo $form->field($searchBugForm, 'projectId')->dropDownList([$project->id => $project->name], ['readonly' => true]);
-    echo $form->field($searchBugForm, 'moduleId')->dropDownList(ArrayHelper::map($project->getModules(), 'id', 'name'), ['prompt' => '全部']);
-    echo $form->field($searchBugForm, 'priority')->dropDownList($bugPriority, ['prompt' => '全部']);
-    echo $form->field($searchBugForm, 'seriousId')->dropDownList($bugSerious, ['prompt' => '全部']);
-    echo $form->field($searchBugForm, 'assignId')->dropDownList(ArrayHelper::map($project->getGroupMember(), 'id', 'name'), ['prompt' => '全部']);
-    echo $form->field($searchBugForm, 'creatorId')->textInput();
-    echo $form->field($searchBugForm, 'statusId')->dropDownList($bugStatus, ['prompt' => '全部']);
-    //    echo $form->field($searchBugForm, 'submitStart')->textInput(['style' => 'width']);
-    //    echo $form->field($searchBugForm, 'submitEnd')->textInput();
-    echo $form->field($searchBugForm, 'keyword')->textInput();
-
-    echo Html::submitButton('查询', ['class' => 'btn btn-primary', 'id' => 'submitBtn']);
-
-    ActiveForm::end();
-    ?>
+<div style="font-size: 23px;margin:10px;font-weight: bold;color: #006611;float: left;">
+    Bug详细列表
 </div>
-<a href="index.php?r=bug/charts" id="createCharts">统计报表</a>
 <div id="bugTable">
     <table>
         <thead>

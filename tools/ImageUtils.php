@@ -6,13 +6,30 @@
 namespace app\tools;
 
 use yii\base\Exception;
+use yii\helpers\Json;
 use yii\web\UploadedFile;
 
 class ImageUtils
 {
+    public static function deleteImage($imageNames)
+    {
+        if (isset($imageNames) && trim($imageNames) != '') {
+            $imagePaths = Json::decode($imageNames);
+            foreach ($imagePaths as $imagePath) {
+                unlink(MyConstant::BIG_IMAGE_PATH . $imagePath);
+                unlink(MyConstant::SMALL_IMAGE_PATH . $imagePath);
+            }
+        }
+    }
+
+    /**
+     * 上传文件的处理操作
+     * @param $bugForm
+     * @return array
+     * @throws Exception
+     */
     public static function uploadImageOpt($bugForm)
     {
-        $bugForm->images = UploadedFile::getInstances($bugForm, 'images');
         $imageNames = [];
         $index = 0;
         foreach ($bugForm->images as $image) {
@@ -50,8 +67,8 @@ class ImageUtils
         list($width, $height, $type, $attr) = getimagesize($srcImageFile);
         /* 将原图片读入内存中 */
         $imageType = image_type_to_extension($type, false);
-        $func = "imagecreatefrom{$imageType}";
-        $srcImage = $func($srcImageFile);
+        $readFunc = "imagecreatefrom{$imageType}";
+        $srcImage = $readFunc($srcImageFile);
 
         $saveFunc = "image{$imageType}";
 

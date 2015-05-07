@@ -24,9 +24,9 @@
 }
 
 .bugInfoItem > .itemArea {
-    min-height: 30px;
-    padding: 5px;
-    border: 1px solid #C1C8D2;
+    min-height: 100px;
+    /*padding: 5px;*/
+    /*border: 1px solid #C1C8D2;*/
     font-size: 16px;
     max-height: 150px;
     overflow: auto;

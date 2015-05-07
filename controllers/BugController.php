@@ -6,6 +6,7 @@
 
 namespace app\controllers;
 
+use app\models\ActiveBugForm;
 use app\models\ResolveForm;
 use Yii;
 use app\models\Bug;
@@ -15,10 +16,12 @@ use app\models\Project;
 use app\models\SearchBugForm;
 use app\tools\ImageUtils;
 use app\tools\MyConstant;
+use yii\base\Exception;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\web\UploadedFile;
+use app\models\CloseBugForm;
 
 class BugController extends BaseController
 {
@@ -29,7 +32,8 @@ class BugController extends BaseController
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'bug', 'add', 'show'],
+                'only' => ['index', 'bug', 'add', 'show', 'modify', 'delete',
+                    'download', 'resolve', 'active', 'close', 'charts'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -97,7 +101,7 @@ class BugController extends BaseController
             }
         }
 
-        $query = Bug::find()->joinWith(['assign'])->where($where);
+        $query = Bug::find()->joinWith(['assign'])->where($where)->addOrderBy(Bug::tableName() . '.create_time DESC');
         $countQuery = clone $query;
         $pagination = new Pagination([
             'totalCount' => $countQuery->count(),
@@ -117,48 +121,141 @@ class BugController extends BaseController
     {
         $bugForm = new BugForm();
         if (isset($_POST['BugForm']) && $bugForm->loadData()) {
-            //处理模块信息
-            if (!isset($bugForm->moduleId) || trim($bugForm->moduleId) == '')
-                $bugForm->moduleId = MyConstant::OPTION_ALL;
+            //在验证之前，先将文件什么的读进来
+            $bugForm->images = UploadedFile::getInstances($bugForm, 'images');
+            $bugForm->attachment = UploadedFile::getInstance($bugForm, 'attachment');
 
-            //处理上传的截图
-            $imageNames = ImageUtils::uploadImageOpt($bugForm);
-            $bugForm->images = Json::encode($imageNames);
+            if ($bugForm->validate()) {
+                //处理模块信息
+                if (!isset($bugForm->moduleId) || trim($bugForm->moduleId) == '')
+                    $bugForm->moduleId = MyConstant::OPTION_ALL;
 
-            //处理上传的附件
-            if (isset($bugForm->attachment) || trim($bugForm->attachment) != '') {
-                $bugForm->attachment = UploadedFile::getInstance($bugForm, 'attachment');
-                if ($bugForm->attachment !== null) {
-                    $attachmentName = time() . $bugForm->attachment->name;
-                    $bugForm->attachment->saveAs(MyConstant::ATTACHMENT_PATH . $attachmentName);
-                    $bugForm->attachment = $attachmentName;
+                //处理上传的截图
+                $imageNames = ImageUtils::uploadImageOpt($bugForm);
+                $bugForm->images = Json::encode($imageNames);
+
+                //处理上传的附件
+                if (isset($bugForm->attachment) || trim($bugForm->attachment) != '') {
+                    if ($bugForm->attachment !== null) {
+                        $attachmentName = time() . $bugForm->attachment->name;
+                        $bugForm->attachment->saveAs(MyConstant::ATTACHMENT_PATH . $attachmentName);
+                        $bugForm->attachment = $attachmentName;
+                    }
                 }
-            }
-
-            $result = $bugForm->addBugToDb();
-
-            if ($result) {
-                //插入数据库成功
-                Yii::$app->session->setFlash(OPT_RESULT, 'Bug提交成功！');
-                return $this->redirect('index.php?r=bug/index');
-            } else {
-                //插入数据库失败
-                Yii::$app->session->setFlash(OPT_RESULT, 'Bug提交失败！');
+                $result = $bugForm->addBugToDb();
+                if ($result) {
+                    //插入数据库成功
+                    Yii::$app->session->setFlash(OPT_RESULT, 'Bug提交成功！');
+                    return $this->redirect('index.php?r=bug/index');
+                } else {
+                    //插入数据库失败
+                    Yii::$app->session->setFlash(OPT_RESULT, 'Bug提交失败！');
+                }
             }
         }
         $projects = Project::find()->select(['id', 'name', 'group_id'])->all();
         $modules = [];
         if (count($projects) > 0) {
-            $modules = Module::find()->select(['id', 'name'])->all();
+            $modules = Module::find()->select(['id', 'name'])->where(['project_id' => $projects[0]->id])->all();
         }
 
-        return $this->render('add', ['bugForm' => $bugForm, 'projects' => $projects, 'modules' => $modules]);
+        return $this->render('edit', ['bugForm' => $bugForm, 'projects' => $projects, 'modules' => $modules]);
+    }
+
+    public function actionModify($bugId)
+    {
+        $bugForm = new BugForm();
+        $bugForm->isModify = true;
+        $bugForm->bugId = $bugId;
+
+        $bug = Bug::find()->where(['id' => $bugId])->one();
+        if ($bug === null) {
+            Yii::$app->session->setFlash(OPT_RESULT, 'Bug信息过期，请刷新重试！');
+            return $this->redirect('index.php?r=bug/index');
+        }
+
+        if (isset($_POST['BugForm']) && $bugForm->loadData()) {
+            //在验证之前，先将文件什么的读进来
+            $bugForm->images = UploadedFile::getInstances($bugForm, 'images');
+            $bugForm->attachment = UploadedFile::getInstance($bugForm, 'attachment');
+            if ($bugForm->validate()) {
+                //处理模块信息
+                if (!isset($bugForm->moduleId) || trim($bugForm->moduleId) == '')
+                    $bugForm->moduleId = MyConstant::OPTION_ALL;
+
+                //处理上传的截图
+                $imageNames = ImageUtils::uploadImageOpt($bugForm);
+                $bugForm->images = Json::encode($imageNames);
+
+                //处理上传的附件
+                if (isset($bugForm->attachment) || trim($bugForm->attachment) != '') {
+                    if ($bugForm->attachment !== null) {
+                        $attachmentName = time() . $bugForm->attachment->name;
+                        $bugForm->attachment->saveAs(MyConstant::ATTACHMENT_PATH . $attachmentName);
+                        $bugForm->attachment = $attachmentName;
+                    }
+                }
+                var_dump($bugForm);
+                $result = $bugForm->modifyBugOfDb($bug);
+                if ($result) {
+                    //插入数据库成功
+                    Yii::$app->session->setFlash(OPT_RESULT, 'Bug修改成功！');
+                    return $this->redirect('index.php?r=bug/index');
+                } else {
+                    //插入数据库失败
+                    Yii::$app->session->setFlash(OPT_RESULT, 'Bug修改失败！');
+                }
+            }
+        } else {
+            $bugForm->name = $bug->name;
+            $bugForm->projectId = $bug->project_id;
+            $bugForm->moduleId = $bug->module_id;
+            $bugForm->assignId = $bug->assign_id;
+            $bugForm->priority = $bug->priority;
+            $bugForm->seriousId = $bug->serious_id;
+            $bugForm->reappear = $bug->reappear;
+        }
+        $projects = Project::find()->select(['id', 'name', 'group_id'])->all();
+        $modules = [];
+        if (count($projects) > 0) {
+            $modules = Module::find()->select(['id', 'name'])->where(['project_id' => $bugForm->projectId])->all();
+        }
+        return $this->render('edit', ['bugForm' => $bugForm, 'projects' => $projects, 'modules' => $modules]);
+    }
+
+    public function actionDelete($bugId)
+    {
+        $bug = Bug::find()->where(['id' => $bugId])->one();
+        if ($bug === null) {
+            Yii::$app->session->setFlash(OPT_RESULT, 'Bug信息过期，请刷新重试！');
+            return $this->redirect('index.php?r=bug/index');
+        } else {
+            $result = false;
+            try {
+                $result = $bug->delete();
+            } catch (Exception $e) {
+                $result = false;
+            }
+            if ($result) {
+                Yii::$app->session->setFlash(OPT_RESULT, 'Bug删除成功!');
+                return $this->redirect('index.php?r=bug/index');
+            } else {
+                Yii::$app->session->setFlash(OPT_RESULT, 'Bug删除成功失败!');
+                if (isset($_SERVER['HTTP_REFERER']))
+                    return $this->redirect($_SERVER['HTTP_REFERENCE']);
+                else
+                    return $this->redirect('index.php?r=bug/index');
+            }
+        }
     }
 
     public function actionShow($bugId)
     {
         $bug = Bug::find()->joinWith(['project', 'assign', 'creator'])->where(['bug.id' => $bugId])->one();
-
+        if ($bug === null) {
+            Yii::$app->session->setFlash(OPT_RESULT, '指定Bug不存在！');
+            return $this->redirect('index.php?r=bug/index');
+        }
         return $this->render('show', ['bug' => $bug]);
     }
 
@@ -182,16 +279,54 @@ class BugController extends BaseController
     {
         $resolveForm = new ResolveForm();
         $resolveForm->bugId = $bugId;
-        if (isset($_POST['ResolveForm']) && $resolveForm->loadData()) {
+        if (isset($_POST['ResolveForm']) && $resolveForm->loadData() && $resolveForm->validate()) {
             $result = $resolveForm->modifyBugOfDb();
             if ($result) {
-                Yii::$app->session->setFlash(OPT_RESULT, '解决操作保存成功！');
+                Yii::$app->session->setFlash(OPT_RESULT, '操作保存成功！');
             } else {
-                Yii::$app->session->setFlash(OPT_RESULT, '解决操作保存失败！');
+                Yii::$app->session->setFlash(OPT_RESULT, '操作保存失败！');
             }
         }
+        if (isset($_SERVER['HTTP_REFERER']))
+            return $this->redirect($_SERVER['HTTP_REFERER']); //回到来的地方
+        else
+            return $this->redirect('index.php?r=bug/index');
+    }
 
-        return $this->redirect($_SERVER['HTTP_REFERER']); //回到来的地方
+    public function actionActive($bugId)
+    {
+        $activeForm = new ActiveBugForm();
+        $activeForm->bugId = $bugId;
+        if (isset($_POST['ActiveBugForm']) && $activeForm->loadData() && $activeForm->validate()) {
+            $result = $activeForm->modifyBugOfDb();
+            if ($result) {
+                Yii::$app->session->setFlash(OPT_RESULT, '激活成功！');
+            } else {
+                Yii::$app->session->setFlash(OPT_RESULT, '激活失败！');
+            }
+        }
+        if (isset($_SERVER['HTTP_REFERER']))
+            return $this->redirect($_SERVER['HTTP_REFERER']); //回到来的地方
+        else
+            return $this->redirect('index.php?r=bug/index');
+    }
+
+    public function actionClose($bugId)
+    {
+        $closeForm = new CloseBugForm();
+        $closeForm->bugId = $bugId;
+        if (isset($_POST['CloseBugForm']) && $closeForm->loadData() && $closeForm->validate()) {
+            $result = $closeForm->modifyBugOfDb();
+            if ($result) {
+                Yii::$app->session->setFlash(OPT_RESULT, '关闭Bug成功！');
+            } else {
+                Yii::$app->session->setFlash(OPT_RESULT, '关闭Bug失败！');
+            }
+        }
+        if (isset($_SERVER['HTTP_REFERER']))
+            return $this->redirect($_SERVER['HTTP_REFERER']); //回到来的地方
+        else
+            return $this->redirect('index.php?r=bug/index');
     }
 
     public function actionGetModuleAndMembers($projectId)
@@ -211,15 +346,15 @@ class BugController extends BaseController
         }
     }
 
-    public function actionTest()
+    public function actionCharts()
     {
-//        return $this->renderPartial('resolve');
-        var_dump($_SERVER);
-//        var_dump(Yii::$app->request);
+        return $this->render('charts');
     }
 
-    public function actionTest1()
+    public function actionTest()
     {
-        return $this->renderPartial('test');
+
+        return $this->render('test');
     }
+
 }
