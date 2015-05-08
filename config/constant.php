@@ -52,3 +52,12 @@ defined("BUG_PRIORITY") or define("BUG_PRIORITY", \yii\helpers\Json::encode([
     '2' => BUG_PRIORITY_HIGH,
     '3' => BUG_PRIORITY_URGENT,
 ]));
+defined("CHART_TYPE") or define("CHART_TYPE", \yii\helpers\Json::encode([
+    '0' => 'Bug提交日期分布表（天）',
+    '1' => 'Bug提交日期分布表（月）',
+    '2' => 'Bug总量走势图（天）',
+    '3' => 'Bug总量走势图（月）',
+    '4' => '各模块Bug数饼图',
+    '5' => 'Bug优先级饼图',
+    '6' => 'Bug状态饼图',
+]));

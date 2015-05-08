@@ -63,4 +63,17 @@ class PersonController extends BaseController
 
         return $this->render('show', ['type' => MyConstant::PERSON_TYPE_ASSIGN, 'bugs' => $bugs, 'pagination' => $pagination]);
     }
+
+    public function actionOpt()
+    {
+        $query = Bug::find()->where('introduce regexp "by *' . Yii::$app->user->identity->name . '\""')->addOrderBy(Bug::tableName() . '.create_time DESC');
+        $countQuery = clone $query;
+        $pagination = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => 10,
+        ]);
+        $bugs = $query->offset($pagination->offset)->limit($pagination->limit)->all();
+
+        return $this->render('show', ['type' => MyConstant::PERSON_TYPE_MY_OPT, 'bugs' => $bugs, 'pagination' => $pagination]);
+    }
 }

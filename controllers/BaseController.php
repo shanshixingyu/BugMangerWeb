@@ -18,6 +18,13 @@ use app\models\User;
 
 class BaseController extends Controller
 {
+    public function init()
+    {
+        parent::init();
+        date_default_timezone_set('Asia/Shanghai');
+    }
+
+
     /**
      * 用户身份控制,没登录的用户不允许访问
      * @return \yii\web\Response

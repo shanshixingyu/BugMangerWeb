@@ -8,6 +8,8 @@ namespace app\controllers;
 
 use app\models\ActiveBugForm;
 use app\models\ResolveForm;
+use app\models\SearchChartForm;
+use app\tools\BugOpt;
 use Yii;
 use app\models\Bug;
 use app\models\BugForm;
@@ -346,14 +348,36 @@ class BugController extends BaseController
         }
     }
 
-    public function actionCharts()
+    public function actionCharts($projectId)
     {
-        return $this->render('charts');
+        $searchCharts = new SearchChartForm();
+
+        if (isset($_POST['SearchChartForm']) && $searchCharts->loadData() && $searchCharts->validate()) {
+//            $data = BugOpt::getProjectRecentDayBugCounts($projectId, $searchCharts->startDate, $searchCharts->endDate);
+        } else {
+            $now = time();
+            $today = date('Y-m-d', $now);
+            $defaultDay = date('Y-m-d', strtotime('-7day', $now));
+            $searchCharts->startDate = $defaultDay;
+            $searchCharts->endDate = $today;
+        }
+
+//        $data = BugOpt::getProjectRecentDayBugCounts($projectId, $searchCharts->startDate, $searchCharts->endDate);
+        $func = BugOpt::getEchartFunction($searchCharts->type);
+        $data = BugOpt::$func($projectId, $searchCharts->startDate, $searchCharts->endDate);
+
+//        var_dump($data);
+
+//        $data = BugOpt::getProjectModuleBugCounts($projectId);
+//        var_dump($data);
+        return $this->render('charts', ['searchCharts' => $searchCharts, 'data' => $data]);
     }
 
     public function actionTest()
     {
-
+        $bugs = Bug::find()->andFilterWhere(['between', 'create_time', '2015-02-01', '2015-08-01'])->all();
+        var_dump($bugs);
+        echo date('Y-m-d H:i:s', time());
         return $this->render('test');
     }
 

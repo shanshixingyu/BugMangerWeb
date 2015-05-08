@@ -47,5 +47,14 @@ class BaseUtils
         return Bug::find()->where(['assign_id' => Yii::$app->user->identity->getId()])->count();
     }
 
+    /**
+     * 获得我操作过的bug数目
+     * @return int|string
+     */
+    public static function getMyOptBugCount()
+    {
+        return Bug::find()->where('introduce regexp "by *' . Yii::$app->user->identity->name . '\""')->count();
+    }
+
 
 }

@@ -18,6 +18,9 @@ switch ($requestType) {
     case MyConstant::PERSON_TYPE_ASSIGN:
         $this->title = '指派给我的Bug';
         break;
+    case MyConstant::PERSON_TYPE_MY_OPT:
+        $this->title = '我操作过的Bug';
+        break;
 }
 
 $this->params['breadcrumbs'] = [

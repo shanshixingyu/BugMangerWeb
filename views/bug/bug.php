@@ -47,7 +47,7 @@ $bugSerious = Json::decode(BUG_SERIOUS);
     ActiveForm::end();
     ?>
 </div>
-<a href="index.php?r=bug/charts" id="createCharts">统计报表</a>
+<a href="index.php?r=bug/charts&projectId=<?php echo $project->id; ?>" id="createCharts">统计报表</a>
 <div id="bugTable">
     <table>
         <thead>

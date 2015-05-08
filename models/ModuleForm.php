@@ -25,6 +25,7 @@ class ModuleForm extends BaseForm
     {
         $tempRules = [
             ['name', 'required', 'message' => '模块名称必填'],
+            ['name', 'match', 'pattern' => '/^[\x{4e00}-\x{9fa5}A-Za-z0-9_]+$/u', 'message' => '只能输入中文、英文、数字字符、下划线'],
             ['projectId', 'validateProjectExist'],
             ['name', 'validateNameUnique'],/* 同一个项目下的模块名称必须唯一*/
             ['fuzeren', 'required', 'message' => '模块负责人必选'],

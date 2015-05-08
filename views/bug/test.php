@@ -14,9 +14,10 @@ $this->registerJsFile('laydate/laydate.js');
 $this->registerCssFile('laydate/need/laydate.css');
 
 $this->registerJsFile('js/echarts/echarts.js', ['position' => \yii\web\View::POS_HEAD]);
-
-
 ?>
+
+
+
 <label>测试
     <input type="text" name="test_input" id="testInput1" placeholder="开始时间" class="laydate-icon"/>
     <input type="text" name="test_input" id="testInput2" placeholder="开始时间" class="laydate-icon"/>

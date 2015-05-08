@@ -6,9 +6,37 @@
 #chartChoice {
     text-align: center;
     background-color: #ffc3c6;
-    height: 100px;
+    overflow: hidden;
+}
+
+.choiceItemRow {
+    overflow: hidden;
+    padding: 10px;
+    float: left;
+}
+
+.choiceItemLabel {
+    float: left;
+    padding: 3px;
+    /*background-color: #ff0000;*/
+}
+
+.choiceItemInput {
+    float: left;
+    margin-left: 5px;
+    clear: right;
+}
+
+.choiceItemError {
+    clear: left;
+}
+
+.inputStyle {
+    height: 28px !important;
+    padding: 3px 6px !important;
 }
 
 #chartContent {
-    background-color: #fffdc1;
+    padding-top: 20px;
+    /*background-color: #fffdc1;*/
 }
