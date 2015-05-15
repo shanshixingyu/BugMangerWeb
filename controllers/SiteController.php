@@ -13,6 +13,7 @@ use Yii;
 use app\models\LoginForm;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
+use app\models\Project;
 
 class SiteController extends BaseController
 {
@@ -114,19 +115,40 @@ class SiteController extends BaseController
         /* 查询指定用户id下的所有组名 */
         $groups = Group::find()->where('member like "%' . $userModifyForm->userId . '%"')->all();
         $groupNames = [];
+        $groupIds = [];
         foreach ($groups as $group) {
             $groupNames[] = $group->name;
+            $groupIds[] = $group->id;
         }
         unset($groups);
 
-        /* 参与项目与模块 */
-        $where = 'fuzeren like "%\"' . $userModifyForm->userId . '\"%"';
-        $projectModules = Module::find()->joinWith('project')->where($where)->all();
+//        /* 参与项目与模块 */
+//        $where = 'fuzeren like "%\"' . $userModifyForm->userId . '\"%"';
+//        $projectModules = Module::find()->joinWith('project')->where($where)->all();
+//        $projectModuleData = [];
+//        foreach ($projectModules as $projectModule) {
+//            $projectModuleData[] = ['project' => $projectModule->project->name, 'module' => $projectModule->name];
+//        }
+//        unset($projectModules);
+
+        //通过参与的所有团队id组，找到所有参与的项目
+        $projects = Project::find()->select([Project::tableName() . '.id', Project::tableName() . '.name'])->joinWith(['projectModules'])->where(['group_id' => $groupIds])->all();
         $projectModuleData = [];
-        foreach ($projectModules as $projectModule) {
-            $projectModuleData[] = ['project' => $projectModule->project->name, 'module' => $projectModule->name];
+        foreach ($projects as $project) {
+            if (isset($project->projectModules) && is_array($project->projectModules) && count($project->projectModules) > 0) {
+                $hasFlag = false;
+                foreach ($project->projectModules as $module) {
+                    if (strpos($module->fuzeren, '"' . $userModifyForm->userId . '"')) {
+                        $projectModuleData[] = ['project' => $project->name, 'module' => $module->name];
+                        $hasFlag = true;
+                    }
+                }
+                if (!$hasFlag)
+                    $projectModuleData[] = ['project' => $project->name, 'module' => ''];
+            } else {
+                $projectModuleData[] = ['project' => $project->name, 'module' => ""];
+            }
         }
-        unset($projectModules);
 
         return $this->render("pim", [
             'userModifyForm' => $userModifyForm,

@@ -38,6 +38,11 @@ class Project extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'creator']);
     }
 
+    public function getProjectModules()
+    {
+        return $this->hasMany(Module::className(), ['project_id' => 'id']);
+    }
+
     /**
      * 获得与本项目相关的bug数量
      * @return int|string 项目的bug数量

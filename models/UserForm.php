@@ -7,6 +7,7 @@
 namespace app\models;
 
 use app\controllers\BaseController;
+use app\tools\PasswordUtils;
 use yii\base\Exception;
 
 class UserForm extends BaseForm
@@ -73,7 +74,7 @@ class UserForm extends BaseForm
     {
         $user = new User();
         $user->name = $this->name;
-        $user->password = BaseController::getEncryptedPassword();
+        $user->password = PasswordUtils::getEncryptedPassword();
         $user->role_id = $this->roleId;
         $user->email = $this->email;
         $user->creator = \Yii::$app->user->identity->getId();

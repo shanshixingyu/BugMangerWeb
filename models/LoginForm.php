@@ -2,6 +2,7 @@
 namespace app\models;
 
 use app\controllers\BaseController;
+use app\tools\PasswordUtils;
 use Yii;
 use yii\base\Model;
 
@@ -27,6 +28,7 @@ class LoginForm extends Model
         return [
             ['username', 'required', 'message' => '账号必填'],
             ['password', 'required', 'message' => '密码必填'],
+            ['username', 'match', 'pattern' => '/^[\x{4e00}-\x{9fa5}A-Za-z0-9_]+$/u', 'message' => '只能输入中文、英文、数字字符、下划线'],
             ['verifyCode', 'captcha', 'message' => '验证码不正确'],
             ['rememberMe', 'boolean'],
             ['password', 'validateUser'],
@@ -55,7 +57,7 @@ class LoginForm extends Model
     public function  validateUser($attribute, $params)
     {
         //先对登录密码信息进行加密,好和数据库比对
-        $encryptedPassword = BaseController::getEncryptedPassword($this->password);
+        $encryptedPassword = PasswordUtils::getEncryptedPassword($this->password);
         $this->user = User::findOne(['name' => $this->username, 'password' => $encryptedPassword]);
         if ($this->user === null) {
             $this->addError($attribute, '用户不存在或者密码不正确');

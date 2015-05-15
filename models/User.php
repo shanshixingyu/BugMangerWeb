@@ -57,7 +57,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         $keys = Json::decode($authKey);
-        if (isset($keys) && $keys->id == $this->id && $keys->password == $this->password)
+//        if (isset($keys) && $keys->id == $this->id && $keys->password == $this->password)
+        if (isset($keys) && $keys['id'] == $this->id && $keys['password'] == $this->password)
             return true;
         else
             return false;

@@ -33,4 +33,31 @@ class MyConstant
     const ECHART_TYPE_PRIORITY = "ECHART_TYPE_PRIORITY";
     const ECHART_TYPE_STATUS = "ECHART_TYPE_STATUS";
 
+
+    const VISIT_CODE_PASSWORD_WRONG = 300;
+    const VISIT_CODE_FAILURE = 200;
+    /**
+     * 响应状态码不是200
+     */
+    const VISIT_CODE_NO_OK = 100;
+    /**
+     * 访问成功
+     */
+    const VISIT_CODE_SUCCESS = 0;
+
+    /**
+     * 连接超时
+     */
+    const VISIT_CODE_CONNECT_TIME_OUT = -100;
+    /**
+     * 连接错误
+     */
+    const VISIT_CODE_CONNECT_ERROR = -200;
+
+    const VISIT_CODE_NO_LOGIN = -300;
+
+    const VISIT_CODE_NO_POST = -400;
+    const VISIT_CODE_NO_USER = -500;
+
+
 }
