@@ -78,9 +78,9 @@ class BugController extends BaseController
         $searchBugForm = new SearchBugForm();
         //查询条件
         $where = ['project_id' => $projectId];
-        if (isset(self::$searchBugPost)) {
-            var_dump($this->searchBugPost);
-        }
+//        if (isset(self::$searchBugPost)) {
+//            var_dump($this->searchBugPost);
+//        }
 
         if (isset($_POST['SearchBugForm']) && $searchBugForm->loadData()) {
             if (isset($searchBugForm->moduleId) && trim($searchBugForm->moduleId) != '') {

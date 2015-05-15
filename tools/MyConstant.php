@@ -34,6 +34,7 @@ class MyConstant
     const ECHART_TYPE_STATUS = "ECHART_TYPE_STATUS";
 
 
+    const VISIT_CODE_NOT_EXIST = 400;
     const VISIT_CODE_PASSWORD_WRONG = 300;
     const VISIT_CODE_FAILURE = 200;
     /**
