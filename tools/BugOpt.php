@@ -6,7 +6,7 @@
 
 namespace app\tools;
 
-
+use Yii;
 use app\models\Bug;
 use app\models\Module;
 use yii\helpers\Json;
@@ -23,7 +23,9 @@ class BugOpt
     {
         $newIntroduce = [
             [
-                'title' => $datetime . ' 新建 by ' . \Yii::$app->user->identity->name,
+                'type' => '新建',
+                'name' => Yii::$app->user->identity->name,
+                'time' => $datetime,
                 'content' => $introduce
             ]
         ];
@@ -46,7 +48,9 @@ class BugOpt
         }
         $tempOldIntroduce = Json::decode($oldIntroduce);
         $tempIntroduce = [
-            'title' => $dateTime . '   ' . $type . '   by   ' . \Yii::$app->user->identity->name,
+            'type' => $type,
+            'name' => Yii::$app->user->identity->name,
+            'time' => $dateTime,
             'content' => $introduce
         ];
         array_unshift($tempOldIntroduce, $tempIntroduce);

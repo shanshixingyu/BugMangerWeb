@@ -37,11 +37,11 @@ $bugStatus = Json::decode(BUG_STATUS);
             <?php endif; ?>
             <!--    以下几个按钮只有在登录用户为bug创建用户时才显示 -->
             <?php if ($bug->creator_id == Yii::$app->user->identity->getId()): ?>
-                <?php if ($bug->status == array_search(BUG_STATUS_UNSOLVED, $bugStatus)): ?>
-                    <a href="index.php?r=bug/modify&bugId=<?php echo $bug->id; ?>">
-                        <img src="<?php echo IMG_PATH; ?>ic_pan.png">&nbsp;修改
-                    </a>
-                <?php endif; ?>
+                <!--                --><?php //if ($bug->status == array_search(BUG_STATUS_UNSOLVED, $bugStatus)): ?>
+                <a href="index.php?r=bug/modify&bugId=<?php echo $bug->id; ?>">
+                    <img src="<?php echo IMG_PATH; ?>ic_pan.png">&nbsp;修改
+                </a>
+                <!--                --><?php //endif; ?>
                 <?php if ($bug->status == array_search(BUG_STATUS_SOLVED, $bugStatus)
                     || $bug->status == array_search(BUG_STATUS_CLOSED, $bugStatus)
                     || $bug->status == array_search(BUG_STATUS_OTHER, $bugStatus)
@@ -116,7 +116,7 @@ $bugStatus = Json::decode(BUG_STATUS);
                         <div class="swiper-wrapper">
                             <?php foreach ($imagesNames as $imagesName) : ?>
                                 <div class="swiper-slide">
-                                    <img src="<?php echo MyConstant::BIG_IMAGE_PATH, $imagesName; ?>" alt="缺陷截图">
+                                    <img src="<?php echo MyConstant::IMAGE_PATH, $imagesName; ?>" alt="缺陷截图">
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -132,7 +132,9 @@ $bugStatus = Json::decode(BUG_STATUS);
             <div class="itemArea" style="border: 1px solid #C1C8D2;padding:5px;">
                 <?php $introduces = Json::decode($bug->introduce); ?>
                 <?php foreach ($introduces as $introduce): ?>
-                    <div class="introduceTitle"><?php echo $introduce['title'], '<br/>'; ?></div>
+                    <div class="introduceTitle">
+                        <?php echo $introduce['time']; ?>&nbsp;&nbsp;<?php echo $introduce['type']; ?>
+                        &nbsp;by&nbsp;<?php echo $introduce['name']; ?></div>
                     <div class="introduceContent">
                         <?php echo $introduce['content'], '<br/>'; ?>
                     </div>

@@ -66,7 +66,8 @@ class PersonController extends BaseController
 
     public function actionOpt()
     {
-        $query = Bug::find()->where('introduce regexp "by *' . Yii::$app->user->identity->name . '\""')->addOrderBy(Bug::tableName() . '.create_time DESC');
+//        $query = Bug::find()->where('introduce regexp "by *' . Yii::$app->user->identity->name . '\""')->addOrderBy(Bug::tableName() . '.create_time DESC');
+        $query = Bug::find()->andFilterWhere(['like', 'introduce', '"name":"' . Yii::$app->user->identity->name . '"'])->addOrderBy(Bug::tableName() . '.create_time DESC');
         $countQuery = clone $query;
         $pagination = new Pagination([
             'totalCount' => $countQuery->count(),

@@ -53,7 +53,8 @@ class BaseUtils
      */
     public static function getMyOptBugCount()
     {
-        return Bug::find()->where('introduce regexp "by *' . Yii::$app->user->identity->name . '\""')->count();
+//        return Bug::find()->where('introduce regexp "by *' . Yii::$app->user->identity->name . '\""')->count();
+        return Bug::find()->andFilterWhere(['like', 'introduce', '"name":"' . Yii::$app->user->identity->name . '"'])->count();
     }
 
 

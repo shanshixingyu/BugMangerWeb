@@ -111,17 +111,28 @@ class BugController extends BaseController
                         $where['status'] = $_POST['status'];
                     }
 
-                    $query = Bug::find()->joinWith(['assign'])->where($where)->addOrderBy(Bug::tableName() . '.create_time DESC');
+                    $query = Bug::find()->select([
+                        Bug::tableName() . '.id',
+                        Bug::tableName() . '.name',
+                        'priority',
+                        'serious_id',
+                        'status',
+                        Bug::tableName() . '.create_time'
+                    ])->joinWith(['assign'])->where($where)->addOrderBy(Bug::tableName() . '.create_time DESC');
                     $countQuery = clone $query;
                     $pagination = new Pagination([
                         'totalCount' => $countQuery->count(),
-                        'pageSize' => 8,
+                        'pageSize' => 10,
                     ]);
                     $bugs = $query->offset($pagination->offset)->limit($pagination->limit)->all();
 
                     $result->code = MyConstant::VISIT_CODE_SUCCESS;
                     $result->message = "获取成功";
-                    $result->result = $bugs;
+                    $result->result = [
+                        'pageCount' => $pagination->getPageCount(),
+                        'currentPage' => $pagination->getPage() + 1,
+                        'data' => $bugs
+                    ];;
                     return $result->parseJson();
                 }
             }
@@ -133,5 +144,28 @@ class BugController extends BaseController
         }
     }
 
+    public function actionDetail($bugId)
+    {
+        $result = new HttpResult();
+        $bug = Bug::find()->joinWith(['assign', 'creator', 'project'])->where([Bug::tableName() . '.id' => $bugId])->one();
+//        var_dump($bug);
+        $result->code = MyConstant::VISIT_CODE_SUCCESS;
+        $result->message = "获取数据成功";
+        $module = Module::find()->where(['id' => $bug->module_id])->one();
+        $result->result = [
+            'bug' => $bug,
+            'assignName' => isset($bug->assign->name) ? $bug->assign->name : '',
+            'creatorName' => isset($bug->creator->name) ? $bug->creator->name : '',
+            'projectName' => isset($bug->project->name) ? $bug->project->name : '',
+            'moduleName' => isset($module->name) ? $module->name : ''
+        ];
+        return $result->parseJson();
+    }
+
+    public function actionTest()
+    {
+        $query = Bug::find()->select([Bug::tableName() . '.id', Bug::tableName() . '.name', 'priority', 'serious_id', 'status', Bug::tableName() . '.create_time'])->joinWith(['assign'])->addOrderBy(Bug::tableName() . '.create_time DESC')->all();
+        var_dump($query);
+    }
 
 }

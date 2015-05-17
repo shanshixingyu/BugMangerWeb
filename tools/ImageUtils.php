@@ -16,8 +16,7 @@ class ImageUtils
         if (isset($imageNames) && trim($imageNames) != '') {
             $imagePaths = Json::decode($imageNames);
             foreach ($imagePaths as $imagePath) {
-                unlink(MyConstant::BIG_IMAGE_PATH . $imagePath);
-                unlink(MyConstant::SMALL_IMAGE_PATH . $imagePath);
+                unlink(MyConstant::IMAGE_PATH . $imagePath);
             }
         }
     }
@@ -33,8 +32,8 @@ class ImageUtils
         $imageNames = [];
         $index = 0;
         foreach ($bugForm->images as $image) {
-            $tempName = time() . $index . $image->getExtension();
-            $tempFilePath = MyConstant::IMAGE_PATH . $tempName;
+            $tempName = time() . $index . '.' . $image->getExtension();
+            $tempFilePath = MyConstant::IMAGE_PATH . "temp/" . $tempName;
             $isSuccess = $image->saveAs($tempFilePath);
             if (!$isSuccess)
                 continue;
@@ -72,57 +71,28 @@ class ImageUtils
 
         $saveFunc = "image{$imageType}";
 
-        /**************************************大图****************************************/
-
         /* 根据获得的图片的大小，计算得到标准图片的大小和缩放比例 */
-        $bigHeight = MyConstant::IMAGE_BIG_HEIGHT;
-        $bigScale = $bigHeight / $height;
-        $bigWidth = $width * $bigScale;
+        $newHeight = MyConstant::IMAGE_HEIGHT;
+        $newScale = $newHeight / $height;
+        $bigWidth = $width * $newScale;
         /* 新建新图片 */
-        $bigImage = imagecreatetruecolor($bigWidth, $bigHeight);
+        $newImage = imagecreatetruecolor($bigWidth, $newHeight);
         /* 将原图片缩放并且存在新建图片上 */
-        $isSuccess = imagecopyresampled($bigImage, $srcImage, 0, 0, 0, 0, $bigWidth, $bigHeight, $width, $height);
+        $isSuccess = imagecopyresampled($newImage, $srcImage, 0, 0, 0, 0, $bigWidth, $newHeight, $width, $height);
         if (!$isSuccess) {
-            imagedestroy($bigImage);
+            imagedestroy($newImage);
             imagedestroy($srcImage);
             return false;
         }
         /* 将缩放好的图片保存到磁盘上 */
-        $dstImageFile = MyConstant::BIG_IMAGE_PATH . $dstImageFileName;
-        $isSuccess = $saveFunc($bigImage, $dstImageFile);
-        /* 将内存中的大图片回收 */
-        imagedestroy($bigImage);
-        if (!$isSuccess) {
-            imagedestroy($srcImage);
-            return false;
-        }
-
-
-        /**************************************小图****************************************/
-
-        /* 根据获得的图片的大小，计算得到标准图片的大小和缩放比例 */
-        $smallHeight = MyConstant::IMAGE_SMALL_HEIGHT;
-        $smallScale = $smallHeight / $height;
-        $smallWidth = $width * $smallScale;
-        /* 新建新图片 */
-        $smallImage = imagecreatetruecolor($smallWidth, $smallHeight);
-        /* 将原图片缩放并且存在新建图片上 */
-        $isSuccess = imagecopyresampled($smallImage, $srcImage, 0, 0, 0, 0, $smallWidth, $smallHeight, $width, $height);
-        if (!$isSuccess) {
-            imagedestroy($smallImage);
-            imagedestroy($srcImage);
-            return false;
-        }
-        /* 将缩放好的图片保存到磁盘上 */
-        $dstImageFile = MyConstant::SMALL_IMAGE_PATH . $dstImageFileName;
-        $isSuccess = $saveFunc($smallImage, $dstImageFile);
-        /* 将内存中的大图片回收 */
-        imagedestroy($smallImage);
+        $dstImageFile = MyConstant::IMAGE_PATH . $dstImageFileName;
+        $isSuccess = $saveFunc($newImage, $dstImageFile);
+        /* 将内存中的图片回收 */
+        imagedestroy($newImage);
         imagedestroy($srcImage);
         if (!$isSuccess) {
             return false;
         }
-
         return true;
     }
 }
