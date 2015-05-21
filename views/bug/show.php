@@ -37,18 +37,20 @@ $bugStatus = Json::decode(BUG_STATUS);
             <?php endif; ?>
             <!--    以下几个按钮只有在登录用户为bug创建用户时才显示 -->
             <?php if ($bug->creator_id == Yii::$app->user->identity->getId()): ?>
-                <!--                --><?php //if ($bug->status == array_search(BUG_STATUS_UNSOLVED, $bugStatus)): ?>
-                <a href="index.php?r=bug/modify&bugId=<?php echo $bug->id; ?>">
-                    <img src="<?php echo IMG_PATH; ?>ic_pan.png">&nbsp;修改
-                </a>
-                <!--                --><?php //endif; ?>
+                <!-- 关闭前都可以修改-->
+                <?php if ($bug->status != array_search(BUG_STATUS_CLOSED, $bugStatus)): ?>
+                    <a href="index.php?r=bug/modify&bugId=<?php echo $bug->id; ?>">
+                        <img src="<?php echo IMG_PATH; ?>ic_pan.png">&nbsp;修改
+                    </a>
+                <?php endif; ?>
                 <?php if ($bug->status == array_search(BUG_STATUS_SOLVED, $bugStatus)
                     || $bug->status == array_search(BUG_STATUS_CLOSED, $bugStatus)
                     || $bug->status == array_search(BUG_STATUS_OTHER, $bugStatus)
                 ): ?>
                     <a href="#" id="activeBug"><img src="<?php echo IMG_PATH; ?>ic_active.png">&nbsp;激活</a>
                 <?php endif; ?>
-                <?php if ($bug->status == array_search(BUG_STATUS_SOLVED, $bugStatus)): ?>
+                <?php if ($bug->status == array_search(BUG_STATUS_SOLVED, $bugStatus)
+                    || $bug->status == array_search(BUG_STATUS_OTHER, $bugStatus)): ?>
                     <a href="#" id="closeBug"><img src="<?php echo IMG_PATH; ?>ic_close.png">&nbsp;关闭</a>
                 <?php endif; ?>
                 <a href="index.php?r=bug/delete&bugId=<?php echo $bug->id; ?>" data-confirm="删除后将不能够恢复，确定删除？"><img

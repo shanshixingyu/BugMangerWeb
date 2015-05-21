@@ -9,6 +9,7 @@ namespace app\modules\api\models;
 
 class PhoneLoginUser
 {
+    public $userId;
     public $userName;
     public $password;
     public $roleId;

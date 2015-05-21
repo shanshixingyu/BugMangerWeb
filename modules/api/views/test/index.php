@@ -57,7 +57,19 @@ $this->title = '登录测试';
     echo \app\tools\PasswordUtils::getEncryptedPassword('root');
     ?>
 
-    
+    <br/>
+    <a href="index.php?r=api/bug/download&fileName=是的弄.txt">下载文件</a>
+
+    <br/><br/><br/>
+    添加用户：<br/>
+
+    <form action="index.php?r=api/user/add" method="post">
+        用户名<input type="text" name="name"/><br/>
+        角色ID<input type="text" name="roleId"/><br/>
+        邮箱<input type="email" name="email"/><br/>
+
+        <input type="submit" value="提交"/><br/>
+    </form>
 
 </div>
 

@@ -162,6 +162,21 @@ class BugController extends BaseController
         return $result->parseJson();
     }
 
+    public function actionDownload($fileName)
+    {
+        $file = MyConstant::ATTACHMENT_PATH . $fileName;
+        if (is_file($fileName)) {
+            header("Content-Type: application/force-download");
+            header("Content-Disposition: attachment; filename=" . basename($file));
+            readfile($file);
+            exit;
+        } else {
+            header("Content-Disposition: attachment; filename=" . basename($file));
+            readfile($file);
+            exit;
+        }
+    }
+
     public function actionTest()
     {
         $query = Bug::find()->select([Bug::tableName() . '.id', Bug::tableName() . '.name', 'priority', 'serious_id', 'status', Bug::tableName() . '.create_time'])->joinWith(['assign'])->addOrderBy(Bug::tableName() . '.create_time DESC')->all();

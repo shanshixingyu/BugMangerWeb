@@ -263,7 +263,6 @@ class BugController extends BaseController
 
     public function actionDownload($fileName)
     {
-        echo 'ssd s ' . $fileName;
         $file = MyConstant::ATTACHMENT_PATH . $fileName;
         if (is_file($fileName)) {
             header("Content-Type: application/force-download");

@@ -25,12 +25,13 @@ class SiteController extends BaseController
             //已经登录过了
             $user = Yii::$app->user->identity;
             $phoneLoginUser = new PhoneLoginUser();
+            $phoneLoginUser->userId = $user->id;
             $phoneLoginUser->userName = $user->name;
             $phoneLoginUser->password = $user->password;
             $phoneLoginUser->roleId = $user->role_id;
             $phoneLoginUser->roleName = $user->role->name;
-            $result->code = 0;
-            $result->message = 'login success';
+            $result->code = MyConstant::VISIT_CODE_SUCCESS;
+            $result->message = '登录成功';
             $result->result = $phoneLoginUser;
             return $result->parseJson();
         }
@@ -47,18 +48,19 @@ class SiteController extends BaseController
             $user = User::find()->joinWith(['role'])->where([User::tableName() . '.name' => $userName, 'password' => $encryptedPassword])->one();
             //如果$user为null的话说明没有登录成功
             if ($user === null) {
-                $result->code = 1;
-                $result->message = 'login failure';
+                $result->code = MyConstant::VISIT_CODE_FAILURE;
+                $result->message = '登录失败';
             } else {
                 //系统登录
                 $loginSuccess = Yii::$app->user->login($user, $rememberMe ? 3600 * 24 * 30 : 0);
                 if (!$loginSuccess) {
                     //登录不成功
                     $result->code = 1;
-                    $result->message = 'login failure';
+                    $result->message = '登录失败';
                 } else {
                     //登录成功
                     $phoneLoginUser = new PhoneLoginUser();
+                    $phoneLoginUser->userId = $user->id;
                     $phoneLoginUser->userName = $user->name;
 //                    $phoneLoginUser->password = $password;
                     $phoneLoginUser->password = $user->password;
@@ -66,13 +68,13 @@ class SiteController extends BaseController
                     $phoneLoginUser->roleName = $user->role->name;
 
                     $result->code = 0;
-                    $result->message = 'login success';
+                    $result->message = '登录成功';
                     $result->result = $phoneLoginUser;
                 }
             }
         } else {
             $result->code = -1;
-            $result->message = 'not pass name and word';
+            $result->message = '没有传输用户名和密码';
         }
 
         return $result->parseJson();

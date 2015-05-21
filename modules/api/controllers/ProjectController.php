@@ -11,10 +11,10 @@ use app\models\Module;
 use app\models\Project;
 use app\modules\api\models\HttpResult;
 use app\tools\MyConstant;
-use yii\helpers\Json;
-use yii\web\Controller;
+use yii\data\Pagination;
 
-class ProjectController extends Controller
+
+class ProjectController extends BaseController
 {
     public function actionProjectModule()
     {
@@ -29,6 +29,27 @@ class ProjectController extends Controller
         $result->code = MyConstant::VISIT_CODE_SUCCESS;
         $result->message = "成功获取";
         $result->result = $projectModuleDatas;
+        return $result->parseJson();
+    }
+
+    public function actionIndex()
+    {
+        $query = Project::find()->select(['id', 'name', 'introduce', 'creator']);
+        $countQuery = clone $query;
+        $pagination = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => 10,
+        ]);
+        $groups = $query->limit($pagination->limit)->offset($pagination->offset)->all();
+
+        $result = new HttpResult();
+        $result->code = MyConstant::VISIT_CODE_SUCCESS;
+        $result->message = "获得项目信息成功";
+        $result->result = [
+            'pageCount' => $pagination->getPageCount(),
+            'currentPage' => $pagination->getPage() + 1,
+            'data' => $groups
+        ];
         return $result->parseJson();
     }
 }
