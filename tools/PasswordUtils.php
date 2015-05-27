@@ -16,11 +16,23 @@ class PasswordUtils
      */
     public static function getEncryptedPassword($rawPassword = '123456')
     {
-
         if ($rawPassword === null || trim($rawPassword) == '') {
             $rawPassword = '123456';
         }
         $tempPassword = md5($rawPassword . PASSWORD_KEY);
         return substr($tempPassword, 3, 20);
     }
+
+    /**
+     * 结合当前时间，利用特定的算法，计算得到用户的重置码
+     * @return string
+     */
+    public static function getResetPasswordParam()
+    {
+        //获取当前时间
+        $currentTime = time();
+        $tempResetPasswordParam = md5($currentTime . PASSWORD_KEY);
+        return substr($tempResetPasswordParam, 3, 20);
+    }
+
 }

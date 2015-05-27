@@ -89,7 +89,7 @@ $this->registerCssFile(CSS_PATH . 'show_manager.css');
                     'modify' => function ($url, $model, $key) {
                         if ($model->creator == Yii::$app->user->identity->getId() || Yii::$app->user->identity->role_id == 0) {
                             return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
-                                'title' => '修改项目信息',
+                                'title' => '修改',
                             ]);
                         } else {
                             return '无权限';

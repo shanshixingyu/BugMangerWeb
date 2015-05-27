@@ -26,6 +26,7 @@ class UserForm extends BaseForm
             ['name', 'match', 'pattern' => '/^[\x{4e00}-\x{9fa5}A-Za-z0-9_]+$/u', 'message' => '只能输入中文、英文、数字字符、下划线'],
             ['name', 'validateNameUnique'],
             ['roleId', 'validateRoleExist'],
+            ['email', 'required', 'message' => '用户邮箱必填'],
             ['email', 'email', 'message' => '用户邮箱不合法'],
         ];
 

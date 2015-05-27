@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 激活bug表单
  * Created by GuLang on 2015-05-07.
  */
 

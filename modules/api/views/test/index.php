@@ -71,6 +71,19 @@ $this->title = '登录测试';
         <input type="submit" value="提交"/><br/>
     </form>
 
+    <br/><br/><br/>
+    修改用户信息：<br/>
+
+    <form action="index.php?r=api/user/modify&userId=38" method="post">
+        用户名<input type="text" name="name"/><br/>
+        角色ID<input type="text" name="roleId"/><br/>
+        邮箱<input type="email" name="email"/><br/>
+
+        <input type="submit" value="提交"/><br/>
+    </form>
+
+    <a href="index.php?r=api/site/test">发送邮件测试</a>
+
 </div>
 
 

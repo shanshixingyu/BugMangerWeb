@@ -17,7 +17,7 @@ $this->registerCssFile(CSS_PATH . "show_module.css");
         <th style="width:14.12%;">创建时间</th>
     </tr>
 </table>
-<div style="width100%;text-align:center;">
+<div style="width:100%;text-align:center;">
     <?php echo Html::button('关闭', [
         'id' => "closeModalBtn",
         'class' => 'btn btn-primary',

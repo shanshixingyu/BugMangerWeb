@@ -3,13 +3,15 @@
  * 登录页面
  * Created by GuLang on 2015-04-16.
  */
+/* @var $this \yii\web\View */
+/* @var $content string */
 use app\assets\AppAsset;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\captcha\Captcha;
-
-/* @var $this \yii\web\View */
-/* @var $content string */
+use yii\bootstrap\Modal;
+use app\models\ResetPasswordParamForm;
+use app\tools\MyConstant;
 
 AppAsset::register($this);
 ?>
@@ -18,8 +20,13 @@ AppAsset::register($this);
 <head>
     <meta charset="utf-8">
     <title>系统登录</title>
-    <link href="<?php echo ASSETS_PATH; ?>61ba6892/css/bootstrap.css" rel="stylesheet">
-    <link href="<?php echo CSS_PATH; ?>login.css" rel="stylesheet" type="text/css">
+    <link href="<?php echo ASSETS_PATH; ?>61ba6892/css/bootstrap.css" rel="stylesheet"/>
+    <link href="<?php echo CSS_PATH; ?>login.css" rel="stylesheet" type="text/css"/>
+    <script src="<?php echo ASSETS_PATH; ?>10b978a4/jquery.js" type="text/javascript"></script>
+    <script src="<?php echo ASSETS_PATH; ?>ceb33bbe/js/bootstrap.js"></script>
+    <!--    <script src="--><?php //echo ASSETS_PATH; ?><!--9768bb07/yii.js"></script>-->
+    <!--    <script src="--><?php //echo ASSETS_PATH; ?><!--9768bb07/yii.validation.js"></script>-->
+    <!--    <script src="--><?php //echo ASSETS_PATH; ?><!--9768bb07/yii.activeForm.js"></script>-->
 </head>
 <body>
 <div id="wrap">
@@ -48,7 +55,8 @@ AppAsset::register($this);
                 <!--                <input type="submit" id="login_button" value="登录">&nbsp;&nbsp;&nbsp;-->
                 <?= Html::submitButton('登录', ['class' => 'btn btn-primary']) ?>
                 &nbsp;&nbsp;&nbsp;
-                <a href="#" style="font-size: 14px;color: #0000ff">找回密码？</a>
+                <a id="forgetPassword" data-toggle="modal" href="#resetPasswordModal"
+                   style="font-size: 14px;color: #0000ff;margin-left: 10px">找回密码？</a>
             </div>
             <?php $form = ActiveForm::end(); ?>
         </div>
@@ -63,5 +71,33 @@ AppAsset::register($this);
         <p style="font-size: 13px;margin-top: -10px;">Copyright&nbsp;©&nbsp;GuLangSoftware,All rights reserved.</p>
     </div>
 </div>
+<?php Modal::begin([
+    'id' => 'resetPasswordModal',
+    'header' => '<div style="text-align: center;font-weight: bold">密码重置</div>',
+    'size' => Modal::SIZE_SMALL,
+]);
+$resetPasswordForm = new ResetPasswordParamForm();
+echo $this->render('reset_password', ['resetPasswordForm' => $resetPasswordForm]);
+Modal::end(); ?>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        <?php if (Yii::$app->session->hasFlash(OPT_RESULT)):?>
+        alert('<?php echo Yii::$app->session->getFlash(OPT_RESULT);?>');
+        <?php Yii::$app ->session ->removeFlash(OPT_RESULT);?>
+        <?php endif;?>
+
+        <?php if (Yii::$app->session->hasFlash(MyConstant::PASSWORD_OPT_RESULT)):?>
+        alert('<?php echo Yii::$app->session->getFlash(MyConstant::PASSWORD_OPT_RESULT);?>');
+        <?php Yii::$app ->session ->removeFlash(MyConstant::PASSWORD_OPT_RESULT);?>
+
+        <?php if (Yii::$app->session->hasFlash(MyConstant::RESET_PASSWORD_SUCCESS)){
+            Yii::$app ->session ->removeFlash(MyConstant::RESET_PASSWORD_SUCCESS);
+        }else{
+            echo '$("#resetPasswordModal").modal("toggle")';
+        }?>
+        <?php endif;?>
+    });
+</script>
 </body>
 </html>

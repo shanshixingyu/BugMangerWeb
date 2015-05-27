@@ -12,4 +12,10 @@ use yii\web\Controller;
 class BaseController extends Controller
 {
     public $enableCsrfValidation = false;
+
+    public function init()
+    {
+        parent::init();
+        date_default_timezone_set('Asia/Shanghai');
+    }
 }

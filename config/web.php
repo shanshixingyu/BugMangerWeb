@@ -26,7 +26,20 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.163.com',
+                'username' => 'h1024246550@163.com',
+                'password' => 'hwz3935007',
+                'port' => 25,
+                'encryption' => 'tls',
+            ],
+            'messageConfig' => [
+                'charset' => 'UTF-8',
+                'from' => ['h1024246550@163.com' => '软件缺陷管理系统']
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -40,7 +53,7 @@ $config = [
         'db' => require(__DIR__ . '/db.php'),
     ],
 //    'params' => $params,
-	'modules' => [
+    'modules' => [
         'api' => [
             'class' => 'app\modules\api\APIModule',
         ],
@@ -49,11 +62,11 @@ $config = [
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = 'yii\debug\Module';
+//    $config['bootstrap'][] = 'debug';
+//    $config['modules']['debug'] = 'yii\debug\Module';
 
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = 'yii\gii\Module';
+//    $config['bootstrap'][] = 'gii';
+//    $config['modules']['gii'] = 'yii\gii\Module';
 }
 
 return $config;

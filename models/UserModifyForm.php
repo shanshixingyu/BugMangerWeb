@@ -27,13 +27,15 @@ class UserModifyForm extends BaseForm
             return [
                 ['oldPassword', 'required', 'message' => '原始密码必填'],
                 ['password', 'required', 'message' => '新密码必填'],
-                ['email', 'email', 'message' => '格式不正确'],
+                ['email', 'required', 'message' => '邮箱必填'],
+                ['email', 'email', 'message' => '邮箱格式不正确'],
                 ['password2', 'compare', 'compareAttribute' => 'password', 'message' => '密码不一致'],
                 ['oldPassword', 'validateOldCorrect'],
             ];
         } else {
             return [
-                ['email', 'email', 'message' => '格式不正确'],
+                ['email', 'required', 'message' => '邮箱必填'],
+                ['email', 'email', 'message' => '邮箱格式不正确'],
             ];
         }
     }
