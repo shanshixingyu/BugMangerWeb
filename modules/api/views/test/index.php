@@ -84,11 +84,25 @@ $this->title = '登录测试';
 
     <br/><br/><br/>
     添加团队信息：<br/>
+
     <form action="index.php?r=api/group/add" method="post">
         团队名称<input type="text" name="name"/><br/>
         团队成员<input type="text" name="memberIds" value="[]"/><br/>
         团队简介<input type="text" name="introduce"/><br/>
 
+        <input type="submit" value="提交"/><br/>
+    </form>
+
+    <br/><br/><br/>
+    <a href="index.php?r=api/project/get-all-group"> 获得所有的团队信息</a>
+
+    <br/><br/><br/>
+    添加项目信息：<br/>
+
+    <form action="index.php?r=api/project/add-project" method="post">
+        项目名称<input type="text" name="name"/><br/>
+        负责团队<input type="text" name="groupId"/><br/>
+        项目简介<input type="text" name="introduce"/><br/>
         <input type="submit" value="提交"/><br/>
     </form>
 

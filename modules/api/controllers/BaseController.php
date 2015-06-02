@@ -15,7 +15,7 @@ class BaseController extends Controller
 
     public function init()
     {
-        parent::init();
         date_default_timezone_set('Asia/Shanghai');
+        parent::init();
     }
 }
