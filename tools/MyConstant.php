@@ -31,7 +31,9 @@ class MyConstant
     const ECHART_TYPE_PRIORITY = "ECHART_TYPE_PRIORITY";
     const ECHART_TYPE_STATUS = "ECHART_TYPE_STATUS";
 
-
+    const VISIT_CODE_NO_LOGIN = 1100;
+    const VISIT_CODE_NO_POST = 1000;
+    const VISIT_CODE_NO_USER = 900;
     const VISIT_CODE_NOT_PERMISSION = 800;
     const VISIT_CODE_OUT_DATE = 700;
     const VISIT_CODE_NOT_LOGIN = 600;
@@ -56,12 +58,6 @@ class MyConstant
      * 连接错误
      */
     const VISIT_CODE_CONNECT_ERROR = -200;
-
-    const VISIT_CODE_NO_LOGIN = -300;
-
-    const VISIT_CODE_NO_POST = -400;
-    const VISIT_CODE_NO_USER = -500;
-
 
     const ONE_DAY_LENGTH = 86400;//一天的秒数：24 * 60 * 60
 

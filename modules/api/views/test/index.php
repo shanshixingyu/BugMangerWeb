@@ -82,7 +82,15 @@ $this->title = '登录测试';
         <input type="submit" value="提交"/><br/>
     </form>
 
-    <a href="index.php?r=api/site/test">发送邮件测试</a>
+    <br/><br/><br/>
+    添加团队信息：<br/>
+    <form action="index.php?r=api/group/add" method="post">
+        团队名称<input type="text" name="name"/><br/>
+        团队成员<input type="text" name="memberIds" value="[]"/><br/>
+        团队简介<input type="text" name="introduce"/><br/>
+
+        <input type="submit" value="提交"/><br/>
+    </form>
 
 </div>
 

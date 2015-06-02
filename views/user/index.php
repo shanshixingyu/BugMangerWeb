@@ -22,7 +22,7 @@ $this->registerCssFile(CSS_PATH . 'show_manager.css');
 
 <div id="showInfoWrap">
     <div id="aboveShowInfTable">
-        <div id="showInfoTableName">用户信息信息表</div>
+        <div id="showInfoTableName">用户信息表</div>
         <?php
         $myRole = Yii::$app->user->identity->role_id;
         if ($myRole == 0 || $myRole == 1):?>

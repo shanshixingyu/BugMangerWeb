@@ -7,7 +7,6 @@ namespace app\controllers;
 
 use app\models\Module;
 use app\models\ResetPasswordParam;
-use app\models\ResetPasswordParamForm;
 use app\models\User;
 use app\models\Group;
 use app\models\UserModifyForm;
@@ -237,7 +236,7 @@ class SiteController extends BaseController
         $absoluteUrl = substr($absoluteUrl, 0, strpos($absoluteUrl, '?r='));
         $emailUrl = $absoluteUrl . '?r=site/reset-opt&userId=' . $user->id . '&token=' . $token;
 
-        $mail = Yii::$app->mailer->compose('reset_password', ['userName' => $userName, 'emailUrl' => $emailUrl])
+        $mail = Yii::$app->mailer->compose('reset_password_mail', ['userName' => $userName, 'emailUrl' => $emailUrl])
 //            ->setFrom('h1024246550@163.com')
             ->setTo($user->email)
             ->setSubject('基于Web和Android客户端的软件缺陷管理系统——密码重置');

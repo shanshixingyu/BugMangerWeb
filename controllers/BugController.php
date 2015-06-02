@@ -27,7 +27,6 @@ use app\models\CloseBugForm;
 
 class BugController extends BaseController
 {
-    private static $searchBugPost;
 
     public function behaviors()
     {
@@ -284,6 +283,7 @@ class BugController extends BaseController
             $result = $resolveForm->modifyBugOfDb();
             if ($result) {
                 Yii::$app->session->setFlash(OPT_RESULT, '操作保存成功！');
+
             } else {
                 Yii::$app->session->setFlash(OPT_RESULT, '操作保存失败！');
             }

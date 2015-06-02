@@ -17,6 +17,7 @@ $this->params['breadcrumbs'] = [
 ];
 $bugStatus = Json::decode(BUG_STATUS);
 $bugPriority = Json::decode(BUG_PRIORITY);
+$bugSerious = Json::decode(BUG_SERIOUS);
 
 $this->registerCssFile(CSS_PATH . 'show_bug.css');
 $this->registerCssFile(CSS_PATH . 'edit.css');
@@ -87,6 +88,10 @@ $bugStatus = Json::decode(BUG_STATUS);
         <div class="bugInfoItem">
             <div class="itemTitle">优先级：</div>
             <div class="itemContent"><?php echo $bugPriority[$bug->priority]; ?></div>
+        </div>
+        <div class="bugInfoItem">
+            <div class="itemTitle">影响程度：</div>
+            <div class="itemContent"><?php echo $bugSerious[$bug->serious_id]; ?></div>
         </div>
         <div class="bugInfoItem">
             <div class="itemTitle">提交者：</div>

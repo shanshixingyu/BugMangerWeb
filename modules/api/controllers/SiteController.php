@@ -10,6 +10,8 @@ use app\modules\api\models\PhoneLoginUser;
 use app\modules\api\models\HttpResult;
 use app\tools\PasswordUtils;
 use app\models\Group;
+use app\models\ResetPasswordParam;
+use yii\base\Exception;
 
 class SiteController extends BaseController
 {
@@ -218,5 +220,67 @@ class SiteController extends BaseController
             return $result->parseJson();
         }
     }
+
+    public function actionResetPassword($userName)
+    {
+        $result = new HttpResult();
+        if (Yii::$app->user->isGuest) {
+            $result->code = MyConstant::VISIT_CODE_NO_LOGIN;
+            $result->message = '还没有登录';
+            return $result->parseJson();
+        }
+
+        //判定用户名称是否存在，并且获得用户信息
+        $user = User::find()->select(['id', 'email'])->where(['name' => $userName])->one();
+        if ($user === null) {
+            $result->code = MyConstant::VISIT_CODE_NOT_EXIST;
+            $result->message = '用户不存在：' . $userName;
+            return $result->parseJson();
+        }
+
+        //生成重置码
+        $token = PasswordUtils::getResetPasswordParam();
+
+        //保存到数据库中的重置表中
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $resetPasswordParam = ResetPasswordParam::find()->where(['user_id' => $user->id])->one();
+            if ($resetPasswordParam === null) {
+                $resetPasswordParam = new ResetPasswordParam();
+            }
+            $resetPasswordParam->user_id = $user->id;
+            $resetPasswordParam->token = $token;
+            $resetPasswordParam->start_time = time();
+            $resetPasswordParam->save();
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            $result->code = MyConstant::VISIT_CODE_FAILURE;
+            $result->message = '保存重置密码信息失败';
+            return $result->parseJson();
+        }
+
+        //拼重置url
+        $absoluteUrl = Yii::$app->request->absoluteUrl;
+        $absoluteUrl = substr($absoluteUrl, 0, strpos($absoluteUrl, '?r='));
+        $emailUrl = $absoluteUrl . '?r=site/reset-opt&userId=' . $user->id . '&token=' . $token;
+
+        $mail = Yii::$app->mailer->compose('reset_password_mail', ['userName' => $userName, 'emailUrl' => $emailUrl])
+//            ->setFrom('h1024246550@163.com')
+            ->setTo($user->email)
+            ->setSubject('基于Web和Android客户端的软件缺陷管理系统——密码重置');
+//
+        if ($mail->send()) {
+            $result->code = MyConstant::VISIT_CODE_SUCCESS;
+            $result->message = '重置密码邮件发送成功';
+            return $result->parseJson();
+        } else {
+            $result->code = MyConstant::VISIT_CODE_FAILURE;
+            $result->message = '重置密码邮件发送失败';
+            return $result->parseJson();
+        }
+
+    }
+
 
 }

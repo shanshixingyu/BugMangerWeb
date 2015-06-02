@@ -73,7 +73,7 @@ AppAsset::register($this);
 </div>
 <?php Modal::begin([
     'id' => 'resetPasswordModal',
-    'header' => '<div style="text-align: center;font-weight: bold">密码重置</div>',
+    'header' => '<div style="text-align: center;font-size:20px;font-weight: bold">密码重置</div>',
     'size' => Modal::SIZE_SMALL,
 ]);
 $resetPasswordForm = new ResetPasswordParamForm();

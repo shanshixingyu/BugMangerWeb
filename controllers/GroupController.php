@@ -149,7 +149,7 @@ class GroupController extends BaseController
             $project = Project::find()->where(['group_id' => $id])->one();
             if ($project === null) {//可删除
                 try {
-                    $result = $group->DELETE();
+                    $result = $group->delete();
                 } catch (Exception $e) {
                     $result = false;
                 }
