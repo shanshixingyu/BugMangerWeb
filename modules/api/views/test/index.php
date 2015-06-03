@@ -106,6 +106,16 @@ $this->title = '登录测试';
         <input type="submit" value="提交"/><br/>
     </form>
 
+    <br/><br/><br/>
+    修改项目信息：<br/>
+
+    <form action="index.php?r=api/project/modify-project&projectId=149" method="post">
+        项目名称<input type="text" name="name"/><br/>
+        负责团队<input type="text" name="groupId"/><br/>
+        项目简介<input type="text" name="introduce"/><br/>
+        <input type="submit" value="提交"/><br/>
+    </form>
+
 </div>
 
 

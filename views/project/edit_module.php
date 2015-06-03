@@ -43,33 +43,34 @@ $this->registerJsFile(JS_PATH . 'edit_module.js', [
     </div>
     <div class="editInfoForm">
         <?php if ($isAddModuleView && count($projects) <= 0): ?>
-        不好意思，暂时还没有任何项目信息，请先<a href="index.php?r=project/add-project">添加项目信息！
-            <?php elseif (!$isAddModuleView && count($modules) <= 0): ?>
-                不好意思，暂时还没有项目
-                <span style="margin: 0 5px;font-weight: bold;color: #FF0000;">
+            不好意思，暂时还没有任何您有权限操作的项目信息，请先<a href="index.php?r=project/add-project">添加项目信息</a>！
+        <?php elseif (!$isAddModuleView && count($modules) <= 0): ?>
+            不好意思，暂时还没有任何您有权限操作的项目信息
+            <span style="margin: 0 5px;font-weight: bold;color: #FF0000;">
                 “<?php echo $moduleForm->projectName; ?>”
             </span>
-                的任何模块信息，请先<a href="index.php?r=project/add-module">添加模块</a>信息！
+            的任何模块信息，请先<a href="index.php?r=project/add-module">添加模块</a>信息！
+        <?php else: ?>
+            <?php $form = ActiveForm::begin(['fieldConfig' => ['template' => '<div class="infoRow"><div class="infoLabel">{label}</div><div class="infoInput">{input}</div><div class="infoError">{error}</div></div>',],]); ?>
+            <?php if (!$isAddModuleView): ?>
+                <?php echo $form->field($moduleForm, 'projectName')->textInput(['readonly' => 'true']); ?>
+                <?php echo $form->field($moduleForm, 'id')->dropDownList(ArrayHelper::map($modules, 'id', 'name')); ?>
+                <div
+                    style="background-color: #717171;width:100%;height: 1px;margin-top: -5px;margin-bottom: 10px;">
+                </div>
             <?php else: ?>
-                <?php $form = ActiveForm::begin(['fieldConfig' => ['template' => '<div class="infoRow"><div class="infoLabel">{label}</div><div class="infoInput">{input}</div><div class="infoError">{error}</div></div>',],]); ?>
-                <?php if (!$isAddModuleView): ?>
-                    <?php echo $form->field($moduleForm, 'projectName')->textInput(['readonly' => 'true']); ?>
-                    <?php echo $form->field($moduleForm, 'id')->dropDownList(ArrayHelper::map($modules, 'id', 'name')); ?>
-                    <div
-                        style="background-color: #717171;width:100%;height: 1px;margin-top: -5px;margin-bottom: 10px;"></div>
-                <?php else: ?>
-                    <?php echo $form->field($moduleForm, 'projectId')->dropDownList(ArrayHelper::map($projects, 'id', 'name')); ?>
-                <?php endif; ?>
-
-                <?php echo $form->field($moduleForm, 'name')->textInput(); ?>
-                <?php echo $form->field($moduleForm, 'fuzeren')->dropDownList(ArrayHelper::map($groupMembers, 'id', 'name'), ['multiple' => 'multiple']) ?>
-                <?php echo $form->field($moduleForm, 'introduce', ['template' => '<div class="infoRow"><div class="infoLabel">{label}</div><div class="infoInputArea">{input}</div></div>',])
-                    ->textarea(['rows' => 6, 'style' => 'resize: none;']) ?>
-
-                <?php echo Html::submitButton($isAddModuleView ? '添加' : '修改', ['class' => 'btn btn-primary', 'id' => 'submitBtn',]) ?>
-
-                <?php ActiveForm::end(); ?>
+                <?php echo $form->field($moduleForm, 'projectId')->dropDownList(ArrayHelper::map($projects, 'id', 'name')); ?>
             <?php endif; ?>
+
+            <?php echo $form->field($moduleForm, 'name')->textInput(); ?>
+            <?php echo $form->field($moduleForm, 'fuzeren')->dropDownList(ArrayHelper::map($groupMembers, 'id', 'name'), ['multiple' => 'multiple']) ?>
+            <?php echo $form->field($moduleForm, 'introduce', ['template' => '<div class="infoRow"><div class="infoLabel">{label}</div><div class="infoInputArea">{input}</div></div>',])
+                ->textarea(['rows' => 6, 'style' => 'resize: none;']) ?>
+
+            <?php echo Html::submitButton($isAddModuleView ? '添加' : '修改', ['class' => 'btn btn-primary', 'id' => 'submitBtn',]) ?>
+
+            <?php ActiveForm::end(); ?>
+        <?php endif; ?>
     </div>
 </div>
 

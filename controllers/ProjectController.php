@@ -178,7 +178,13 @@ class ProjectController extends BaseController
         }
 
         /* 获得所有项目信息 */
-        $projects = Project::find()->select(['id', 'name', 'group_id'])->all();
+        $projects = null;
+        if (Yii::$app->user->identity->role_id == 0)
+            $projects = Project::find()->select(['id', 'name', 'group_id'])->all();
+        else
+            $projects = Project::find()->select(['id', 'name', 'group_id'])->where([
+                'creator' => Yii::$app->user->identity->getId()
+            ])->all();
         if (count($projects) > 0) {
             $group = Group::find()->select(['member'])->where(['id' => $projects[0]->group_id])->one();
             if ($group != null) {
