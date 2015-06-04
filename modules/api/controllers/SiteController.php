@@ -20,6 +20,19 @@ class SiteController extends BaseController
         return $this->redirect('index.php?r=site/login');
     }
 
+    public function actionAutoLogin()
+    {
+        $result = new HttpResult();
+        if (Yii::$app->user->isGuest) {
+            $result->code = MyConstant::VISIT_CODE_SUCCESS;
+            $result->message = '自动登录成功';
+        } else {
+            $result->code = MyConstant::VISIT_CODE_FAILURE;
+            $result->message = '自动登录失败';
+        }
+        return $result->parseJson();
+    }
+
     public function actionLogin()
     {
         $result = new HttpResult();

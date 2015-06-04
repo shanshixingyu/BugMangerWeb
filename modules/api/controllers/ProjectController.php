@@ -365,7 +365,7 @@ class ProjectController extends BaseController
         ])->joinWith(['group'])->where([Project::tableName() . '.id' => $projectId])->one();
         if ($project === null) {
             $result->code = MyConstant::VISIT_CODE_NOT_EXIST;
-            $result->message = 'sorry，您还没有登录';
+            $result->message = '指定的项目信息不存在';
             return $result->parseJson();
         }
 
@@ -436,6 +436,100 @@ class ProjectController extends BaseController
             } else {
                 $result->code = MyConstant::VISIT_CODE_FAILURE;
                 $result->message = '添加模块信息失败';
+            }
+            return $result->parseJson();
+        } else {
+            $result->code = MyConstant::VISIT_CODE_NO_POST;
+            $result->message = '不是POST请求';
+            return $result->parseJson();
+        }
+    }
+
+    public function actionGetModifyModule($moduleId)
+    {
+        $result = new HttpResult();
+        if (Yii::$app->user->isGuest) {
+            $result->code = MyConstant::VISIT_CODE_NO_LOGIN;
+            $result->message = 'sorry，您还没有登录';
+            return $result->parseJson();
+        }
+
+        $module = Module::find()->joinWith(['project', 'createUser'])->where([Module::tableName() . '.id' => $moduleId])->one();
+        if ($module === null) {
+            $result->code = MyConstant::VISIT_CODE_NOT_EXIST;
+            $result->message = '指定的模块信息不存在';
+            return $result->parseJson();
+        }
+
+        $memberJson = isset($module->project->group->member) ? $module->project->group->member : '[]';
+        $memberIds = Json::decode($memberJson);
+        $memberUsers = User::find()->where(['id' => $memberIds])->all();
+
+
+        $result->code = MyConstant::VISIT_CODE_SUCCESS;
+        $result->message = '获取信息成功';
+        $result->result = [
+            'project' => isset($module->project) ? $module->project : null,
+            'memberUsers' => $memberUsers,
+            'module' => $module,
+            'creatorName' => isset($module->createUser->name) ? $module->createUser->name : ''
+        ];
+        return $result->parseJson();
+    }
+
+    public function actionModifyModule($moduleId)
+    {
+        $result = new HttpResult();
+        if (Yii::$app->user->isGuest) {
+            $result->code = MyConstant::VISIT_CODE_NO_LOGIN;
+            $result->message = 'sorry，您还没有登录';
+            return $result->parseJson();
+        }
+
+        if (Yii::$app->request->isPost) {
+            /* 处理步骤：1、取数据  2、判断模块是否存在
+            3、当模块名称发生修改的时候判断项目中模块名称的唯一性 4、修改数据库 */
+
+            //取数据
+            $name = $_POST['name'];
+            $fzr = $_POST['fzr'];
+            $introduce = $_POST['introduce'];
+
+            //判断模块是否存在
+            $module = Module::find()->where(['id' => $moduleId])->one();
+            if ($module === null) {
+                $result->code = MyConstant::VISIT_CODE_NOT_EXIST;
+                $result->message = '指定模块不存在';
+                return $result->parseJson();
+            }
+
+            //当模块名称修改后验证同一项目下的模块名称的唯一性
+            if ($module->name != $name) {
+                $tempModule = Module::find()->where(['name' => $name, 'project_id' => $module->project_id])->one();
+                if ($tempModule !== null) {
+                    $result->code = MyConstant::VISIT_CODE_HAS_EXIST;
+                    $result->message = '同项目下已存在同名模块信息';
+                    return $result->parseJson();
+                }
+            }
+
+            //更新数据库
+            $module->name = $name;
+            $module->fuzeren = $fzr;
+            $module->introduce = $introduce;
+            $success = false;
+            try {
+                $success = $module->update();
+            } catch (Exception $e) {
+                $success = false;
+            }
+
+            if ($success) {
+                $result->code = MyConstant::VISIT_CODE_SUCCESS;
+                $result->message = '模块信息修改成功';
+            } else {
+                $result->code = MyConstant::VISIT_CODE_FAILURE;
+                $result->message = '模块信息修改失败';
             }
             return $result->parseJson();
         } else {

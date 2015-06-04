@@ -116,6 +116,17 @@ $this->title = '登录测试';
         <input type="submit" value="提交"/><br/>
     </form>
 
+
+    <br/><br/><br/>
+    修改模块信息信息：<br/>
+
+    <form action="index.php?r=api/project/modify-module&moduleId=53" method="post">
+        模块名称<input type="text" name="name"/><br/>
+        负责人<input type="text" name="fzr" value='["20"]'/><br/>
+        模块简介<input type="text" name="introduce"/><br/>
+        <input type="submit" value="提交"/><br/>
+    </form>
+
 </div>
 
 
