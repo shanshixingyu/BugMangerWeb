@@ -50,8 +50,8 @@ class CloseBugForm extends BaseForm
 
         date_default_timezone_set('Asia/Shanghai');
         $tempTime = date('Y-m-d H:i:s', time());
-        $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $this->reason, '激活', $tempTime);
-
+        $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $this->reason, '关闭', $tempTime);
+        $bug->close_time = $tempTime;
         $result = false;
         try {
             $result = $bug->update();

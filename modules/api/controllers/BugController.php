@@ -14,6 +14,9 @@ use app\tools\MangerUtils;
 use app\tools\MyConstant;
 use yii\data\Pagination;
 use app\models\Bug;
+use yii\base\Exception;
+use yii\helpers\Json;
+use app\tools\BugOpt;
 
 class BugController extends BaseController
 {
@@ -176,6 +179,195 @@ class BugController extends BaseController
             exit;
         }
     }
+
+    public function actionSolve($bugId)
+    {
+        $result = new HttpResult();
+        if (Yii::$app->user->isGuest) {
+            $result->code = MyConstant::VISIT_CODE_NO_LOGIN;
+            $result->message = 'sorry，您还没有登录';
+            return $result->parseJson();
+        }
+
+        if (Yii::$app->request->isPost) {
+            /* 步骤：1、取数据  2、验证bug是否存在  3、更新数据库信息 */
+            //取数据
+            $type = $_POST['type'];
+            $introduce = $_POST['introduce'];
+
+            //验证是否存在
+            $bug = Bug::find()->where(['id' => $bugId])->one();
+            if ($bug === null) {
+                $result->code = MyConstant::VISIT_CODE_NOT_EXIST;
+                $result->message = '指定缺陷不存在';
+                return $result->parseJson();
+            }
+            $bugStatus = Json::decode(BUG_STATUS);
+            $bug->resolve_id = Yii::$app->user->identity->getId();
+            date_default_timezone_set('Asia/Shanghai');
+            $dateTime = date('Y-m-d H:i:s', time());
+            $bug->resolve_time = $dateTime;
+            if ($type == 0) {
+                $bug->status = array_search(BUG_STATUS_SOLVED, $bugStatus);
+                $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $introduce, '解决', $dateTime);
+            } else {
+                $bug->status = array_search(BUG_STATUS_OTHER, $bugStatus);
+                $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $introduce, '改成其他状态', $dateTime);
+            }
+            $success = false;
+            try {
+                $success = $bug->update();
+            } catch (Exception $e) {
+                $success = false;
+            }
+
+            if ($success) {
+                $result->code = MyConstant::VISIT_CODE_SUCCESS;
+                $result->message = '成功解决';
+            } else {
+                $result->code = MyConstant::VISIT_CODE_FAILURE;
+                $result->message = '解决失败';
+            }
+            return $result->parseJson();
+        } else {
+            $result->code = MyConstant::VISIT_CODE_NO_POST;
+            $result->message = '不是POST请求';
+            return $result->parseJson();
+        }
+    }
+
+    public function actionActive($bugId)
+    {
+        $result = new HttpResult();
+        if (Yii::$app->user->isGuest) {
+            $result->code = MyConstant::VISIT_CODE_NO_LOGIN;
+            $result->message = 'sorry，您还没有登录';
+            return $result->parseJson();
+        }
+
+        if (Yii::$app->request->isPost) {
+            /* 步骤：1、取数据  2、验证bug是否存在  3、更新数据库信息 */
+            //取数据
+            $reason = $_POST['reason'];
+
+            //验证是否存在
+            $bug = Bug::find()->where(['id' => $bugId])->one();
+            if ($bug === null) {
+                $result->code = MyConstant::VISIT_CODE_NOT_EXIST;
+                $result->message = '指定缺陷不存在';
+                return $result->parseJson();
+            }
+
+            $bugStatus = Json::decode(BUG_STATUS);
+            $bug->status = array_search(BUG_STATUS_ACTIVE, $bugStatus);
+            date_default_timezone_set('Asia/Shanghai');
+            $tempTime = date('Y-m-d H:i:s', time());
+            $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $reason, '激活', $tempTime);
+            ++$bug->active_num;
+            $success = false;
+            try {
+                $success = $bug->update();
+            } catch (Exception $e) {
+                $success = false;
+            }
+
+            if ($success) {
+                $result->code = MyConstant::VISIT_CODE_SUCCESS;
+                $result->message = '成功激活';
+            } else {
+                $result->code = MyConstant::VISIT_CODE_FAILURE;
+                $result->message = '激活失败';
+            }
+            return $result->parseJson();
+        } else {
+            $result->code = MyConstant::VISIT_CODE_NO_POST;
+            $result->message = '不是POST请求';
+            return $result->parseJson();
+        }
+    }
+
+    public function actionClose($bugId)
+    {
+        $result = new HttpResult();
+        if (Yii::$app->user->isGuest) {
+            $result->code = MyConstant::VISIT_CODE_NO_LOGIN;
+            $result->message = 'sorry，您还没有登录';
+            return $result->parseJson();
+        }
+
+        if (Yii::$app->request->isPost) {
+            /* 步骤：1、取数据  2、验证bug是否存在  3、更新数据库信息 */
+            //取数据
+            $reason = $_POST['reason'];
+
+            //验证是否存在
+            $bug = Bug::find()->where(['id' => $bugId])->one();
+            if ($bug === null) {
+                $result->code = MyConstant::VISIT_CODE_NOT_EXIST;
+                $result->message = '指定缺陷不存在';
+                return $result->parseJson();
+            }
+
+            $bugStatus = Json::decode(BUG_STATUS);
+            $bug->status = array_search(BUG_STATUS_CLOSED, $bugStatus);
+            date_default_timezone_set('Asia/Shanghai');
+            $tempTime = date('Y-m-d H:i:s', time());
+            $bug->introduce = BugOpt::addBugIntroduce($bug->introduce, $reason, '关闭', $tempTime);
+            $bug->close_time = $tempTime;
+            $success = false;
+            try {
+                $success = $bug->update();
+            } catch (Exception $e) {
+                $success = false;
+            }
+
+            if ($success) {
+                $result->code = MyConstant::VISIT_CODE_SUCCESS;
+                $result->message = '关闭成功';
+            } else {
+                $result->code = MyConstant::VISIT_CODE_FAILURE;
+                $result->message = '关闭失败';
+            }
+            return $result->parseJson();
+        } else {
+            $result->code = MyConstant::VISIT_CODE_NO_POST;
+            $result->message = '不是POST请求';
+            return $result->parseJson();
+        }
+    }
+
+    public function actionDelete($bugId)
+    {
+        $result = new HttpResult();
+        if (Yii::$app->user->isGuest) {
+            $result->code = MyConstant::VISIT_CODE_NO_LOGIN;
+            $result->message = 'sorry，您还没有登录';
+            return $result->parseJson();
+        }
+
+        $bug = Bug::find()->where(['id' => $bugId])->one();
+        if ($bug === null) {
+            $result->code = MyConstant::VISIT_CODE_NOT_EXIST;
+            $result->message = '指定缺陷不存在';
+            return $result->parseJson();
+        }
+
+        $success = false;
+        try {
+            $success = $bug->delete();
+        } catch (Exception $e) {
+            $success = false;
+        }
+        if ($success) {
+            $result->code = MyConstant::VISIT_CODE_SUCCESS;
+            $result->message = '删除缺陷成功';
+        } else {
+            $result->code = MyConstant::VISIT_CODE_FAILURE;
+            $result->message = '删除缺陷失败';
+        }
+        return $result->parseJson();
+    }
+
 
     public function actionTest()
     {

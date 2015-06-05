@@ -24,11 +24,20 @@ class SiteController extends BaseController
     {
         $result = new HttpResult();
         if (Yii::$app->user->isGuest) {
-            $result->code = MyConstant::VISIT_CODE_SUCCESS;
-            $result->message = '自动登录成功';
-        } else {
             $result->code = MyConstant::VISIT_CODE_FAILURE;
             $result->message = '自动登录失败';
+        } else {
+            //已经登录过了
+            $user = Yii::$app->user->identity;
+            $phoneLoginUser = new PhoneLoginUser();
+            $phoneLoginUser->userId = $user->id;
+            $phoneLoginUser->userName = $user->name;
+            $phoneLoginUser->password = $user->password;
+            $phoneLoginUser->roleId = $user->role_id;
+            $phoneLoginUser->roleName = $user->role->name;
+            $result->code = MyConstant::VISIT_CODE_SUCCESS;
+            $result->message = '自动登录成功';
+            $result->result = $phoneLoginUser;
         }
         return $result->parseJson();
     }
