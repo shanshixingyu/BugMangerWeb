@@ -368,6 +368,57 @@ class BugController extends BaseController
         return $result->parseJson();
     }
 
+    public function actionGetAllProject()
+    {
+        $result = new HttpResult();
+        if (Yii::$app->user->isGuest) {
+            $result->code = MyConstant::VISIT_CODE_NO_LOGIN;
+            $result->message = 'sorry，您还没有登录';
+            return $result->parseJson();
+        }
+
+        $projects = Project::find()->select(['id', 'name'])->all();
+        $result->code = MyConstant::VISIT_CODE_SUCCESS;
+        $result->message = '项目信息获取成功';
+        $result->result = $projects;
+        return $result->parseJson();
+    }
+
+//    public function actionCharts($projectId, $startTime, $endTime)
+//    {
+//        $startDate = date('Y-m-d', $startTime);
+//        $endDate = date('Y-m-d', $endTime);
+//        $data = [];
+//        for ($i = 0; $i < 7; $i++) {
+//            $func = BugOpt::getEchartFunction($i);
+//            $data[] = BugOpt::$func($projectId, $startDate, $endDate);
+//        }
+//        return $this->renderPartial('charts', ['data' => $data]);
+//    }
+
+    public function actionCharts($projectId, $startTime, $endTime)
+    {
+        $result = new HttpResult();
+        if (Yii::$app->user->isGuest) {
+            $result->code = MyConstant::VISIT_CODE_NO_LOGIN;
+            $result->message = 'sorry，您还没有登录';
+            return $result->parseJson();
+        }
+
+        $startDate = date('Y-m-d', $startTime);
+        $endDate = date('Y-m-d', $endTime);
+
+        $data = [];
+        for ($i = 0; $i < 7; $i++) {
+            $func = BugOpt::getEchartFunction($i);
+            $data[] = BugOpt::$func($projectId, $startDate, $endDate);
+        }
+
+        $result->code = MyConstant::VISIT_CODE_SUCCESS;
+        $result->message = '获取成功';
+        $result->result = $data;
+        return $result->parseJson();
+    }
 
     public function actionTest()
     {

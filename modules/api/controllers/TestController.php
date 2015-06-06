@@ -14,4 +14,9 @@ class TestController extends Controller
         return $this->renderPartial('index');
     }
 
+    public function actionCharts()
+    {
+        return $this->renderPartial('charts');
+    }
+
 }

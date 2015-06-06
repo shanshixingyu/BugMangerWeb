@@ -76,34 +76,34 @@ $this->registerCssFile('css/charts.css');
                     switch($data['type']){
                         case MyConstant::ECHART_TYPE_SUBMIT_DAY:
                             $isPie=false;
-                            $chartTitle='项目Bug提交情况（天）';
+                            $chartTitle='项目缺陷提交情况（天）';
                             break;
                         case MyConstant::ECHART_TYPE_SUBMIT_MONTH:
                             $isPie=false;
-                            $chartTitle='项目Bug提交情况（月）';
+                            $chartTitle='项目缺陷提交情况（月）';
                             break;
                         case MyConstant::ECHART_TYPE_TOTAL_DAY:
                             $isPie=false;
-                            $chartTitle='项目Bug总量走势（天）';
+                            $chartTitle='项目缺陷总量走势（天）';
                             break;
                         case MyConstant::ECHART_TYPE_TOTAL_MONTH:
                             $isPie=false;
-                            $chartTitle='项目Bug总量走势（月）';
+                            $chartTitle='项目缺陷总量走势（月）';
                             break;
                         case MyConstant::ECHART_TYPE_MODULE:
                             $isPie=true;
-                            $chartTitle='项目各模块Bug比例';
+                            $chartTitle='项目各模块缺陷比例';
                             $seriesName='项目模块';
                             break;
                         case MyConstant::ECHART_TYPE_PRIORITY:
                             $isPie=true;
-                            $chartTitle='项目Bug优先级比例';
+                            $chartTitle='项目缺陷优先级比例';
                             $seriesName='优先级';
                             break;
                         case MyConstant::ECHART_TYPE_STATUS:
                             $isPie=true;
-                            $chartTitle='项目Bug状态比例';
-                            $seriesName='Bug状态';
+                            $chartTitle='项目缺陷状态比例';
+                            $seriesName='缺陷状态';
                             break;
                     }
                 ?>
