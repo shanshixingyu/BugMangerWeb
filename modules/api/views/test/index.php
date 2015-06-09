@@ -136,6 +136,22 @@ $this->title = '登录测试';
         <input type="submit" value="提交"/><br/>
     </form>
 
+
+    <br/><br/><br/>
+    提交缺陷信息：<br/>
+
+    <form action="index.php?r=api/bug/add" method="post">
+        缺陷名称<input type="text" name="bugName"/><br/>
+        项目ID<input type="text" name="projectId" value='142'/><br/>
+        模块ID<input type="text" name="moduleId" value='-1'/><br/>
+        负责人<input type="text" name="assignId" /><br/>
+        优先级<input type="text" name="priority" value='0'/><br/>
+        严重程度<input type="text" name="serious" value='0'/><br/>
+        缺陷简介<input type="text" name="introduce"/><br/>
+        重现步骤<input type="text" name="reappear"/><br/>
+        <input type="submit" value="提交"/><br/>
+    </form>
+
 </div>
 
 

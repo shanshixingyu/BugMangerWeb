@@ -43,7 +43,7 @@ $this->registerCssFile(CSS_PATH . 'edit.css');
         echo $form->field($bugForm, 'name')->textInput();
         echo $form->field($bugForm, 'projectId')->dropDownList(ArrayHelper::map($projects, 'id', 'name'));
         echo $form->field($bugForm, 'moduleId')->dropDownList(ArrayHelper::map($modules, 'id', 'name'), ['prompt' => '全部']);
-        echo $form->field($bugForm, 'assignId')->dropDownList(ArrayHelper::map((count($projects) > 0) ? $projects[0]->getGroupMember() : [], 'id', 'name'));
+        echo $form->field($bugForm, 'assignId')->dropDownList(ArrayHelper::map((count($projects) > 0) ? $projects[0]->getGroupMember(['id','name']) : [], 'id', 'name'));
         echo $form->field($bugForm, 'priority')->radioList(Json::decode(BUG_PRIORITY), [
             'style' => 'padding-top:7px;',
             'item' => function ($index, $label, $name, $checked, $value) {

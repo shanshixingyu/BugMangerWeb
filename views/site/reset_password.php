@@ -13,7 +13,7 @@ AppAsset::register($this);
 <div style="text-align: center;">
     <p style="width: 100%;text-align: left;font-weight: bold;font-size: 15px;">请注意：</p>
 
-    <p style="width: 100%;text-align: left;text-indent: 2em;font-size: 15px;">
+    <p style="width: 100%;text-align: left;text-indent: 2em;font-size: 13px;">
         当您点击重置按钮后，所指定的用户绑定的邮箱会收到系统发送的重置密码的邮件，
         请在24小时内进入邮箱点击邮件内的链接进行密码重置，否则此次重置无效！
     </p>

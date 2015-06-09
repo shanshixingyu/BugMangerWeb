@@ -233,6 +233,9 @@ class BugController extends BaseController
         } else {
             $result = false;
             try {
+                ImageUtils::deleteImage($bug->img_path);
+                if (isset($bug->file_path) && $bug->file_path != '')
+                    unlink(MyConstant::ATTACHMENT_PATH . $bug->file_path);
                 $result = $bug->delete();
             } catch (Exception $e) {
                 $result = false;

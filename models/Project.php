@@ -72,22 +72,26 @@ class Project extends ActiveRecord
 
     /**
      * 获得负责本项目的团队成员信息
+     * @param string|array|null $selectColumn 选中的字段，用户必须保证字段是正确的
      * @return array|User[] 用户信息列表，没有的时候为[]
      * @throws Exception 之前没有将负责团队id查询出来
      */
-    public function getGroupMember()
+    public function getGroupMember($selectColumn = null)
     {
         /* 防止没有查询出该项的情况 */
         if (isset($this->group_id)) {
             $group = Group::find(['member'])->where(['id' => $this->group_id])->one();
             if ($group !== null) {
                 $memberId = Json::decode($group->member);
-                return User::find()->where(['id' => $memberId])->all();
+                if ($selectColumn === null)
+                    return User::find()->where(['id' => $memberId])->all();
+                else
+                    return User::find()->select($selectColumn)->where(['id' => $memberId])->all();
             } else {
                 return [];
             }
         } else {
-            throw new Exception('没有查询出负责团队信息');
+            throw new Exception('没有查询出负责团队信息字段');
         }
     }
 

@@ -56,7 +56,7 @@ AppAsset::register($this);
                 <?= Html::submitButton('登录', ['class' => 'btn btn-primary']) ?>
                 &nbsp;&nbsp;&nbsp;
                 <a id="forgetPassword" data-toggle="modal" href="#resetPasswordModal"
-                   style="font-size: 14px;color: #0000ff;margin-left: 10px">找回密码？</a>
+                   style="font-size: 15px;font-weight:bold;color: #0608ff;margin-left: 10px">找回密码？</a>
             </div>
             <?php $form = ActiveForm::end(); ?>
         </div>
