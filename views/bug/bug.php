@@ -52,7 +52,7 @@ $bugSerious = Json::decode(BUG_SERIOUS);
     <table>
         <thead>
         <tr>
-            <th style="width:40%;">Bug名称</th>
+            <th style="width:40%;">缺陷名称</th>
             <th style="width:8%;">优先级</th>
             <th style="width:11%;">当前状态</th>
             <th style="width:11%;">影响程度</th>

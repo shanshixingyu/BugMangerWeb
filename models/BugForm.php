@@ -91,15 +91,15 @@ class BugForm extends BaseForm
     public function attributeLabels()
     {
         return [
-            'name' => 'Bug名称',
+            'name' => '缺陷名称',
             'projectId' => '项目名称',
             'moduleId' => '模块名称',
             'assignId' => '指派给',
             'priority' => '优先级',
             'seriousId' => '影响程度',
-            'images' => 'Bug截图',
+            'images' => '缺陷截图',
             'attachment' => '附件',
-            'introduce' => 'Bug注释',
+            'introduce' => '缺陷注释',
             'reappear' => '重现步骤',
         ];
     }

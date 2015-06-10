@@ -27,12 +27,12 @@ body {
 }
 
 #left_content img {
-    margin-top: 120px;
+    margin-top: 140px;
 }
 
 #login {
     float: right;
-    width: 355px;
+    width: 345px;
     height: 400px;
     background: url("../img/bg_login_part.png") left top no-repeat;
     background-size: 100% 100%;
@@ -62,9 +62,9 @@ form {
 }
 
 .login_title {
-    width: 85px;
+    width: 75px;
     height: 20px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: normal;
     text-align: right;
     display: inline;

@@ -28,7 +28,7 @@ $bugStatus = Json::decode(BUG_STATUS);
 <div class="editInfo">
     <div class="editInfoTitle">
         <div class="editInfoTitleIcon"></div>
-        Bug详细信息
+        缺陷详细信息
     </div>
     <div class="editInfoForm">
         <div id="opt_area">
@@ -61,11 +61,11 @@ $bugStatus = Json::decode(BUG_STATUS);
 
         </div>
         <div class="bugInfoItem">
-            <div class="itemTitle">Bug名称：</div>
+            <div class="itemTitle">缺陷名称：</div>
             <div class="itemContent"><?php echo $bug->name; ?></div>
         </div>
         <div class="bugInfoItem">
-            <div class="itemTitle">Bug路径：</div>
+            <div class="itemTitle">缺陷路径：</div>
             <div class="itemContent">
                 <?php
                 echo $bug->project->name;
@@ -111,7 +111,7 @@ $bugStatus = Json::decode(BUG_STATUS);
             <div class="itemContent"><?php echo $bug->close_time; ?></div>
         </div>
         <div class="bugInfoItem">
-            <div class="itemTitle">Bug截图：</div>
+            <div class="itemTitle">缺陷截图：</div>
             <div class="itemContent">
                 <?php
                 try {
@@ -136,7 +136,7 @@ $bugStatus = Json::decode(BUG_STATUS);
             </div>
         </div>
         <div class="bugInfoItem">
-            <div class="itemTitle">Bug注释：</div>
+            <div class="itemTitle">缺陷注释：</div>
             <div class="itemArea" style="border: 1px solid #C1C8D2;padding:5px;">
                 <?php $introduces = Json::decode($bug->introduce); ?>
                 <?php foreach ($introduces as $introduce): ?>
@@ -179,7 +179,7 @@ $bugStatus = Json::decode(BUG_STATUS);
 
 <?php Modal::begin([
     'id' => 'resolveBugModal',
-    'header' => '<div id="showModalHeader">解决BUG</div>',
+    'header' => '<div id="showModalHeader">解决缺陷</div>',
     'size' => Modal::SIZE_DEFAULT,
 ]);
 $resolveForm = new \app\models\ResolveForm();
@@ -188,7 +188,7 @@ Modal::end(); ?>
 
 <?php Modal::begin([
     'id' => 'activeBugModal',
-    'header' => '<div id="showModalHeader">激活Bug</div>',
+    'header' => '<div id="showModalHeader">激活缺陷</div>',
     'size' => Modal::SIZE_DEFAULT,
 ]);
 $activeForm = new \app\models\ActiveBugForm();
@@ -197,7 +197,7 @@ Modal::end(); ?>
 
 <?php Modal::begin([
     'id' => 'closeBugModal',
-    'header' => '<div id="showModalHeader">关闭Bug</div>',
+    'header' => '<div id="showModalHeader">关闭缺陷</div>',
     'size' => Modal::SIZE_DEFAULT,
 ]);
 $closeForm = new \app\models\CloseBugForm();

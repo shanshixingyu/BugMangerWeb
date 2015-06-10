@@ -12,10 +12,10 @@ use yii\helpers\ArrayHelper;
 /* @var $bugForm app\models\BugForm */
 $isModify = false;
 if (isset($bugForm->isModify) && $bugForm->isModify) {
-    $this->title = '修改BUG';
+    $this->title = '修改缺陷';
     $isModify = true;
 } else {
-    $this->title = '提交新BUG';
+    $this->title = '提交新缺陷';
     $isModify = false;
 }
 $this->params['breadcrumbs'] = [
@@ -27,7 +27,7 @@ $this->registerCssFile(CSS_PATH . 'edit.css');
 <div class="editInfo">
     <div class="editInfoTitle">
         <div class="editInfoTitleIcon"></div>
-        <?php echo $isModify ? '修改Bug' : '提交新bug'; ?>
+        <?php echo $isModify ? '修改缺陷' : '提交新缺陷'; ?>
     </div>
     <div class="editInfoForm">
         <?php $form = ActiveForm::begin([

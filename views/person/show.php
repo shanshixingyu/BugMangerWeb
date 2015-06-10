@@ -13,13 +13,13 @@ if (isset($type)) {
 }
 switch ($requestType) {
     case MyConstant::PERSON_TYPE_SUBMIT:
-        $this->title = '我提交的Bug';
+        $this->title = '我提交的缺陷';
         break;
     case MyConstant::PERSON_TYPE_ASSIGN:
-        $this->title = '指派给我的Bug';
+        $this->title = '指派给我的缺陷';
         break;
     case MyConstant::PERSON_TYPE_MY_OPT:
-        $this->title = '我操作过的Bug';
+        $this->title = '我操作过的缺陷';
         break;
 }
 
@@ -33,13 +33,13 @@ $bugPriority = Json::decode(BUG_PRIORITY);
 $bugSerious = Json::decode(BUG_SERIOUS);
 ?>
 <div style="font-size: 23px;margin:10px;font-weight: bold;color: #006611;float: left;">
-    Bug详细列表
+    缺陷详细列表
 </div>
 <div id="bugTable">
     <table>
         <thead>
         <tr>
-            <th style="width:40%;">Bug名称</th>
+            <th style="width:40%;">缺陷名称</th>
             <th style="width:8%;">优先级</th>
             <th style="width:11%;">当前状态</th>
             <th style="width:11%;">影响程度</th>
@@ -108,7 +108,7 @@ $bugSerious = Json::decode(BUG_SERIOUS);
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="7">sorry，该项目暂时没有满足条件的Bug信息!</td>
+                <td colspan="7">sorry，该项目暂时没有满足条件的缺陷信息!</td>
             </tr>
         <?php endif; ?>
         </tbody>

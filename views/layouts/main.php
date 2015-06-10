@@ -70,24 +70,24 @@ $this->registerJsFile(ASSETS_PATH . '10b978a4/jquery.js', ['position' => View::P
         <div id="aboutMe">
             <div>个人相关信息</div>
             <p>
-                <a href="index.php?r=person/submit">我提交的Bug&nbsp;
+                <a href="index.php?r=person/submit">我提交的缺陷&nbsp;
                     ( <span style="font-weight: bold;"><?php echo BaseUtils::getMySubmitBugCount(); ?></span> )
                 </a>
             </p>
 
             <p>
-                <a href="index.php?r=person/assign">指派给我的Bug&nbsp;
+                <a href="index.php?r=person/assign">指派给我的缺陷&nbsp;
                     ( <span style="font-weight: bold;"><?php echo BaseUtils::getAssignToMeBugCount(); ?></span> )
                 </a>
             </p>
 
             <p>
-                <a href="index.php?r=person/opt">我操作过的Bug&nbsp;
+                <a href="index.php?r=person/opt">我操作过的缺陷&nbsp;
                     ( <span style="font-weight: bold;"><?php echo BaseUtils::getMyOptBugCount(); ?></span> )
                 </a>
             </p>
 
-            <!--            <p><a href="#">抄送给我的bug</a></p>-->
+            <!--            <p><a href="#">抄送给我的缺陷</a></p>-->
         </div>
     </div>
     <div id="rightContent">

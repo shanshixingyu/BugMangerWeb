@@ -12,7 +12,7 @@ $this->registerCssFile(CSS_PATH . 'bug_overview.css');
 <div id="projectBugTable">
     <div id="aboveOfTable">
         <div id="pageTitle">项目缺陷概况表</div>
-        <a href="index.php?r=bug/add" class="optBtn">提交新BUG</a>
+        <a href="index.php?r=bug/add" class="optBtn">提交新缺陷</a>
     </div>
     <table class="table table-striped table-bordered">
         <thead>
